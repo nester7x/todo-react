@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
-import Input from '../../../components/Input';
-import Btn from '../../../components/Button';
+import Input from '../../../../components/Input';
+import {AddBtn} from "./styles";
 
 const CreateNew = ({ handleSave }) => {
     const [inputValue, setInputValue] = useState('');
@@ -20,7 +20,7 @@ const CreateNew = ({ handleSave }) => {
     return (
         <div>
             <Input value={inputValue} onChange={handleInputChange} />
-            <Btn onClick={onHandleSave} />
+            <AddBtn onClick={onHandleSave}>Btn</AddBtn>
         </div>
     );
 };
