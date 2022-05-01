@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {Wrapper, Header, Title, Aside, ToggleButton, Main} from "./styles";
 import { NavLink } from "react-router-dom";
+import PropTypes from 'prop-types';
+import {Wrapper, Header, Title, Aside, ToggleButton, Main} from "./styles";
 
 const Layout = ({ children }) => {
     const [open, setOpen] = useState(false);
@@ -35,6 +36,10 @@ const Layout = ({ children }) => {
             </Main>
         </Wrapper>
     );
+};
+
+Layout.propTypes = {
+    children: PropTypes.element.isRequired
 };
 
 export default Layout;

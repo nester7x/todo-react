@@ -7,9 +7,7 @@ import Wrap from "./components/Wrap";
 const Todo = () => {
     const [todoArr, setTodoArr] = useState([]);
     const handleSave = (newData) => {
-        setTodoArr(prevState => {
-            return [...prevState, {id: prevState.length + 1, name: newData}]
-        })
+        setTodoArr(prevState => [...prevState, {id: prevState.length + 1, name: newData}])
     }
 
     return (

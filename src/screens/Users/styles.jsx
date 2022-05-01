@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import Btn from "../../components/Button";
-
 export const Wrap = styled.div`
   background-color: #ccc;
   min-height: 100vh;
@@ -10,13 +8,6 @@ export const Wrap = styled.div`
 export const Title = styled.h1`
   color: purple;
   margin: 0 0 10px 0;
-`;
-
-export const ChangeBtn = styled(Btn)`
-  margin: 0 0 10px 0;
-  :hover {
-    opacity: .8;
-  }
 `;
 
 export const Tr = styled.tr`

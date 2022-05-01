@@ -1,11 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TodoItem from "../TodoItem";
 import {Form} from "../Wrap/styles";
 
-const TodoList = ({ data }) => {
-
-
-    return (
+const TodoList = ({ data }) => (
         <Form>
             <p>My list:</p>
             {data.length
@@ -13,6 +11,9 @@ const TodoList = ({ data }) => {
                 : <span>List is empty...</span>}
         </Form>
     );
+
+TodoList.propTypes = {
+    data: PropTypes.element.isRequired
 };
 
 export default TodoList;
