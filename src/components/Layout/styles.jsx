@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
-import Btn from "../../components/Button";
+import Btn from '../Button';
 
 const ASIDE_WIDTH = 50;
 const ASIDE_WIDTH_OPEN = 200;
 
 export const Wrapper = styled.div`
-  padding-left: ${({ open }) => open ? ASIDE_WIDTH_OPEN : ASIDE_WIDTH}px;
+  padding-left: ${({ open }) => (open ? ASIDE_WIDTH_OPEN : ASIDE_WIDTH)}px;
   position: relative;
   height: 100vh;
   overflow-y: auto;
@@ -15,7 +15,7 @@ export const Wrapper = styled.div`
 export const Header = styled.header`
   position: sticky;
   top: 0;
-  background-color: rgb(200,100,100);
+  background-color: rgb(200, 100, 100);
   padding: 10px;
 `;
 
@@ -30,7 +30,7 @@ export const Aside = styled.aside`
   left: 0;
   bottom: 0;
   padding: 10px;
-  width: ${({ open }) => open ? ASIDE_WIDTH_OPEN : ASIDE_WIDTH}px;
+  width: ${({ open }) => (open ? ASIDE_WIDTH_OPEN : ASIDE_WIDTH)}px;
   background-color: #fff;
   color: #29627e;
 `;
@@ -45,9 +45,11 @@ export const ToggleButton = styled(Btn)`
   background-color: transparent;
   width: 20px;
   height: 20px;
-  position:relative;
+  position: relative;
   padding: 0;
-  ::after, ::before, span {
+  ::after,
+  ::before,
+  span {
     position: absolute;
     left: 0;
     content: '';
