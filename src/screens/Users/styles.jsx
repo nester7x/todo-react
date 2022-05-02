@@ -12,9 +12,9 @@ export const Title = styled.h1`
 
 export const Tr = styled.tr`
   cursor: pointer;
-  transition: .1s;
+  transition: 0.1s;
   :hover {
-    background-color: rgba(111,111,111,.1);
+    background-color: rgba(111, 111, 111, 0.1);
   }
 `;
 
