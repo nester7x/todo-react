@@ -6,7 +6,7 @@ import { Form } from '../Wrap/styles';
 const TodoList = ({ data }) => (
   <Form>
     <p>My list:</p>
-    {data.length ? data.map(TodoItem) : <span>List is empty...</span>}
+    {data?.length ? data.map(TodoItem) : <span>List is empty...</span>}
   </Form>
 );
 

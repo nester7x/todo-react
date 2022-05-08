@@ -13,13 +13,12 @@
   },
   "plugins": ["react"],
   "rules": {
-    "react/function-component-definition": [
-      2,
-      {
-        "namedComponents": "arrow-function",
-        "unnamedComponents": "arrow-function"
-      }
-    ],
-    "import/prefer-default-export": "off"
+    "react/function-component-definition": "off",
+    "import/prefer-default-export": "off",
+    "import/no-extraneous-dependencies": ["error",  {"devDependencies": true}],
+    "react/jsx-props-no-spreading": "off",
+    "no-alert": "off",
+    "react/no-array-index-key": "off",
+    "import/no-unresolved": "off"
   }
 }

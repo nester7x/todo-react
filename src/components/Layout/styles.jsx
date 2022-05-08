@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import Btn from '../Button';
+import Btn from 'components/Button';
 
 const ASIDE_WIDTH = 50;
 const ASIDE_WIDTH_OPEN = 200;
@@ -37,7 +37,6 @@ export const Aside = styled.aside`
 
 export const Main = styled.main`
   background-color: #ccc;
-  padding: 0 15px;
 `;
 
 export const ToggleButton = styled(Btn)`
