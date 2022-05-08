@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import Btn from '../Button';
+import Btn from 'components/Button';
 
 const ASIDE_WIDTH = 50;
 const ASIDE_WIDTH_OPEN = 200;

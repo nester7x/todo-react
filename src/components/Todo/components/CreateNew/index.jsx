@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Input from '../../../Input';
+import Input from 'components/Input';
 import { AddBtn } from './styles';
 
 const CreateNew = ({ handleSave }) => {
@@ -14,7 +14,6 @@ const CreateNew = ({ handleSave }) => {
       await handleSave(inputValue);
       await setInputValue('');
     } else {
-      // eslint-disable-next-line no-alert
       alert('Input is empty...');
     }
   };

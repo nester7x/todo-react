@@ -29,13 +29,12 @@ const Users = () => {
             <S.Td>Username</S.Td>
             <S.Td>Email</S.Td>
           </tr>
-          {info.map((item, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <S.Tr key={index} onClick={() => handleClick(item.id)}>
-              <S.Td>{item.id}</S.Td>
-              <S.Td>{item.name}</S.Td>
-              <S.Td>{item.username}</S.Td>
-              <S.Td>{item.email}</S.Td>
+          {info.map((item, id) => (
+            <S.Tr key={id} onClick={() => handleClick(item.id)}>
+              <S.Td>{item.id || ''}</S.Td>
+              <S.Td>{item.name || ''}</S.Td>
+              <S.Td>{item.username || ''}</S.Td>
+              <S.Td>{item.email || ''}</S.Td>
             </S.Tr>
           ))}
         </tbody>

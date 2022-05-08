@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-// eslint-disable-next-line import/no-unresolved
+import Preloader from 'components/Preloader';
 import * as S from './styles';
-import { Id, InfoItem, SubName, SubNameValue, UserId } from './styles';
-import Preloader from '../../components/Preloader';
 
 const User = () => {
   const { id } = useParams();
@@ -14,57 +12,55 @@ const User = () => {
       fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
         .then((response) => response.json())
         .then((json) => setUserInfo(json));
-  }, []);
+  }, [id]);
 
   if (!userInfo)
     return (
       <div>
-        {' '}
         <Preloader />
       </div>
     );
 
   return (
     <S.Wrap>
-      <S.UserName>{userInfo?.name}</S.UserName>
-      <UserId>
-        {' '}
-        User_id: <Id>{id}</Id>
-      </UserId>
+      <S.UserName>{userInfo?.name || ''}</S.UserName>
+      <S.UserId>
+        User_id: <S.Id>{id || ''}</S.Id>
+      </S.UserId>
       <S.Info>
-        <InfoItem>
-          <SubName>username</SubName>
-          <SubNameValue>{userInfo?.username}</SubNameValue>
-        </InfoItem>
+        <S.InfoItem>
+          <S.SubName>username</S.SubName>
+          <S.SubNameValue>{userInfo?.username || ''}</S.SubNameValue>
+        </S.InfoItem>
 
-        <InfoItem>
-          <SubName>email</SubName>
-          <SubNameValue>{userInfo?.email}</SubNameValue>
-        </InfoItem>
+        <S.InfoItem>
+          <S.SubName>email</S.SubName>
+          <S.SubNameValue>{userInfo?.email || ''}</S.SubNameValue>
+        </S.InfoItem>
 
-        <InfoItem>
-          <SubName>address</SubName>
-          <SubNameValue>
-            Street: {userInfo?.address?.street}
+        <S.InfoItem>
+          <S.SubName>address</S.SubName>
+          <S.SubNameValue>
+            Street: {userInfo?.address?.street || ''}
             <br />
-            City: {userInfo?.address?.city}
-          </SubNameValue>
-        </InfoItem>
+            City: {userInfo?.address?.city || ''}
+          </S.SubNameValue>
+        </S.InfoItem>
 
-        <InfoItem>
-          <SubName>phone</SubName>
-          <SubNameValue>{userInfo?.phone}</SubNameValue>
-        </InfoItem>
+        <S.InfoItem>
+          <S.SubName>phone</S.SubName>
+          <S.SubNameValue>{userInfo?.phone || ''}</S.SubNameValue>
+        </S.InfoItem>
 
-        <InfoItem>
-          <SubName>company</SubName>
-          <SubNameValue>{userInfo?.company?.name}</SubNameValue>
-        </InfoItem>
+        <S.InfoItem>
+          <S.SubName>company</S.SubName>
+          <S.SubNameValue>{userInfo?.company?.name || ''}</S.SubNameValue>
+        </S.InfoItem>
 
-        <InfoItem>
-          <SubName>website</SubName>
-          <SubNameValue>{userInfo?.website}</SubNameValue>
-        </InfoItem>
+        <S.InfoItem>
+          <S.SubName>website</S.SubName>
+          <S.SubNameValue>{userInfo?.website || ''}</S.SubNameValue>
+        </S.InfoItem>
       </S.Info>
     </S.Wrap>
   );
