@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Wrap = styled.div`
   background-color: #ccc;
   min-height: 100vh;
+  padding: 0 15px;
 `;
 
 export const Title = styled.h1`
