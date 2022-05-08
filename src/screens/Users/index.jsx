@@ -9,7 +9,7 @@ const Users = () => {
   const navigate = useNavigate();
 
   const handleClick = (id) => {
-    navigate(`./${id}`, { replace: true });
+    navigate(`../user/${id}`, { replace: true });
   };
 
   useEffect(() => {
@@ -22,20 +22,23 @@ const Users = () => {
     <S.Wrap>
       <S.Title>Users info</S.Title>
       <table cellSpacing="0">
-        <tr>
-          <S.Td>id</S.Td>
-          <S.Td>Name</S.Td>
-          <S.Td>Username</S.Td>
-          <S.Td>Email</S.Td>
-        </tr>
-        {info.map((item) => (
-          <S.Tr onClick={() => handleClick(item.id)}>
-            <S.Td>{item.id}</S.Td>
-            <S.Td>{item.name}</S.Td>
-            <S.Td>{item.username}</S.Td>
-            <S.Td>{item.email}</S.Td>
-          </S.Tr>
-        ))}
+        <tbody>
+          <tr>
+            <S.Td>id</S.Td>
+            <S.Td>Name</S.Td>
+            <S.Td>Username</S.Td>
+            <S.Td>Email</S.Td>
+          </tr>
+          {info.map((item, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <S.Tr key={index} onClick={() => handleClick(item.id)}>
+              <S.Td>{item.id}</S.Td>
+              <S.Td>{item.name}</S.Td>
+              <S.Td>{item.username}</S.Td>
+              <S.Td>{item.email}</S.Td>
+            </S.Tr>
+          ))}
+        </tbody>
       </table>
     </S.Wrap>
   );
