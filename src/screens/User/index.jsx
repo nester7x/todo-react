@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, NavLink } from 'react-router-dom';
 import Preloader from 'components/Preloader';
 import * as S from './styles';
 
@@ -23,10 +23,15 @@ const User = () => {
 
   return (
     <S.Wrap>
-      <S.UserName>{userInfo?.name || ''}</S.UserName>
-      <S.UserId>
-        User_id: <S.Id>{id || ''}</S.Id>
-      </S.UserId>
+      <div>
+        <S.UserName>{userInfo?.name || ''}</S.UserName>
+        <S.UserId>
+          User_id: <S.Id>{id || ''}</S.Id>
+        </S.UserId>
+        <S.EditBtn>
+          <NavLink to={`../users/${id}/edit`}>Edit...</NavLink>
+        </S.EditBtn>
+      </div>
       <S.Info>
         <S.InfoItem>
           <S.SubName>username</S.SubName>

@@ -9,7 +9,7 @@ const Users = () => {
   const navigate = useNavigate();
 
   const handleClick = (id) => {
-    navigate(`../user/${id}`, { replace: true });
+    navigate(`../users/${id}`, { replace: true });
   };
 
   useEffect(() => {

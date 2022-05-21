@@ -14,6 +14,10 @@ export const UserId = styled.p`
   margin: 0 0 10px 0;
 `;
 
+export const EditBtn = styled.p`
+  margin: 0 0 10px 0;
+`;
+
 export const Id = styled.span`
   background-color: #ccc;
   border-radius: 4px;
