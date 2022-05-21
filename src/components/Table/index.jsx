@@ -2,6 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TableWrapper, TD, TH } from './styles';
 
+const TableHeadItem = ({ item }) => <TH>{item.label}</TH>;
+
+const TableRow = ({ item, colName }) => (
+  <tr>
+    {colName.map(({ label, key, Row }) => {
+      if (Row) {
+        return <TD>{Row(label, key, item)}</TD>;
+      }
+
+      if (key.includes('.')) {
+        const keySplit = key.split('.');
+        return <TD>{item[keySplit[0]][keySplit[1]]}</TD>;
+      }
+
+      return <TD>{item[key]}</TD>;
+    })}
+  </tr>
+);
+
 const Table = ({ data, colName }) => (
   <TableWrapper>
     <thead>
@@ -17,20 +36,6 @@ const Table = ({ data, colName }) => (
       ))}
     </tbody>
   </TableWrapper>
-);
-
-const TableHeadItem = ({ item }) => <TH>{item.value}</TH>;
-
-const TableRow = ({ item, colName }) => (
-  <tr>
-    {colName.map(({ value, key, Row }) => {
-      if (Row) {
-        return <TD>{Row(value, key, item)}</TD>;
-      }
-
-      return <TD>{`${''}`}</TD>;
-    })}
-  </tr>
 );
 
 Table.propTypes = {

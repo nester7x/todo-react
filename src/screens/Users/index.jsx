@@ -14,37 +14,27 @@ const Users = () => {
       .then((json) => setInfo(json));
   }, []);
 
-  if (!info)
-    return (
-      <div>
-        <Preloader />
-      </div>
-    );
+  if (!info) return <Preloader />;
 
   const colName = [
     {
-      value: 'name',
+      label: 'name',
       key: 'name',
-      Row: (value, key, item) => (
-        <td>
-          <NavLink to={`/user/${item.id}`}>{item.name}</NavLink>
-        </td>
+      Row: (label, key, item) => (
+        <NavLink to={`/user/${item.id}`}>{item.name}</NavLink>
       )
     },
     {
-      value: 'username',
-      key: 'username',
-      Row: (value, key, item) => <td>{item.username}</td>
+      label: 'username',
+      key: 'username'
     },
     {
-      value: 'email',
-      key: 'email',
-      Row: (value, key, item) => <td>{item.email}</td>
+      label: 'email',
+      key: 'email'
     },
     {
-      value: 'city',
-      key: 'address.city',
-      Row: (value, key, item) => <td>{item.address.city}</td>
+      label: 'city',
+      key: 'address.city'
     }
   ];
 
