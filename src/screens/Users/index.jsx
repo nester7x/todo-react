@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
+import Table from 'components/Table';
+import Preloader from 'components/Preloader';
 import * as S from './styles';
 
 const Users = () => {
-  const [info, setInfo] = useState([]);
-
-  const navigate = useNavigate();
-
-  const handleClick = (id) => {
-    navigate(`../user/${id}`, { replace: true });
-  };
+  const [info, setInfo] = useState(null);
 
   useEffect(() => {
     fetch(`https://jsonplaceholder.typicode.com/users`)
@@ -18,27 +14,44 @@ const Users = () => {
       .then((json) => setInfo(json));
   }, []);
 
+  if (!info)
+    return (
+      <div>
+        <Preloader />
+      </div>
+    );
+
+  const colName = [
+    {
+      value: 'name',
+      key: 'name',
+      Row: (value, key, item) => (
+        <td>
+          <NavLink to={`/user/${item.id}`}>{item.name}</NavLink>
+        </td>
+      )
+    },
+    {
+      value: 'username',
+      key: 'username',
+      Row: (value, key, item) => <td>{item.username}</td>
+    },
+    {
+      value: 'email',
+      key: 'email',
+      Row: (value, key, item) => <td>{item.email}</td>
+    },
+    {
+      value: 'city',
+      key: 'address.city',
+      Row: (value, key, item) => <td>{item.address.city}</td>
+    }
+  ];
+
   return (
     <S.Wrap>
       <S.Title>Users info</S.Title>
-      <table cellSpacing="0">
-        <tbody>
-          <tr>
-            <S.Td>id</S.Td>
-            <S.Td>Name</S.Td>
-            <S.Td>Username</S.Td>
-            <S.Td>Email</S.Td>
-          </tr>
-          {info.map((item, id) => (
-            <S.Tr key={id} onClick={() => handleClick(item.id)}>
-              <S.Td>{item.id || ''}</S.Td>
-              <S.Td>{item.name || ''}</S.Td>
-              <S.Td>{item.username || ''}</S.Td>
-              <S.Td>{item.email || ''}</S.Td>
-            </S.Tr>
-          ))}
-        </tbody>
-      </table>
+      <Table data={info} colName={colName} />
     </S.Wrap>
   );
 };

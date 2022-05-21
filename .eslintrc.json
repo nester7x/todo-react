@@ -19,6 +19,10 @@
     "react/jsx-props-no-spreading": "off",
     "no-alert": "off",
     "react/no-array-index-key": "off",
-    "import/no-unresolved": "off"
+    "import/no-unresolved": "off",
+    "react/no-unstable-nested-components": [
+      "off", "warn", "error",
+      { "allowAsProps":  true }
+    ]
   }
 }
