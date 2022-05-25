@@ -21,7 +21,7 @@ const Users = () => {
       label: 'name',
       key: 'name',
       Row: (label, key, item) => (
-        <NavLink to={`/user/${item.id}`}>{item.name}</NavLink>
+        <NavLink to={`/user/${item.id}`}>{item.name || ''}</NavLink>
       )
     },
     {

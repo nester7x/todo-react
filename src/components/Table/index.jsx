@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TableWrapper, TD, TH } from './styles';
 
+const EmptyState = () => <div>No data found!</div>;
+
 const TableHeadItem = ({ item }) => <TH>{item.label}</TH>;
 
 const TableRow = ({ item, colName }) => (
@@ -13,7 +15,17 @@ const TableRow = ({ item, colName }) => (
 
       if (key.includes('.')) {
         const keySplit = key.split('.');
-        return <TD>{item[keySplit[0]][keySplit[1]]}</TD>;
+        let res;
+
+        keySplit.forEach((el) => {
+          if (res) {
+            res = res[el];
+          } else {
+            res = item[el];
+          }
+        });
+
+        return <TD>{res}</TD>;
       }
 
       return <TD>{item[key]}</TD>;
@@ -21,22 +33,28 @@ const TableRow = ({ item, colName }) => (
   </tr>
 );
 
-const Table = ({ data, colName }) => (
-  <TableWrapper>
-    <thead>
-      <tr>
-        {colName.map((item, index) => (
-          <TableHeadItem key={index} item={item} />
+const Table = ({ data, colName }) => {
+  if (!data.length) {
+    return <EmptyState />;
+  }
+
+  return (
+    <TableWrapper>
+      <thead>
+        <tr>
+          {colName.map((item, index) => (
+            <TableHeadItem key={index} item={item} />
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((item, index) => (
+          <TableRow key={index} item={item} colName={colName} />
         ))}
-      </tr>
-    </thead>
-    <tbody>
-      {data.map((item, index) => (
-        <TableRow key={index} item={item} colName={colName} />
-      ))}
-    </tbody>
-  </TableWrapper>
-);
+      </tbody>
+    </TableWrapper>
+  );
+};
 
 Table.propTypes = {
   data: PropTypes.arrayOf.isRequired,
