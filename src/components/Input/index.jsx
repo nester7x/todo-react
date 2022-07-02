@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import InputStyled from './styles';
 
-const Input = ({ onChange, value, type }) => (
-  <InputStyled type={type} onChange={onChange} value={value} />
+const Input = ({ onChange, value, type, ...rest }) => (
+  <InputStyled {...rest} type={type} onChange={onChange} value={value} />
 );
 
 Input.defaultProps = {
