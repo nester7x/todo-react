@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import useAuth from "../../hooks/useAuth";
 import { Wrapper, Header, Title, Aside, ToggleButton, Main } from './styles';
 
 const Layout = ({ children }) => {
   const [open, setOpen] = useState(false);
   const toggleDrawer = () => setOpen(!open);
+
+  const auth = useAuth();
+
   return (
     <Wrapper open={open}>
       <Header>
@@ -18,11 +22,17 @@ const Layout = ({ children }) => {
         </ToggleButton>
         <ul>
           <li>
-            <NavLink to="login">To Login</NavLink>
-            <br />
+            {!auth?.user &&
+              <>
+                <NavLink to="login">Login</NavLink>
+                <br/>
+                <NavLink to="register">Register</NavLink>
+                <br />
+              </>
+            }
             <NavLink to="">Home</NavLink>
             <br />
-            <NavLink to="users">Users</NavLink>
+            {auth?.user && <NavLink to="users">Users</NavLink>}
           </li>
         </ul>
       </Aside>
