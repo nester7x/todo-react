@@ -4,37 +4,37 @@ import { NavLink } from 'react-router-dom';
 import Table from 'components/Table';
 import Preloader from 'components/Preloader';
 import * as S from './styles';
+import { getCookie } from '../../utils/CookieUtils';
 
 const Users = () => {
   const [info, setInfo] = useState(null);
 
-  useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/users`)
-      .then((response) => response.json())
-      .then((json) => setInfo(json));
+  useEffect(async () => {
+    const response = await fetch('https://nestbe.herokuapp.com/api/users', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getCookie('token')}`,
+        'Content-Type': 'application/json;charset=utf-8'
+      }
+    });
+
+    const data = await response.json();
+    await setInfo(data);
   }, []);
 
   if (!info) return <Preloader />;
 
   const colName = [
     {
-      label: 'name',
-      key: 'name',
-      Row: (label, key, item) => (
-        <NavLink to={`/user/${item.id}`}>{item.name || ''}</NavLink>
-      )
-    },
-    {
       label: 'username',
-      key: 'username'
+      key: 'username',
+      Row: (label, key, item) => (
+        <NavLink to={`/user/${item.username}`}>{item.username || ''}</NavLink>
+      )
     },
     {
       label: 'email',
       key: 'email'
-    },
-    {
-      label: 'city',
-      key: 'address.city'
     }
   ];
 

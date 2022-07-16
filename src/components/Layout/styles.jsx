@@ -2,13 +2,13 @@ import styled from 'styled-components';
 
 import Btn from 'components/Button';
 
-const ASIDE_WIDTH = 50;
+const ASIDE_WIDTH = 65;
 const ASIDE_WIDTH_OPEN = 200;
+const HEADER_HEIGHT = 41.6;
 
 export const Wrapper = styled.div`
   padding-left: ${({ open }) => (open ? ASIDE_WIDTH_OPEN : ASIDE_WIDTH)}px;
   position: relative;
-  height: 100vh;
   overflow-y: auto;
 `;
 
@@ -24,6 +24,15 @@ export const Title = styled.p`
   color: #fff;
 `;
 
+export const LogOut = styled(Btn)`
+  background-color: transparent;
+  color: #551a8b;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translate(0, -50%);
+`;
+
 export const Aside = styled.aside`
   position: fixed;
   top: 0;
@@ -35,8 +44,14 @@ export const Aside = styled.aside`
   color: #29627e;
 `;
 
+export const MenuItem = styled.ul`
+  display: flex;
+  flex-direction: column;
+`;
+
 export const Main = styled.main`
   background-color: #ccc;
+  height: calc(100vh - ${HEADER_HEIGHT}px);
 `;
 
 export const ToggleButton = styled(Btn)`

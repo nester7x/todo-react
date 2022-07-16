@@ -4,7 +4,6 @@ export const Wrapper = styled.div`
   background: #ccc;
   display: flex;
   flex-direction: column;
-  height: 100vh;
 `;
 
 export const Form = styled.div`
