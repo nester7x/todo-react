@@ -1,18 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {
-  Wrapper,
-  Header,
-  Title,
-  Aside,
-  ToggleButton,
-  Main,
-  LogOut,
-  MenuItem
-} from './styles';
+import * as S from './styles';
+
 import { GlobalContext } from '../../context/global';
-import { setCookie } from '../../utils/CookieUtils';
+import { deleteCookie } from '../../utils/CookieUtils';
 
 const Layout = ({ children }) => {
   const [open, setOpen] = useState(false);
@@ -20,33 +12,60 @@ const Layout = ({ children }) => {
   const { isLogin } = useContext(GlobalContext);
 
   const onLogOut = () => {
-    setCookie('token', '', 1);
+    deleteCookie('token', '/', 'localhost');
     window.location.reload();
   };
 
+  const links = [
+    {
+      component: <NavLink to="">Home</NavLink>,
+      isLogin: 'general',
+      key: 1
+    },
+    {
+      component: <NavLink to="login">Login</NavLink>,
+      isLogin: false,
+      key: 2
+    },
+    {
+      component: <NavLink to="registration">Registration</NavLink>,
+      isLogin: false,
+      key: 3
+    },
+    {
+      component: <NavLink to="users">Users</NavLink>,
+      isLogin: true,
+      key: 4
+    }
+  ];
+
   return (
-    <Wrapper open={open}>
-      <Header>
-        <Title>Header</Title>
-        {isLogin && <LogOut onClick={onLogOut}>LogOut</LogOut>}
-      </Header>
+    <S.Wrapper open={open}>
+      <S.Header>
+        <S.Title>Header</S.Title>
+        {isLogin && <S.LogOut onClick={onLogOut}>LogOut</S.LogOut>}
+      </S.Header>
 
-      <Aside open={open}>
-        <ToggleButton onClick={toggleDrawer}>
+      <S.Aside open={open}>
+        <S.ToggleButton onClick={toggleDrawer}>
           <span />
-        </ToggleButton>
-        <ul>
-          <MenuItem>
-            {!isLogin && <NavLink to="login">Login</NavLink>}
-            {!isLogin && <NavLink to="registration">Registration</NavLink>}
-            <NavLink to="">Home</NavLink>
-            {isLogin && <NavLink to="users">Users</NavLink>}
-          </MenuItem>
-        </ul>
-      </Aside>
+        </S.ToggleButton>
 
-      <Main>{children}</Main>
-    </Wrapper>
+        <S.Menu>
+          {links.map((item) => {
+            if (item.isLogin === 'general') {
+              return <li key={item.key}>{item.component}</li>;
+            }
+            if (isLogin === item.isLogin) {
+              return <li key={item.key}>{item.component}</li>;
+            }
+            return '';
+          })}
+        </S.Menu>
+      </S.Aside>
+
+      <S.Main>{children}</S.Main>
+    </S.Wrapper>
   );
 };
 

@@ -15,22 +15,6 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route
-        path="/users"
-        element={
-          <PrivateRoute>
-            <Users />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/user/:id"
-        element={
-          <PrivateRoute>
-            <User />
-          </PrivateRoute>
-        }
-      />
-      <Route
         path="/login"
         element={
           <GuestRoute>
@@ -44,6 +28,22 @@ export default function AppRoutes() {
           <GuestRoute>
             <Registration />
           </GuestRoute>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <PrivateRoute>
+            <Users />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/user/:id"
+        element={
+          <PrivateRoute>
+            <User />
+          </PrivateRoute>
         }
       />
       <Route path="/not-found-404" element={<NotFound />} />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { setCookie } from 'utils/CookieUtils';
+import HttpClient from '../../api/base.api';
 import * as S from './styles';
 
 const Login = () => {
@@ -7,6 +8,7 @@ const Login = () => {
     email: '',
     password: ''
   });
+
   const [error, setError] = useState('');
 
   const handleDataChange = (event) => {
@@ -14,24 +16,14 @@ const Login = () => {
     setLoginData((prev) => ({ ...prev, [target.name]: target.value }));
   };
 
+  const client = new HttpClient();
+
   const handleLogin = async (event) => {
     try {
       event.preventDefault();
-
-      const response = await fetch(
-        'https://nestbe.herokuapp.com/api/user/login',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          body: JSON.stringify(loginData)
-        }
-      );
-
-      const data = await response.json();
-      setCookie('token', data.user.token, 1);
-      window.location.reload();
+      const data = await client.post('user/login', loginData);
+      await setCookie('token', data.user.token, 1);
+      await window.location.reload();
     } catch (e) {
       setError(`${e}`);
     }

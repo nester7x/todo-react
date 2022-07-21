@@ -7,16 +7,12 @@ export const GlobalContext = createContext();
 const { Provider } = GlobalContext;
 
 export const GlobalContextProvider = ({ children }) => {
-  const [isLogin, setLogin] = useState(null);
-
-  useEffect(() => {
-    if (isLogin !== getCookie('token')) setLogin(getCookie('token'));
-  });
+  const [isLogin, setLogin] = useState(false);
 
   useEffect(() => {
     const token = getCookie('token');
     if (token) {
-      setLogin(token);
+      setLogin(true);
     }
   }, []);
 

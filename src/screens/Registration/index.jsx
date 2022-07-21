@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { setCookie } from 'utils/CookieUtils';
+import HttpClient from '../../api/base.api';
 import * as S from './styles';
 
 const Registration = () => {
@@ -15,19 +16,10 @@ const Registration = () => {
     setRegistrationData((prev) => ({ ...prev, [target.name]: target.value }));
   };
 
-  const login = async () => {
-    const response = await fetch(
-      'https://nestbe.herokuapp.com/api/user/login',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(registrationData)
-      }
-    );
+  const client = new HttpClient();
 
-    const data = await response.json();
+  const login = async () => {
+    const data = await client.post('user/login', registrationData);
     setCookie('token', data.user.token, 1);
     window.location.reload();
   };
@@ -35,16 +27,8 @@ const Registration = () => {
   const handleRegistration = async (event) => {
     try {
       event.preventDefault();
-
-      const response = await fetch('https://nestbe.herokuapp.com/api/user', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(registrationData)
-      });
-
-      if (response.ok) await login();
+      const response = await client.post('user', registrationData);
+      if (!response.errors) await login();
     } catch (e) {
       setError(`${e}`);
     }

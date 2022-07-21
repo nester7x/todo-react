@@ -3,23 +3,22 @@ import { NavLink } from 'react-router-dom';
 
 import Table from 'components/Table';
 import Preloader from 'components/Preloader';
+import HttpClient from '../../api/base.api';
 import * as S from './styles';
 import { getCookie } from '../../utils/CookieUtils';
 
 const Users = () => {
   const [info, setInfo] = useState(null);
 
-  useEffect(async () => {
-    const response = await fetch('https://nestbe.herokuapp.com/api/users', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${getCookie('token')}`,
-        'Content-Type': 'application/json;charset=utf-8'
-      }
-    });
+  const client = new HttpClient();
 
-    const data = await response.json();
-    await setInfo(data);
+  useEffect(() => {
+    const getData = async () => {
+      const data = await client.get('users', getCookie('token'));
+      await setInfo(data);
+    };
+
+    getData();
   }, []);
 
   if (!info) return <Preloader />;

@@ -44,7 +44,7 @@ export const Aside = styled.aside`
   color: #29627e;
 `;
 
-export const MenuItem = styled.ul`
+export const Menu = styled.ul`
   display: flex;
   flex-direction: column;
 `;
