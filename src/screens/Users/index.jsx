@@ -3,18 +3,16 @@ import { NavLink } from 'react-router-dom';
 
 import Table from 'components/Table';
 import Preloader from 'components/Preloader';
-import HttpClient from '../../api/base.api';
+import { httpGet } from '../../api/base.api';
 import * as S from './styles';
 import { getCookie } from '../../utils/CookieUtils';
 
 const Users = () => {
   const [info, setInfo] = useState(null);
 
-  const client = new HttpClient();
-
   useEffect(() => {
     const getData = async () => {
-      const data = await client.get('users', getCookie('token'));
+      const data = await httpGet('users', getCookie('token'));
       await setInfo(data);
     };
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { setCookie } from 'utils/CookieUtils';
-import HttpClient from '../../api/base.api';
+import { httpPost } from '../../api/base.api';
 import * as S from './styles';
 
 const Login = () => {
@@ -16,12 +16,10 @@ const Login = () => {
     setLoginData((prev) => ({ ...prev, [target.name]: target.value }));
   };
 
-  const client = new HttpClient();
-
   const handleLogin = async (event) => {
     try {
       event.preventDefault();
-      const data = await client.post('user/login', loginData);
+      const data = await httpPost('user/login', loginData);
       await setCookie('token', data.user.token, 1);
       await window.location.reload();
     } catch (e) {

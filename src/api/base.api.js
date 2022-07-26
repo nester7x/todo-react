@@ -1,87 +1,59 @@
-class HttpClient {
-  constructor(options = {}) {
-    this.baseURL = options.baseURL || 'https://nestbe.herokuapp.com/api/';
-    this.headers = {
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json',
-      ...options.headers
-    };
+const config = {
+  api: 'https://nestbe.herokuapp.com/api/',
+  options: {
+    headers: { 'content-type': 'application/json' }
   }
+};
 
-  async fetchJSON(endpoint, options = {}) {
-    const res = await fetch(this.baseURL + endpoint, {
-      ...options,
-      headers: this.headers
-    });
-
-    if (options.parseResponse !== false && res.status !== 204) {
-      return res.json();
+export const httpGet = (endpoint, token) =>
+  fetch(`${config.api}${endpoint}`, {
+    method: 'get',
+    ...config.options,
+    headers: {
+      Authorization: `Bearer ${token}`
     }
-
-    return undefined;
-  }
-
-  setHeader(key, value) {
-    this.headers[key] = value;
-    return this;
-  }
-
-  getHeader(key) {
-    return this.headers[key];
-  }
-
-  setBasicAuth(username, password) {
-    this.headers.Authorization = `Basic ${btoa(`${username}:${password}`)}`;
-    return this;
-  }
-
-  setBearerAuth(token) {
-    this.headers.Authorization = `Bearer ${token}`;
-    return this;
-  }
-
-  get(endpoint, token, options = {}) {
-    return this.fetchJSON(endpoint, {
-      ...options,
-      headers: {
-        Authorization: this.setBearerAuth(token)
-      },
-      method: 'GET'
+  })
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      console.error(error);
+      throw Error(error);
     });
-  }
 
-  post(endpoint, body, options = {}) {
-    return this.fetchJSON(endpoint, {
-      ...options,
-      body: body ? JSON.stringify(body) : undefined,
-      method: 'POST'
+export const httpPost = (endpoint, data) =>
+  fetch(`${config.api}${endpoint}`, {
+    ...config.options,
+    body: data ? JSON.stringify(data) : null,
+    method: 'post'
+  })
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      console.error(error);
+      throw Error(error);
     });
-  }
 
-  put(endpoint, body, options = {}) {
-    return this.fetchJSON(endpoint, {
-      ...options,
-      body: body ? JSON.stringify(body) : undefined,
-      method: 'PUT'
+export const httpPut = (endpoint, data) =>
+  fetch(`${config.api}${endpoint}`, {
+    method: 'put',
+    body: data ? JSON.stringify(data) : null,
+    ...config.options
+  })
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      console.error(error);
+      throw Error(error);
     });
-  }
 
-  patch(endpoint, operations, options = {}) {
-    return this.fetchJSON(endpoint, {
-      parseResponse: false,
-      ...options,
-      body: JSON.stringify(operations),
-      method: 'PATCH'
+export const httpDelete = (endpoint) =>
+  fetch(`${config.api}${endpoint}`, {
+    method: 'delete',
+    ...config.options
+  })
+    .then((response) => response.json())
+    .then((json) => json)
+    .catch((error) => {
+      console.error(error);
+      throw Error(error);
     });
-  }
-
-  delete(endpoint, options = {}) {
-    return this.fetchJSON(endpoint, {
-      parseResponse: false,
-      ...options,
-      method: 'DELETE'
-    });
-  }
-}
-
-export default HttpClient;

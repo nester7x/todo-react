@@ -24,17 +24,17 @@ const Layout = ({ children }) => {
     },
     {
       component: <NavLink to="login">Login</NavLink>,
-      isLogin: false,
+      isLogin: 'loggedOut',
       key: 2
     },
     {
       component: <NavLink to="registration">Registration</NavLink>,
-      isLogin: false,
+      isLogin: 'loggedOut',
       key: 3
     },
     {
       component: <NavLink to="users">Users</NavLink>,
-      isLogin: true,
+      isLogin: 'loggedIn',
       key: 4
     }
   ];
@@ -56,7 +56,10 @@ const Layout = ({ children }) => {
             if (item.isLogin === 'general') {
               return <li key={item.key}>{item.component}</li>;
             }
-            if (isLogin === item.isLogin) {
+            if (isLogin && item.isLogin === 'loggedIn') {
+              return <li key={item.key}>{item.component}</li>;
+            }
+            if (!isLogin && item.isLogin === 'loggedOut') {
               return <li key={item.key}>{item.component}</li>;
             }
             return '';
