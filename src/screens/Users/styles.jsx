@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 
 export const Wrap = styled.div`
-  background-color: #ccc;
-  min-height: 100vh;
   padding: 0 15px;
+  background-color: inherit;
 `;
 
 export const Title = styled.h1`

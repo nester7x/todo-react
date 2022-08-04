@@ -3,38 +3,35 @@ import { NavLink } from 'react-router-dom';
 
 import Table from 'components/Table';
 import Preloader from 'components/Preloader';
+import { httpGet } from '../../api/base.api';
 import * as S from './styles';
+import { getCookie } from '../../utils/CookieUtils';
 
 const Users = () => {
   const [info, setInfo] = useState(null);
 
   useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/users`)
-      .then((response) => response.json())
-      .then((json) => setInfo(json));
+    const getData = async () => {
+      const data = await httpGet('users', getCookie('token'));
+      await setInfo(data);
+    };
+
+    getData();
   }, []);
 
   if (!info) return <Preloader />;
 
   const colName = [
     {
-      label: 'name',
-      key: 'name',
-      Row: (label, key, item) => (
-        <NavLink to={`/user/${item.id}`}>{item.name || ''}</NavLink>
-      )
-    },
-    {
       label: 'username',
-      key: 'username'
+      key: 'username',
+      Row: (label, key, item) => (
+        <NavLink to={`/user/${item.username}`}>{item.username || ''}</NavLink>
+      )
     },
     {
       label: 'email',
       key: 'email'
-    },
-    {
-      label: 'city',
-      key: 'address.city'
     }
   ];
 
