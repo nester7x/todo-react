@@ -1,5 +1,11 @@
-import React, { useContext, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useLocation } from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
+import Container from '@mui/material/Container';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import GroupIcon from '@mui/icons-material/Group';
 import PropTypes from 'prop-types';
 import * as S from './styles';
 
@@ -7,9 +13,8 @@ import { GlobalContext } from '../../context/global';
 import { deleteCookie } from '../../utils/CookieUtils';
 
 const Layout = ({ children }) => {
-  const [open, setOpen] = useState(false);
-  const toggleDrawer = () => setOpen(!open);
   const { isLogin } = useContext(GlobalContext);
+  const location = useLocation();
 
   const onLogOut = () => {
     deleteCookie('token', '/', 'localhost');
@@ -18,39 +23,61 @@ const Layout = ({ children }) => {
 
   const links = [
     {
-      component: <NavLink to="">Home</NavLink>,
+      component: (
+        <S.Link to="">
+          <HomeIcon />
+        </S.Link>
+      ),
       isLogin: 'general',
       key: 1
     },
     {
-      component: <NavLink to="login">Login</NavLink>,
+      component: (
+        <S.Link to="login">
+          <LoginIcon />
+        </S.Link>
+      ),
       isLogin: 'loggedOut',
       key: 2
     },
     {
-      component: <NavLink to="registration">Registration</NavLink>,
+      component: (
+        <S.Link to="registration">
+          <PersonAddIcon />
+        </S.Link>
+      ),
       isLogin: 'loggedOut',
       key: 3
     },
     {
-      component: <NavLink to="users">Users</NavLink>,
+      component: (
+        <S.Link to="users">
+          <GroupIcon />
+        </S.Link>
+      ),
       isLogin: 'loggedIn',
       key: 4
     }
   ];
 
   return (
-    <S.Wrapper open={open}>
+    <S.Wrapper>
       <S.Header>
-        <S.Title>Header</S.Title>
-        {isLogin && <S.LogOut onClick={onLogOut}>LogOut</S.LogOut>}
+        <Container>
+          <S.Title>
+            {location.pathname.substring(1) === ''
+              ? 'home'
+              : location.pathname.substring(1)}
+          </S.Title>
+          {isLogin && (
+            <S.LogOut onClick={onLogOut}>
+              <LogoutOutlinedIcon />
+            </S.LogOut>
+          )}
+        </Container>
       </S.Header>
 
-      <S.Aside open={open}>
-        <S.ToggleButton onClick={toggleDrawer}>
-          <span />
-        </S.ToggleButton>
-
+      <S.Aside>
         <S.Menu>
           {links.map((item) => {
             if (item.isLogin === 'general') {

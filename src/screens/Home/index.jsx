@@ -1,13 +1,10 @@
 import React from 'react';
 import Todo from 'components/Todo';
 
-import * as S from './styles';
-
 const Home = () => (
-  <S.Wrap>
-    <S.Title>Home</S.Title>
+  <div>
     <Todo />
-  </S.Wrap>
+  </div>
 );
 
 export default Home;

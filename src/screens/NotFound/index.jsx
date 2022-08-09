@@ -3,8 +3,9 @@ import * as S from './styles';
 
 const NotFound = () => (
   <S.Wrapper>
-    <S.H2>404</S.H2>
-    <S.H3>Page not found</S.H3>
+    <S.Info>
+      <S.Message>PAGE NOT FOUND</S.Message>
+    </S.Info>
   </S.Wrapper>
 );
 

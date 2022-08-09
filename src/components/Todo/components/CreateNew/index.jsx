@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Input from 'components/Input';
-import { AddBtn } from './styles';
+import * as S from './styles';
 
 const CreateNew = ({ handleSave }) => {
   const [inputValue, setInputValue] = useState('');
@@ -19,10 +18,14 @@ const CreateNew = ({ handleSave }) => {
   };
 
   return (
-    <div>
-      <Input value={inputValue} onChange={handleInputChange} />
-      <AddBtn onClick={onHandleSave}>Btn</AddBtn>
-    </div>
+    <S.Wrapper>
+      <S.TaskInput
+        value={inputValue}
+        onChange={handleInputChange}
+        placeholder="Write your task..."
+      />
+      <S.AddBtn onClick={onHandleSave}>Btn</S.AddBtn>
+    </S.Wrapper>
   );
 };
 

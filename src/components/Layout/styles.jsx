@@ -1,36 +1,54 @@
 import styled from 'styled-components';
+import { NavLink } from 'react-router-dom';
+import Container from '@mui/material/Container';
 
 import Btn from 'components/Button';
 
-const ASIDE_WIDTH = 65;
-const ASIDE_WIDTH_OPEN = 200;
-const HEADER_HEIGHT = 41.6;
+const HEADER_HEIGHT = 48;
 
 export const Wrapper = styled.div`
-  padding-left: ${({ open }) => (open ? ASIDE_WIDTH_OPEN : ASIDE_WIDTH)}px;
+  background-color: #1d2a9f;
+  padding-left: 44px;
   position: relative;
   overflow-y: auto;
+`;
+
+export const Main = styled(Container)`
+  min-height: calc(100vh - ${HEADER_HEIGHT}px);
+  padding: 15px 0;
 `;
 
 export const Header = styled.header`
   position: sticky;
   top: 0;
-  background-color: rgb(200, 100, 100);
-  padding: 10px;
+  left: 0;
+  background-color: #262473;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 10px 0;
 `;
 
 export const Title = styled.p`
-  text-align: center;
-  color: #fff;
+  font-size: 24px;
+  line-height: 28px;
+  text-transform: uppercase;
+  color: #ffffff;
 `;
 
 export const LogOut = styled(Btn)`
-  background-color: transparent;
-  color: #551a8b;
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translate(0, -50%);
+  && {
+    background-color: transparent;
+    color: #551a8b;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translate(0, -50%);
+    svg {
+      fill: #ffffff;
+    }
+    svg:hover {
+      opacity: 0.7;
+    }
+  }
 `;
 
 export const Aside = styled.aside`
@@ -39,9 +57,9 @@ export const Aside = styled.aside`
   left: 0;
   bottom: 0;
   padding: 10px;
-  width: ${({ open }) => (open ? ASIDE_WIDTH_OPEN : ASIDE_WIDTH)}px;
-  background-color: #fff;
-  color: #29627e;
+  background-color: #b1b1b1;
+  display: flex;
+  justify-content: center;
 `;
 
 export const Menu = styled.ul`
@@ -49,37 +67,11 @@ export const Menu = styled.ul`
   flex-direction: column;
 `;
 
-export const Main = styled.main`
-  background-color: #ccc;
-  height: calc(100vh - ${HEADER_HEIGHT}px);
-`;
-
-export const ToggleButton = styled(Btn)`
-  margin: 0 0 20px 0;
-  background-color: transparent;
-  width: 20px;
-  height: 20px;
-  position: relative;
-  padding: 0;
-  ::after,
-  ::before,
-  span {
-    position: absolute;
-    left: 0;
-    content: '';
-    background-color: #000;
-    width: 100%;
-    height: 2px;
+export const Link = styled(NavLink)`
+  svg {
+    fill: #000000;
   }
-  span {
-    bottom: 2px;
-  }
-  ::after {
-    height: 3px;
-    top: 4px;
-  }
-  ::before {
-    height: 3px;
-    top: 10px;
+  svg:hover {
+    opacity: 0.7;
   }
 `;
