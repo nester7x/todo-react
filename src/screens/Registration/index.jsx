@@ -32,7 +32,7 @@ const Registration = () => {
   const handleRegistration = async (event) => {
     try {
       event.preventDefault();
-      await setIsLoading((prevState) => !prevState);
+      setIsLoading(true);
       const response = await httpPost('user', registrationData);
       if (!response.errors) await login();
     } catch (e) {

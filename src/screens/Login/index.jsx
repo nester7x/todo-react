@@ -25,7 +25,7 @@ const Login = () => {
   const handleLogin = async (event) => {
     try {
       event.preventDefault();
-      await setIsLoading((prevState) => !prevState);
+      setIsLoading(true);
       const data = await httpPost('user/login', loginData);
       await setCookie('token', data.user.token, 1);
       await window.location.reload();
