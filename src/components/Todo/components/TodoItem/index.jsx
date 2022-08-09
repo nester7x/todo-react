@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import * as S from './styles';
+
 const TodoItem = ({ id, name }) => (
-  <div>
+  <S.Name>
     {id} {name}
-  </div>
+  </S.Name>
 );
 
 TodoItem.defaultProps = {

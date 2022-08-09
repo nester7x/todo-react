@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
 
-import Table from 'components/Table';
 import Preloader from 'components/Preloader';
 import { httpGet } from '../../api/base.api';
-import * as S from './styles';
 import { getCookie } from '../../utils/CookieUtils';
+
+import * as S from './styles';
 
 const Users = () => {
   const [info, setInfo] = useState(null);
@@ -26,7 +25,7 @@ const Users = () => {
       label: 'username',
       key: 'username',
       Row: (label, key, item) => (
-        <NavLink to={`/user/${item.username}`}>{item.username || ''}</NavLink>
+        <S.Link to={`/user/${item.username}`}>{item.username || ''}</S.Link>
       )
     },
     {
@@ -36,10 +35,9 @@ const Users = () => {
   ];
 
   return (
-    <S.Wrap>
-      <S.Title>Users info</S.Title>
-      <Table data={info} colName={colName} />
-    </S.Wrap>
+    <div>
+      <S.StyledTable data={info} colName={colName} />
+    </div>
   );
 };
 

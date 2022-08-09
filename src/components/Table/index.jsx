@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TableWrapper, TD, TH } from './styles';
+
+import * as S from './styles';
 
 const EmptyState = () => <div>No data found!</div>;
 
-const TableHeadItem = ({ item }) => <TH>{item.label}</TH>;
+const TableHeadItem = ({ item }) => <S.TH>{item.label}</S.TH>;
 
 const TableRow = ({ item, colName }) => (
-  <tr>
+  <S.TR>
     {colName.map(({ label, key, Row }) => {
       if (Row) {
-        return <TD>{Row(label, key, item)}</TD>;
+        return <S.TD>{Row(label, key, item)}</S.TD>;
       }
 
       if (key.includes('.')) {
@@ -25,34 +26,34 @@ const TableRow = ({ item, colName }) => (
           }
         });
 
-        return <TD>{res}</TD>;
+        return <S.TD>{res}</S.TD>;
       }
 
-      return <TD>{item[key]}</TD>;
+      return <S.TD>{item[key]}</S.TD>;
     })}
-  </tr>
+  </S.TR>
 );
 
-const Table = ({ data, colName }) => {
+const Table = ({ data, colName, ...rest }) => {
   if (!data.length) {
     return <EmptyState />;
   }
 
   return (
-    <TableWrapper>
-      <thead>
+    <S.TableWrapper {...rest}>
+      <S.TableHeader>
         <tr>
           {colName.map((item, index) => (
             <TableHeadItem key={index} item={item} />
           ))}
         </tr>
-      </thead>
-      <tbody>
+      </S.TableHeader>
+      <S.TableBody>
         {data.map((item, index) => (
           <TableRow key={index} item={item} colName={colName} />
         ))}
-      </tbody>
-    </TableWrapper>
+      </S.TableBody>
+    </S.TableWrapper>
   );
 };
 

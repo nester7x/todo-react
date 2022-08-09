@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import TodoItem from '../TodoItem';
 import { Form } from '../Wrap/styles';
 
+import * as S from './styles';
+
 const TodoList = ({ data }) => (
   <Form>
-    <p>My list:</p>
-    {data?.length ? data.map(TodoItem) : <span>List is empty...</span>}
+    <S.Name>My list:</S.Name>
+    {data?.length ? data.map(TodoItem) : <S.Name>List is empty...</S.Name>}
   </Form>
 );
 

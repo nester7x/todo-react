@@ -3,9 +3,7 @@ import Btn from 'components/Button';
 import Input from 'components/Input';
 
 export const Wrap = styled.div`
-  background-color: #2148c0;
   height: 100%;
-  padding: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,7 +11,10 @@ export const Wrap = styled.div`
 `;
 
 export const DataForm = styled.form`
-  width: 250px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  padding: 28px 29px;
+  max-width: 250px;
   position: fixed;
   left: 50%;
   top: 50%;
@@ -24,35 +25,41 @@ export const DataForm = styled.form`
 `;
 
 export const ErrorMessage = styled.p`
+  display: ${({ error }) => (error ? 'block' : 'none')};
   margin: 0 auto 20px;
-  color: red;
+  color: #ff3523;
   font-size: 18px;
 `;
 
 export const DataInput = styled(Input)`
-  padding: 10px 15px;
-  border: 1px solid #ffffff;
-  border-radius: 6px;
-  background: transparent;
-  width: 100%;
-  color: #ffffff;
-  margin: 0 0 10px;
-  :focus {
-    outline: none;
-  }
-  ::placeholder {
-    color: rgba(255, 255, 255, 0.8);
+  && {
+    padding: 4px 6px;
+    border-bottom: 1px solid #ffffff;
+    background: transparent;
+    width: 100%;
+    color: #ffffff;
+    margin: 0 0 10px;
+    :before {
+      border-bottom: 1px solid transparent;
+    }
+    :after {
+      border-bottom: 1px solid #252383;
+    }
+    :hover:before {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
   }
 `;
 
 export const LoginBtn = styled(Btn)`
-  color: #264eca;
-  background-color: #ffffff;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
-  width: 100%;
-  transition: 0.3s;
-  :hover {
-    opacity: 0.8;
+  && {
+    margin: 19px 0 0;
+    background: rgba(255, 255, 255, 0.36) !important;
+    border-radius: 0;
+    width: 100%;
+    transition: 0.3s;
+    font-size: 16px;
+    line-height: 19px;
+    color: #ffffff;
   }
 `;
