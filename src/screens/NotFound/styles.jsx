@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
 `;
 
 export const Info = styled.div`
-  background: rgba(255, 255, 255, 0.24);
+  background-color: #394252;
   border-radius: 20px;
   padding: 22px 30px;
 `;

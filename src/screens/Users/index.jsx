@@ -35,7 +35,13 @@ const Users = () => {
   ];
 
   return (
-    <div>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+    >
       <S.StyledTable data={info} colName={colName} />
     </div>
   );

@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
-import Container from '@mui/material/Container';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -33,8 +32,8 @@ const Layout = ({ children }) => {
     },
     {
       component: (
-        <S.Link to="login">
-          <LoginIcon />
+        <S.Link to="registration">
+          <PersonAddIcon />
         </S.Link>
       ),
       isLogin: 'loggedOut',
@@ -42,8 +41,8 @@ const Layout = ({ children }) => {
     },
     {
       component: (
-        <S.Link to="registration">
-          <PersonAddIcon />
+        <S.Link to="login">
+          <LoginIcon />
         </S.Link>
       ),
       isLogin: 'loggedOut',
@@ -57,42 +56,43 @@ const Layout = ({ children }) => {
       ),
       isLogin: 'loggedIn',
       key: 4
+    },
+    {
+      component: (
+        <S.LogOut onClick={onLogOut}>
+          <LogoutOutlinedIcon />
+        </S.LogOut>
+      ),
+      isLogin: 'loggedIn',
+      key: 5
     }
   ];
 
   return (
     <S.Wrapper>
       <S.Header>
-        <Container>
+        <S.HeaderInner>
           <S.Title>
             {location.pathname.substring(1) === ''
               ? 'home'
               : location.pathname.substring(1)}
           </S.Title>
-          {isLogin && (
-            <S.LogOut onClick={onLogOut}>
-              <LogoutOutlinedIcon />
-            </S.LogOut>
-          )}
-        </Container>
+          <S.Menu>
+            {links.map((item) => {
+              if (item.isLogin === 'general') {
+                return <li key={item.key}>{item.component}</li>;
+              }
+              if (isLogin && item.isLogin === 'loggedIn') {
+                return <li key={item.key}>{item.component}</li>;
+              }
+              if (!isLogin && item.isLogin === 'loggedOut') {
+                return <li key={item.key}>{item.component}</li>;
+              }
+              return '';
+            })}
+          </S.Menu>
+        </S.HeaderInner>
       </S.Header>
-
-      <S.Aside>
-        <S.Menu>
-          {links.map((item) => {
-            if (item.isLogin === 'general') {
-              return <li key={item.key}>{item.component}</li>;
-            }
-            if (isLogin && item.isLogin === 'loggedIn') {
-              return <li key={item.key}>{item.component}</li>;
-            }
-            if (!isLogin && item.isLogin === 'loggedOut') {
-              return <li key={item.key}>{item.component}</li>;
-            }
-            return '';
-          })}
-        </S.Menu>
-      </S.Aside>
 
       <S.Main>{children}</S.Main>
     </S.Wrapper>

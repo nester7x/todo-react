@@ -2,29 +2,36 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import Container from '@mui/material/Container';
 
-import Btn from 'components/Button';
-
 const HEADER_HEIGHT = 48;
 
 export const Wrapper = styled.div`
-  background-color: #1d2a9f;
-  padding-left: 44px;
+  background-color: #cccccc;
   position: relative;
   overflow-y: auto;
 `;
 
 export const Main = styled(Container)`
-  min-height: calc(100vh - ${HEADER_HEIGHT}px);
-  padding: 15px 0;
+  min-height: 100vh;
+  padding: ${HEADER_HEIGHT + 15}px 0 15px;
 `;
 
 export const Header = styled.header`
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
-  background-color: #262473;
+  right: 0;
+  width: 100%;
+  background-color: #394252;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   padding: 10px 0;
+`;
+
+export const HeaderInner = styled(Container)`
+  && {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 `;
 
 export const Title = styled.p`
@@ -34,14 +41,10 @@ export const Title = styled.p`
   color: #ffffff;
 `;
 
-export const LogOut = styled(Btn)`
+export const LogOut = styled.a`
   && {
-    background-color: transparent;
-    color: #551a8b;
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translate(0, -50%);
+    cursor: pointer;
+    margin: 0 10px;
     svg {
       fill: #ffffff;
     }
@@ -64,12 +67,13 @@ export const Aside = styled.aside`
 
 export const Menu = styled.ul`
   display: flex;
-  flex-direction: column;
+  margin-right: -10px;
 `;
 
 export const Link = styled(NavLink)`
+  margin: 0 10px;
   svg {
-    fill: #000000;
+    fill: #ffffff;
   }
   svg:hover {
     opacity: 0.7;

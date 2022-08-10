@@ -24,7 +24,7 @@ const CreateNew = ({ handleSave }) => {
         onChange={handleInputChange}
         placeholder="Write your task..."
       />
-      <S.AddBtn onClick={onHandleSave}>Btn</S.AddBtn>
+      <S.AddBtn onClick={onHandleSave}>add task</S.AddBtn>
     </S.Wrapper>
   );
 };

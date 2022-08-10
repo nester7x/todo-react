@@ -4,7 +4,7 @@ import Table from 'components/Table';
 
 export const StyledTable = styled(Table)`
   display: block;
-  height: 90vh;
+  height: 88vh;
   overflow-y: scroll;
   width: max-content;
   ::-webkit-scrollbar {
@@ -15,11 +15,11 @@ export const StyledTable = styled(Table)`
   }
   ::-webkit-scrollbar-thumb {
     background-color: transparent;
-    border: 2px solid #4553d2;
+    border: 2px solid #ffffff;
     border-radius: 5px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.4);
   }
 `;
 
@@ -27,6 +27,6 @@ export const Link = styled(NavLink)`
   color: #ffffff;
   transition: 0.2s;
   :hover {
-    color: #1d2a9f;
+    opacity: 0.8;
   }
 `;
