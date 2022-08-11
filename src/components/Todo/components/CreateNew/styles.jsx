@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
 
 export const AddBtn = styled(Btn)`
   && {
-    padding: 8px 3px;
+    padding: 8px;
     border-radius: 0 3px 3px 0;
   }
 `;
@@ -17,18 +17,18 @@ export const AddBtn = styled(Btn)`
 export const TaskInput = styled(Input)`
   && {
     padding: 8px 15px;
-    background: rgba(217, 217, 217, 0.5);
+    background: #ffffff;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
     border-radius: 3px 0 0 3px;
-    color: #ffffff;
+    color: #000000;
     :before {
-      border-bottom: 2px solid #252383;
+      border-bottom: 2px solid #394252;
     }
     :after {
-      border-bottom: 2px solid #ffffff;
+      border-bottom: 2px solid #394252;
     }
     :hover:before {
-      border-bottom: 2px solid rgba(255, 255, 255, 0.2) !important;
+      border-bottom: 2px solid transparent !important;
     }
   }
 `;

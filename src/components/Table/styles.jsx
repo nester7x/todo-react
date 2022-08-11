@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const TableWrapper = styled.table`
   border-spacing: 0;
   border-collapse: collapse;
-  background: rgba(255, 255, 255, 0.4);
+  background-color: #394252;
   border-radius: 5px;
 `;
 
@@ -12,7 +12,7 @@ export const TableHeader = styled.thead`
   left: 0;
   top: 0;
   z-index: 10;
-  background: #777fc5;
+  background: #394252;
   border-radius: 8px 8px 0 0;
   box-shadow: 0 5px 4px rgba(0, 0, 0, 0.25);
 `;

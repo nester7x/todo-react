@@ -11,7 +11,7 @@ export const Wrap = styled.div`
 `;
 
 export const DataForm = styled.form`
-  background: rgba(255, 255, 255, 0.4);
+  background-color: #394252;
   border-radius: 20px;
   padding: 28px 29px;
   max-width: 250px;
@@ -43,7 +43,7 @@ export const DataInput = styled(Input)`
       border-bottom: 1px solid transparent;
     }
     :after {
-      border-bottom: 1px solid #252383;
+      border-bottom: 1px solid #394252;
     }
     :hover:before {
       border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
