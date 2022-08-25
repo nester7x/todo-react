@@ -6,9 +6,9 @@ import { GlobalContext } from '../../context/global';
 function GuestRoute({ children }) {
   const location = useLocation();
   const url = new URLSearchParams(location.search.slice(1));
-  const { isLogin } = useContext(GlobalContext);
+  const { user } = useContext(GlobalContext);
 
-  return isLogin ? <Navigate to={url.get('redirect') || '/'} /> : children;
+  return user.isLogin ? <Navigate to={url.get('redirect') || '/'} /> : children;
 }
 
 GuestRoute.propTypes = {

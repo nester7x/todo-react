@@ -10,13 +10,14 @@ const Btn = ({ onClick, type, children, ...rest }) => (
 );
 
 Btn.defaultProps = {
+  onClick: () => {},
   type: 'button',
   text: 'Btn'
 };
 
 Btn.propTypes = {
   children: PropTypes.element.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   type: PropTypes.string,
   text: PropTypes.string
 };

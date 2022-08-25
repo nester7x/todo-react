@@ -5,6 +5,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import GroupIcon from '@mui/icons-material/Group';
+import ChatIcon from '@mui/icons-material/Chat';
 import PropTypes from 'prop-types';
 import * as S from './styles';
 
@@ -12,7 +13,7 @@ import { GlobalContext } from '../../context/global';
 import { deleteCookie } from '../../utils/CookieUtils';
 
 const Layout = ({ children }) => {
-  const { isLogin } = useContext(GlobalContext);
+  const { user } = useContext(GlobalContext);
   const location = useLocation();
 
   const onLogOut = () => {
@@ -50,12 +51,21 @@ const Layout = ({ children }) => {
     },
     {
       component: (
+        <S.Link to="chat">
+          <ChatIcon />
+        </S.Link>
+      ),
+      isLogin: 'loggedIn',
+      key: 4
+    },
+    {
+      component: (
         <S.Link to="users">
           <GroupIcon />
         </S.Link>
       ),
       isLogin: 'loggedIn',
-      key: 4
+      key: 5
     },
     {
       component: (
@@ -64,7 +74,7 @@ const Layout = ({ children }) => {
         </S.LogOut>
       ),
       isLogin: 'loggedIn',
-      key: 5
+      key: 6
     }
   ];
 
@@ -82,10 +92,10 @@ const Layout = ({ children }) => {
               if (item.isLogin === 'general') {
                 return <li key={item.key}>{item.component}</li>;
               }
-              if (isLogin && item.isLogin === 'loggedIn') {
+              if (user.isLogin && item.isLogin === 'loggedIn') {
                 return <li key={item.key}>{item.component}</li>;
               }
-              if (!isLogin && item.isLogin === 'loggedOut') {
+              if (!user.isLogin && item.isLogin === 'loggedOut') {
                 return <li key={item.key}>{item.component}</li>;
               }
               return '';

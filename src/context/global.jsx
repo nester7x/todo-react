@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { httpGet } from 'api/base.api';
 import { getCookie } from '../utils/CookieUtils';
 
 export const GlobalContext = createContext();
@@ -7,16 +8,29 @@ export const GlobalContext = createContext();
 const { Provider } = GlobalContext;
 
 export const GlobalContextProvider = ({ children }) => {
-  const [isLogin, setLogin] = useState(false);
+  const [user, setUser] = useState({
+    userInfo: {},
+    isLogin: false
+  });
 
   useEffect(() => {
-    const token = getCookie('token');
-    if (token) {
-      setLogin(true);
-    }
+    const putData = async () => {
+      const token = getCookie('token');
+
+      if (token) {
+        const data = await httpGet(`me`, token);
+        setUser((prevState) => ({
+          ...prevState,
+          userInfo: data?.user,
+          isLogin: true
+        }));
+      }
+    };
+
+    putData();
   }, []);
 
-  return <Provider value={{ isLogin, setLogin }}>{children}</Provider>;
+  return <Provider value={{ user, setUser }}>{children}</Provider>;
 };
 
 GlobalContextProvider.propTypes = {

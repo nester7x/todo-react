@@ -9,6 +9,7 @@ import PrivateRoute from '../PrivateRoute';
 import GuestRoute from '../GuestRoute';
 import NotFound from '../../screens/NotFound';
 import Registration from '../../screens/Registration';
+import Chat from '../../screens/Chat';
 
 export default function AppRoutes() {
   return (
@@ -28,6 +29,14 @@ export default function AppRoutes() {
           <GuestRoute>
             <Registration />
           </GuestRoute>
+        }
+      />
+      <Route
+        path="/chat"
+        element={
+          <PrivateRoute>
+            <Chat />
+          </PrivateRoute>
         }
       />
       <Route
