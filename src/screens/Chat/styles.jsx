@@ -1,34 +1,37 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-`;
-
-export const Receivers = styled.div`
+  margin: 0 auto;
   border-radius: 5px;
   background-color: #394252;
-  padding: 25px;
   height: 85vh;
-  overflow-y: auto;
-  width: 20%;
-`;
-
-export const Receiver = styled.div`
+  overflow-y: hidden;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
   color: #ffffff;
 `;
 
 export const Chat = styled.div`
-  margin: 0 auto;
-  border-radius: 5px;
-  background-color: #394252;
-  padding: 25px;
-  height: 85vh;
-  overflow-y: auto;
-  width: 70%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  color: #ffffff;
+  width: 70%;
+`;
+
+export const Receiver = styled.p`
+  margin: 0 0 10px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  background-color: #262a33;
+  padding: 10px;
+`;
+
+export const EmptyReceiver = styled.p`
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
 `;

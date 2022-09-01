@@ -4,6 +4,7 @@ import Button from 'components/Button';
 
 export const SendWrap = styled.div`
   display: flex;
+  margin: 20px;
 `;
 
 export const MessageInput = styled(Input)`

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import * as S from './styles';
+import { getCookie } from 'utils/CookieUtils';
+import { httpGet } from 'api/base.api';
 import Message from '../Message';
-import { httpGet } from '../../../../api/base.api';
-import { getCookie } from '../../../../utils/CookieUtils';
+import * as S from './styles';
 
 const Messages = () => {
   const [messages, setMessages] = useState({

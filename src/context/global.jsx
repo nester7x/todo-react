@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { httpGet } from 'api/base.api';
-import { getCookie } from '../utils/CookieUtils';
+import { getCookie } from 'utils/CookieUtils';
 
 export const GlobalContext = createContext();
 
@@ -14,7 +14,7 @@ export const GlobalContextProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    const putData = async () => {
+    const getUser = async () => {
       const token = getCookie('token');
 
       if (token) {
@@ -27,7 +27,7 @@ export const GlobalContextProvider = ({ children }) => {
       }
     };
 
-    putData();
+    getUser();
   }, []);
 
   return <Provider value={{ user, setUser }}>{children}</Provider>;

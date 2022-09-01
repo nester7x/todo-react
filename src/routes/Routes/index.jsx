@@ -1,15 +1,15 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-import Home from '../../screens/Home';
-import Login from '../../screens/Login';
-import Users from '../../screens/Users';
-import User from '../../screens/User';
-import PrivateRoute from '../PrivateRoute';
+import Home from 'screens/Home';
+import Login from 'screens/Login';
+import Users from 'screens/Users';
+import User from 'screens/User';
+import NotFound from 'screens/NotFound';
+import Registration from 'screens/Registration';
+import Chat from 'screens/Chat';
 import GuestRoute from '../GuestRoute';
-import NotFound from '../../screens/NotFound';
-import Registration from '../../screens/Registration';
-import Chat from '../../screens/Chat';
+import PrivateRoute from '../PrivateRoute';
 
 export default function AppRoutes() {
   return (
@@ -33,6 +33,14 @@ export default function AppRoutes() {
       />
       <Route
         path="/chat"
+        element={
+          <PrivateRoute>
+            <Chat />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/chat/:id"
         element={
           <PrivateRoute>
             <Chat />

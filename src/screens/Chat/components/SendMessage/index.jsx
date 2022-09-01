@@ -1,12 +1,11 @@
 import React, { useContext, useState } from 'react';
+import { GlobalContext } from 'context/global';
+import { getCookie } from 'utils/CookieUtils';
+import { httpPost } from 'api/base.api';
 import * as S from './styles';
-import { GlobalContext } from '../../../../context/global';
-import { getCookie } from '../../../../utils/CookieUtils';
-import { httpPost } from '../../../../api/base.api';
 
-const SendMessage = () => {
+const SendMessage = (id) => {
   const { user } = useContext(GlobalContext);
-
   const [messageValue, setMessageValue] = useState('');
 
   const handleInputChange = (event) => {
@@ -21,10 +20,7 @@ const SendMessage = () => {
       'message',
       {
         from: user?.userInfo?.email,
-        to:
-          user?.userInfo?.email === 'qwerty@gmail.com'
-            ? 'qwerty@gmail.com'
-            : 'qwerty@gmail.com',
+        to: `${id}`,
         message: messageValue
       },
       {
@@ -38,8 +34,14 @@ const SendMessage = () => {
 
   return (
     <S.SendWrap>
-      <S.MessageInput onChange={handleInputChange} value={messageValue} />
-      <S.SendBtn onClick={sendMessage}>Send</S.SendBtn>
+      <S.MessageInput
+        onChange={handleInputChange}
+        value={messageValue}
+        placeholder="Write a message..."
+      />
+      <S.SendBtn onClick={sendMessage} disabled={!messageValue}>
+        Send
+      </S.SendBtn>
     </S.SendWrap>
   );
 };
