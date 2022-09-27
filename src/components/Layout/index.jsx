@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 
 import { GlobalContext } from 'context/global';
 import { deleteCookie } from 'utils/CookieUtils';
+import { showComponents } from 'utils/ShowComponents.Utils';
 import * as S from './styles';
 
 const Layout = ({ children }) => {
@@ -78,19 +79,6 @@ const Layout = ({ children }) => {
     }
   ];
 
-  const showComponents = (statement, isLogin, component) => {
-    switch (isLogin) {
-      case 'general':
-        return component;
-      case statement && 'loggedIn':
-        return component;
-      case !statement && 'loggedOut':
-        return component;
-      default:
-        return '';
-    }
-  };
-
   return (
     <S.Wrapper>
       <S.Header>
@@ -102,9 +90,9 @@ const Layout = ({ children }) => {
           </S.Title>
           <S.Menu>
             {links.map((item) => (
-              <li key={item.key}>
+              <S.MenuItem key={item.key} data-hover={item.key}>
                 {showComponents(user.isLogin, item.isLogin, item.component)}
-              </li>
+              </S.MenuItem>
             ))}
           </S.Menu>
         </S.HeaderInner>

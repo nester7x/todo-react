@@ -13,6 +13,11 @@ export const GlobalContextProvider = ({ children }) => {
     isLogin: false
   });
 
+  const [receiver, setReceiver] = useState({
+    receiverId: '',
+    items: []
+  });
+
   useEffect(() => {
     const getUser = async () => {
       const token = getCookie('token');
@@ -30,7 +35,25 @@ export const GlobalContextProvider = ({ children }) => {
     getUser();
   }, []);
 
-  return <Provider value={{ user, setUser }}>{children}</Provider>;
+  useEffect(() => {
+    if (receiver.receiverId) {
+      const getConversation = async () => {
+        const data = await httpGet(
+          `conversation?with=${receiver.receiverId}`,
+          getCookie('token')
+        );
+        await setReceiver(data);
+      };
+
+      getConversation();
+    }
+  }, [receiver.receiverId]);
+
+  return (
+    <Provider value={{ user, setUser, receiver, setReceiver }}>
+      {children}
+    </Provider>
+  );
 };
 
 GlobalContextProvider.propTypes = {

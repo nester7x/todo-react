@@ -54,20 +54,34 @@ export const LogOut = styled.a`
   }
 `;
 
-export const Aside = styled.aside`
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  padding: 10px;
-  background-color: #b1b1b1;
-  display: flex;
-  justify-content: center;
-`;
-
 export const Menu = styled.ul`
   display: flex;
   margin-right: -10px;
+`;
+
+export const MenuItem = styled.li`
+  position: relative;
+  :before {
+    content: attr(data-hover);
+    visibility: hidden;
+    opacity: 0;
+    width: max-content;
+    background-color: #ffffff;
+    color: #394252;
+    text-align: center;
+    font-size: 10px;
+    border-radius: 5px;
+    padding: 5px 5px;
+    transition: opacity 0.6s ease-in-out;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 110%;
+  }
+  :hover:before {
+    opacity: 1;
+    visibility: visible;
+  }
 `;
 
 export const Link = styled(NavLink)`

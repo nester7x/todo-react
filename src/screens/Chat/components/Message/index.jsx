@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import parse from 'html-react-parser';
+import { convertingDate } from 'utils/ConvertingDate';
 import * as S from './styles';
 
-const Message = ({ id, from, createdDate, message }) => (
-  <S.Message key={id}>
+const Message = ({ id, from, createdDate, message, ...rest }) => (
+  <S.Message key={id} {...rest}>
     <S.InfoWrap>
       <S.Name>{from}</S.Name>
-      <S.Date>{createdDate}</S.Date>
+      <S.Date>{convertingDate(createdDate)}</S.Date>
     </S.InfoWrap>
-    <S.Content>{message}</S.Content>
+    <S.Content>{parse(message)}</S.Content>
   </S.Message>
 );
 

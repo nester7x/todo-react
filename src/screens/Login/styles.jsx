@@ -28,6 +28,7 @@ export const ErrorMessage = styled.p`
   display: ${({ error }) => (error ? 'block' : 'none')};
   margin: 0 auto 20px;
   color: #ff3523;
+  text-align: center;
   font-size: 18px;
 `;
 

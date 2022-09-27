@@ -1,24 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { GlobalContext } from 'context/global';
 import { useParams } from 'react-router-dom';
+import { httpGet } from 'api/base.api';
+import { getCookie } from 'utils/CookieUtils';
 import Messages from './components/Messages';
 import SendMessage from './components/SendMessage';
 
 import * as S from './styles';
 import Receivers from './components/Receivers';
-import { httpGet } from '../../api/base.api';
-import { getCookie } from '../../utils/CookieUtils';
 
 const Chat = () => {
+  const { setReceiver } = useContext(GlobalContext);
+
   const { id } = useParams();
-  const [receiver, setReceiver] = useState('');
+  const [receiverName, setReceiverName] = useState('');
 
   useEffect(() => {
-    const getData = async () => {
-      const data = await httpGet(`user/${id}`, getCookie('token'));
-      await setReceiver(data.user.username);
-    };
+    if (id) {
+      const getData = async () => {
+        const data = await httpGet(`user/${id}`, getCookie('token'));
+        await setReceiverName(data.user.username);
+      };
+      setReceiver((prevState) => ({
+        ...prevState,
+        receiverId: id
+      }));
 
-    getData();
+      getData();
+    }
   }, [id]);
 
   return (
@@ -26,9 +35,9 @@ const Chat = () => {
       <Receivers />
       {id ? (
         <S.Chat>
-          <S.Receiver>{receiver}</S.Receiver>
+          <S.Receiver>{receiverName}</S.Receiver>
           <Messages />
-          <SendMessage id={id} />
+          <SendMessage chatId={id.toString()} />
         </S.Chat>
       ) : (
         <S.EmptyReceiver>Choose a receiver</S.EmptyReceiver>

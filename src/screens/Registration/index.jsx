@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { setCookie } from 'utils/CookieUtils';
+import { validate } from 'utils/LoginValidation';
 import { httpPost } from 'api/base.api';
 import Preloader from 'components/Preloader';
 import * as S from './styles';
@@ -13,9 +14,21 @@ const Registration = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [error, setError] = useState({
+  const [requestError, setRequestError] = useState({
     message: '',
     isShow: false
+  });
+
+  const [inputError, setInputError] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+
+  const [isDirty, setIsDirty] = useState({
+    username: false,
+    email: false,
+    password: false
   });
 
   const handleDataChange = (event) => {
@@ -29,20 +42,42 @@ const Registration = () => {
     window.location.reload();
   };
 
+  useEffect(() => {
+    Object.keys(inputError).forEach((key) => {
+      setInputError((prev) => ({
+        ...prev,
+        [key]: validate(key, registrationData[key])
+      }));
+    });
+  }, [inputError]);
+
   const handleRegistration = async (event) => {
     try {
       event.preventDefault();
       setIsLoading(true);
       const response = await httpPost('user', registrationData);
       if (!response.errors) await login();
-    } catch (e) {
-      setError(() => ({
-        message: e.toString(),
-        isShow: true
-      }));
+      else
+        setRequestError(() => ({
+          message:
+            'username' in response.errors
+              ? response.errors.username
+              : 'Something went wrong',
+          isShow: true
+        }));
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const blurHandler = (e) => {
+    const { target } = e;
+    Object.keys(isDirty).forEach(() => {
+      setIsDirty((prev) => ({
+        ...prev,
+        [target.name]: true
+      }));
+    });
   };
 
   if (isLoading) return <Preloader />;
@@ -50,27 +85,42 @@ const Registration = () => {
   return (
     <S.Wrap>
       <S.DataForm onSubmit={handleRegistration}>
-        <S.ErrorMessage error={error.isShow}>{error.message}</S.ErrorMessage>
+        <S.ErrorMessage error={requestError.isShow}>
+          {requestError.message}
+        </S.ErrorMessage>
         <S.DataInput
           name="username"
+          type="text"
           value={registrationData.username}
           onChange={handleDataChange}
-          placeholder="username..."
+          onBlur={(e) => blurHandler(e)}
+          placeholder="username"
         />
+        {isDirty.username && <S.Error>{inputError.username}</S.Error>}
         <S.DataInput
           name="email"
+          type="email"
           value={registrationData.email}
           onChange={handleDataChange}
-          placeholder="email..."
+          onBlur={(e) => blurHandler(e)}
+          placeholder="email"
         />
+        {isDirty.email && <S.Error>{inputError.email}</S.Error>}
         <S.DataInput
           name="password"
           type="password"
           value={registrationData.password}
           onChange={handleDataChange}
-          placeholder="password..."
+          onBlur={(e) => blurHandler(e)}
+          placeholder="password"
         />
-        <S.LoginBtn type="submit">Registration</S.LoginBtn>
+        {isDirty.password && <S.Error>{inputError.password}</S.Error>}
+        <S.LoginBtn
+          type="submit"
+          disabled={Object.values(inputError).join('') !== ''}
+        >
+          Registration
+        </S.LoginBtn>
       </S.DataForm>
     </S.Wrap>
   );

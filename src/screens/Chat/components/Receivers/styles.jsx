@@ -7,13 +7,18 @@ export const Wrapper = styled.div`
 
 export const Receivers = styled.div`
   overflow-y: auto;
+  overflow-x: hidden;
   height: 100%;
+  background-color: #313946;
+  padding: 0 0 40px;
   ::-webkit-scrollbar {
     width: 4px;
   }
+
   ::-webkit-scrollbar-track {
     border-radius: 20px;
   }
+
   ::-webkit-scrollbar-thumb {
     border-radius: 20px;
   }
@@ -35,5 +40,6 @@ export const Contacts = styled.p`
   font-size: 14px;
   padding: 10px;
   text-align: center;
+  color: #ffffff;
   background-color: #262a33;
 `;

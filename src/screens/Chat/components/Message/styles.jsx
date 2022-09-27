@@ -16,12 +16,16 @@ export const InfoWrap = styled.div`
 
 export const Name = styled.p`
   font-weight: 700;
+  margin-right: 10px;
   color: #ffffff;
 `;
 
 export const Date = styled.p`
   color: #ffffff;
+  font-size: 12px;
   opacity: 0.6;
 `;
 
-export const Content = styled.p``;
+export const Content = styled.p`
+  color: #ffffff;
+`;

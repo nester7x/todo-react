@@ -5,11 +5,9 @@ export const Wrapper = styled.div`
   border-radius: 5px;
   background-color: #394252;
   height: 85vh;
-  overflow-y: hidden;
-  width: 80%;
+  overflow: hidden;
   display: flex;
   justify-content: space-between;
-  color: #ffffff;
 `;
 
 export const Chat = styled.div`
@@ -24,11 +22,13 @@ export const Receiver = styled.p`
   text-align: center;
   font-size: 14px;
   font-weight: 700;
+  color: #ffffff;
   background-color: #262a33;
   padding: 10px;
 `;
 
 export const EmptyReceiver = styled.p`
+  color: #ffffff;
   font-size: 25px;
   display: flex;
   justify-content: center;
