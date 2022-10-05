@@ -4,10 +4,12 @@ import { GlobalContext } from 'context/global';
 import { getCookie } from 'utils/CookieUtils';
 import { httpPost } from 'api/base.api';
 import PropTypes from 'prop-types';
+
 import * as S from './styles';
 
-const SendMessage = ({ chatId }) => {
+const SendMessage = ({ chatId, getConversation }) => {
   const { user } = useContext(GlobalContext);
+
   const [messageValue, setMessageValue] = useState('');
 
   const handleInputChange = (event, editor) => {
@@ -30,15 +32,16 @@ const SendMessage = ({ chatId }) => {
         Authorization: `Bearer ${token}`
       }
     );
+
+    await getConversation();
     await setMessageValue('');
-    await window.location.reload();
     return data;
   };
 
   return (
     <S.Wrapper>
       <CKEditor
-        value={messageValue}
+        data={messageValue}
         onChange={handleInputChange}
         placeholder="Write a message..."
       />
@@ -50,7 +53,8 @@ const SendMessage = ({ chatId }) => {
 };
 
 SendMessage.propTypes = {
-  chatId: PropTypes.string.isRequired
+  chatId: PropTypes.string.isRequired,
+  getConversation: PropTypes.func.isRequired
 };
 
 export default SendMessage;

@@ -3,18 +3,18 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Editor = ({ value, onChange, placeholder, ...rest }) => (
+const Editor = ({ data, onChange, placeholder, ...rest }) => (
   <CKEditor
     {...rest}
     editor={ClassicEditor}
-    value={value}
+    data={data}
     onChange={onChange}
     config={{ placeholder: `${placeholder || 'Type something...'}` }}
   />
 );
 
 Editor.propTypes = {
-  value: PropTypes.string.isRequired,
+  data: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string.isRequired
 };

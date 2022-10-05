@@ -1,32 +1,44 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { GlobalContext } from 'context/global';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { httpGet } from 'api/base.api';
 import { getCookie } from 'utils/CookieUtils';
 import Messages from './components/Messages';
 import SendMessage from './components/SendMessage';
-
-import * as S from './styles';
 import Receivers from './components/Receivers';
 
-const Chat = () => {
-  const { setReceiver } = useContext(GlobalContext);
+import * as S from './styles';
 
+const Chat = () => {
   const { id } = useParams();
-  const [receiverName, setReceiverName] = useState('');
+  const [receiver, setReceiver] = useState({
+    receiverId: '',
+    receiverName: '',
+    conversation: []
+  });
+
+  const getConversation = async () => {
+    const data = await httpGet(`conversation?with=${id}`, getCookie('token'));
+    await setReceiver((prevState) => ({
+      ...prevState,
+      conversation: data.items
+    }));
+  };
 
   useEffect(() => {
     if (id) {
-      const getData = async () => {
-        const data = await httpGet(`user/${id}`, getCookie('token'));
-        await setReceiverName(data.user.username);
-      };
-      setReceiver((prevState) => ({
-        ...prevState,
-        receiverId: id
-      }));
-
-      getData();
+      (async () => {
+        const user = await httpGet(`user/${id}`, getCookie('token'));
+        const conversation = await httpGet(
+          `conversation?with=${id}`,
+          getCookie('token')
+        );
+        await setReceiver((prevState) => ({
+          ...prevState,
+          receiverId: id,
+          receiverName: user.user.username,
+          conversation: conversation.items
+        }));
+      })();
     }
   }, [id]);
 
@@ -35,9 +47,12 @@ const Chat = () => {
       <Receivers />
       {id ? (
         <S.Chat>
-          <S.Receiver>{receiverName}</S.Receiver>
-          <Messages />
-          <SendMessage chatId={id.toString()} />
+          <S.Receiver>{receiver.receiverName}</S.Receiver>
+          <Messages conversation={receiver.conversation} />
+          <SendMessage
+            chatId={id.toString()}
+            getConversation={getConversation}
+          />
         </S.Chat>
       ) : (
         <S.EmptyReceiver>Choose a receiver</S.EmptyReceiver>

@@ -2,11 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { GlobalContext } from 'context/global';
 import { httpGet } from 'api/base.api';
 import { getCookie } from 'utils/CookieUtils';
+import PropTypes from 'prop-types';
 import Message from '../Message';
 import * as S from './styles';
 
-const Messages = () => {
-  const { receiver, user } = useContext(GlobalContext);
+const Messages = ({ conversation }) => {
+  const { user } = useContext(GlobalContext);
+
   const [info, setInfo] = useState([]);
 
   useEffect(() => {
@@ -20,10 +22,10 @@ const Messages = () => {
 
   return (
     <S.Messages>
-      {receiver.items.length === 0 ? (
+      {conversation.length === 0 ? (
         <S.EmptyMessage>Nothing here...</S.EmptyMessage>
       ) : (
-        receiver.items.map((item) => (
+        conversation.map((item) => (
           <Message
             style={
               item.from === user.userInfo.id.toString()
@@ -46,6 +48,10 @@ const Messages = () => {
       )}
     </S.Messages>
   );
+};
+
+Messages.propTypes = {
+  conversation: PropTypes.arrayOf.isRequired
 };
 
 export default Messages;
