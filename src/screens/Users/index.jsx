@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 import Preloader from 'components/Preloader';
-import { httpGet } from '../../api/base.api';
-import { getCookie } from '../../utils/CookieUtils';
+import { httpGet } from 'api/base.api';
+import { getCookie } from 'utils/CookieUtils';
 
 import * as S from './styles';
 

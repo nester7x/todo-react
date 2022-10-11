@@ -20,11 +20,11 @@ export const httpGet = (endpoint, token) =>
       throw Error(error);
     });
 
-export const httpPost = (endpoint, data) =>
+export const httpPost = (endpoint, data, options) =>
   fetch(`${config.api}${endpoint}`, {
-    ...config.options,
+    method: 'post',
     body: data ? JSON.stringify(data) : null,
-    method: 'post'
+    headers: options || config.options.headers
   })
     .then((response) => response.json())
     .then((json) => json)

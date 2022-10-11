@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { setCookie } from 'utils/CookieUtils';
 import { httpPost } from 'api/base.api';
+import Preloader from 'components/Preloader';
 import * as S from './styles';
-import Preloader from '../../components/Preloader';
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -17,6 +17,16 @@ const Login = () => {
     isShow: false
   });
 
+  const isDisabled = () => {
+    let res = false;
+    Object.values(loginData).forEach((value) => {
+      if (!value) {
+        res = true;
+      }
+    });
+    return res;
+  };
+
   const handleDataChange = (event) => {
     const { target } = event;
     setLoginData((prev) => ({ ...prev, [target.name]: target.value }));
@@ -30,8 +40,10 @@ const Login = () => {
       await setCookie('token', data.user.token, 1);
       await window.location.reload();
     } catch (e) {
+      const data = await httpPost('user/login', loginData);
       setError(() => ({
-        message: e.toString(),
+        message:
+          'User' in data.errors ? data.errors.User : 'Something went wrong',
         isShow: true
       }));
     } finally {
@@ -49,16 +61,18 @@ const Login = () => {
           name="email"
           value={loginData.email}
           onChange={handleDataChange}
-          placeholder="email..."
+          placeholder="email"
         />
         <S.DataInput
           name="password"
           type="password"
           value={loginData.password}
           onChange={handleDataChange}
-          placeholder="password..."
+          placeholder="password"
         />
-        <S.LoginBtn type="submit">Login</S.LoginBtn>
+        <S.LoginBtn type="submit" disabled={isDisabled()}>
+          Login
+        </S.LoginBtn>
       </S.DataForm>
     </S.Wrap>
   );

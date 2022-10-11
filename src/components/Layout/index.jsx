@@ -5,14 +5,16 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import GroupIcon from '@mui/icons-material/Group';
+import ChatIcon from '@mui/icons-material/Chat';
 import PropTypes from 'prop-types';
+
+import { GlobalContext } from 'context/global';
+import { deleteCookie } from 'utils/CookieUtils';
+import { showComponents } from 'utils/ShowComponents.Utils';
 import * as S from './styles';
 
-import { GlobalContext } from '../../context/global';
-import { deleteCookie } from '../../utils/CookieUtils';
-
 const Layout = ({ children }) => {
-  const { isLogin } = useContext(GlobalContext);
+  const { user } = useContext(GlobalContext);
   const location = useLocation();
 
   const onLogOut = () => {
@@ -28,7 +30,7 @@ const Layout = ({ children }) => {
         </S.Link>
       ),
       isLogin: 'general',
-      key: 1
+      key: 'home'
     },
     {
       component: (
@@ -37,7 +39,7 @@ const Layout = ({ children }) => {
         </S.Link>
       ),
       isLogin: 'loggedOut',
-      key: 2
+      key: 'registration'
     },
     {
       component: (
@@ -46,7 +48,16 @@ const Layout = ({ children }) => {
         </S.Link>
       ),
       isLogin: 'loggedOut',
-      key: 3
+      key: 'login'
+    },
+    {
+      component: (
+        <S.Link to="chat">
+          <ChatIcon />
+        </S.Link>
+      ),
+      isLogin: 'loggedIn',
+      key: 'chat'
     },
     {
       component: (
@@ -55,7 +66,7 @@ const Layout = ({ children }) => {
         </S.Link>
       ),
       isLogin: 'loggedIn',
-      key: 4
+      key: 'users'
     },
     {
       component: (
@@ -64,7 +75,7 @@ const Layout = ({ children }) => {
         </S.LogOut>
       ),
       isLogin: 'loggedIn',
-      key: 5
+      key: 'logout'
     }
   ];
 
@@ -75,21 +86,14 @@ const Layout = ({ children }) => {
           <S.Title>
             {location.pathname.substring(1) === ''
               ? 'home'
-              : location.pathname.substring(1)}
+              : location.pathname.split('/')[1]}
           </S.Title>
           <S.Menu>
-            {links.map((item) => {
-              if (item.isLogin === 'general') {
-                return <li key={item.key}>{item.component}</li>;
-              }
-              if (isLogin && item.isLogin === 'loggedIn') {
-                return <li key={item.key}>{item.component}</li>;
-              }
-              if (!isLogin && item.isLogin === 'loggedOut') {
-                return <li key={item.key}>{item.component}</li>;
-              }
-              return '';
-            })}
+            {links.map((item) => (
+              <S.MenuItem key={item.key} data-hover={item.key}>
+                {showComponents(user.isLogin, item.isLogin, item.component)}
+              </S.MenuItem>
+            ))}
           </S.Menu>
         </S.HeaderInner>
       </S.Header>

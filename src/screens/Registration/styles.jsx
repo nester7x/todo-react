@@ -28,7 +28,13 @@ export const ErrorMessage = styled.p`
   display: ${({ error }) => (error ? 'block' : 'none')};
   margin: 0 auto 20px;
   color: #ff3523;
+  text-align: center;
   font-size: 18px;
+`;
+
+export const Error = styled.p`
+  font-size: 12px;
+  color: #ff3523;
 `;
 
 export const DataInput = styled(Input)`

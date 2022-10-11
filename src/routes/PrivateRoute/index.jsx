@@ -7,9 +7,9 @@ function PrivateRoute({ children }) {
   const location = useLocation();
   const url = new URLSearchParams();
   url.set('redirect', location.pathname + location.search);
-  const { isLogin } = useContext(GlobalContext);
+  const { user } = useContext(GlobalContext);
 
-  return isLogin ? (
+  return user.isLogin ? (
     children
   ) : (
     <Navigate
