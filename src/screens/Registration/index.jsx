@@ -9,7 +9,8 @@ const Registration = () => {
   const [registrationData, setRegistrationData] = useState({
     username: '',
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -22,13 +23,15 @@ const Registration = () => {
   const [inputError, setInputError] = useState({
     username: '',
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
 
   const [isDirty, setIsDirty] = useState({
     username: false,
     email: false,
-    password: false
+    password: false,
+    confirmPassword: false
   });
 
   const handleDataChange = (event) => {
@@ -46,7 +49,7 @@ const Registration = () => {
     Object.keys(inputError).forEach((key) => {
       setInputError((prev) => ({
         ...prev,
-        [key]: validate(key, registrationData[key])
+        [key]: validate(key, registrationData[key], registrationData)
       }));
     });
   }, [inputError]);
@@ -91,35 +94,50 @@ const Registration = () => {
         <S.DataInput
           name="username"
           type="text"
+          inputProps={{ maxLength: 20 }}
           value={registrationData.username}
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
-          placeholder="username"
+          placeholder="Full Name"
         />
         {isDirty.username && <S.Error>{inputError.username}</S.Error>}
         <S.DataInput
           name="email"
           type="email"
+          inputProps={{ maxLength: 40 }}
           value={registrationData.email}
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
-          placeholder="email"
+          placeholder="Email"
         />
         {isDirty.email && <S.Error>{inputError.email}</S.Error>}
         <S.DataInput
           name="password"
           type="password"
+          inputProps={{ maxLength: 30 }}
           value={registrationData.password}
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
-          placeholder="password"
+          placeholder="Password"
         />
         {isDirty.password && <S.Error>{inputError.password}</S.Error>}
+        <S.DataInput
+          name="confirmPassword"
+          type="password"
+          inputProps={{ maxLength: 30 }}
+          value={registrationData.confirmPassword}
+          onChange={handleDataChange}
+          onBlur={(e) => blurHandler(e)}
+          placeholder="Confirm Password"
+        />
+        {isDirty.confirmPassword && (
+          <S.Error>{inputError.confirmPassword}</S.Error>
+        )}
         <S.LoginBtn
           type="submit"
           disabled={Object.values(inputError).join('') !== ''}
         >
-          Registration
+          Submit
         </S.LoginBtn>
       </S.DataForm>
     </S.Wrap>

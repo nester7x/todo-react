@@ -25,16 +25,16 @@ const Layout = ({ children }) => {
   const links = [
     {
       component: (
-        <S.Link to="">
+        <S.Link to="home">
           <HomeIcon />
         </S.Link>
       ),
-      isLogin: 'general',
+      isLogin: 'loggedIn',
       key: 'home'
     },
     {
       component: (
-        <S.Link to="registration">
+        <S.Link to="">
           <PersonAddIcon />
         </S.Link>
       ),
@@ -85,13 +85,20 @@ const Layout = ({ children }) => {
         <S.HeaderInner>
           <S.Title>
             {location.pathname.substring(1) === ''
-              ? 'home'
+              ? 'registration'
               : location.pathname.split('/')[1]}
           </S.Title>
           <S.Menu>
             {links.map((item) => (
               <S.MenuItem key={item.key} data-hover={item.key}>
-                {showComponents(user.isLogin, item.isLogin, item.component)}
+                {location.pathname.split('/')[1] !== item.component.props.to
+                  ? showComponents(
+                      user.isLogin,
+                      item.isLogin,
+                      item.component,
+                      item.key
+                    )
+                  : ''}
               </S.MenuItem>
             ))}
           </S.Menu>

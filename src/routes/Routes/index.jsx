@@ -14,7 +14,14 @@ import PrivateRoute from '../PrivateRoute';
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route
+        path="/home"
+        element={
+          <PrivateRoute>
+            <Home />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/login"
         element={
@@ -24,7 +31,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path="/registration"
+        path="/"
         element={
           <GuestRoute>
             <Registration />
