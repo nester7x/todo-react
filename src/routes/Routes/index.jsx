@@ -15,7 +15,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route
-        path="/home"
+        path="/"
         element={
           <PrivateRoute>
             <Home />
@@ -31,7 +31,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path="/"
+        path="/registration"
         element={
           <GuestRoute>
             <Registration />

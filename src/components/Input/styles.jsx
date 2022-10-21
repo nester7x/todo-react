@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Input from '@mui/material/Input';
 
-export default styled(Input)`
+export const InputStyled = styled(Input)`
   && {
     background-color: #ffffff;
     padding: 10px 15px;
@@ -9,4 +9,9 @@ export default styled(Input)`
       padding: 0;
     }
   }
+`;
+
+export const Error = styled.p`
+  font-size: 12px;
+  color: #ff3523;
 `;

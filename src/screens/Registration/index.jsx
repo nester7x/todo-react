@@ -99,8 +99,8 @@ const Registration = () => {
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
           placeholder="Full Name"
+          errorText={isDirty.username ? inputError.username : ''}
         />
-        {isDirty.username && <S.Error>{inputError.username}</S.Error>}
         <S.DataInput
           name="email"
           type="email"
@@ -109,8 +109,8 @@ const Registration = () => {
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
           placeholder="Email"
+          errorText={isDirty.email ? inputError.email : ''}
         />
-        {isDirty.email && <S.Error>{inputError.email}</S.Error>}
         <S.DataInput
           name="password"
           type="password"
@@ -119,8 +119,8 @@ const Registration = () => {
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
           placeholder="Password"
+          errorText={isDirty.password ? inputError.password : ''}
         />
-        {isDirty.password && <S.Error>{inputError.password}</S.Error>}
         <S.DataInput
           name="confirmPassword"
           type="password"
@@ -129,10 +129,8 @@ const Registration = () => {
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
           placeholder="Confirm Password"
+          errorText={isDirty.confirmPassword ? inputError.confirmPassword : ''}
         />
-        {isDirty.confirmPassword && (
-          <S.Error>{inputError.confirmPassword}</S.Error>
-        )}
         <S.LoginBtn
           type="submit"
           disabled={Object.values(inputError).join('') !== ''}
