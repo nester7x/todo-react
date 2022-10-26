@@ -8,11 +8,7 @@ function GuestRoute({ children }) {
   const url = new URLSearchParams(location.search.slice(1));
   const { user } = useContext(GlobalContext);
 
-  return user.isLogin ? (
-    <Navigate to={url.get('redirect') || '/home'} />
-  ) : (
-    children
-  );
+  return user.isLogin ? <Navigate to={url.get('redirect') || '/'} /> : children;
 }
 
 GuestRoute.propTypes = {

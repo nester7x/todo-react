@@ -1,39 +1,49 @@
+import { isFirstSymbol, isValidSymbols } from './EmailCheck';
+import { isAllCases, isNumbers } from './PasswordCheck';
+
 export const validate = (fieldName, value, stateObj) => {
-  let error = '';
+  const error = [];
   switch (fieldName) {
     case 'email':
       if (!value) {
-        error = 'Email address is required';
-      } else if (!/\S+\w*@gmail\.+com\b/.test(value)) {
-        error = 'Email address is invalid';
+        error.push('Email address is required');
+      } else {
+        if (!isFirstSymbol(value)) {
+          error.push('First symbol must be a letter');
+        }
+        if (!isValidSymbols(value)) {
+          error.push('Invalid email(example: test1.2kek-lol@gmail.com)');
+        }
       }
       break;
 
     case 'password':
       if (!value) {
-        error = 'Password is required';
-      } else if (value.length < 6) {
-        error = 'Password must be 6 or more characters';
-      } else if (
-        stateObj.confirmPassword &&
-        value !== stateObj.confirmPassword
-      ) {
-        error = 'Password and Confirm Password does not match';
+        error.push('Password is required');
+      } else {
+        if (value.length < 6) {
+          error.push('Password must be 6 or more characters');
+        }
+        if (!isAllCases(value) || !isNumbers(value)) {
+          error.push(
+            'Password must contains numbers, lowercase and uppercase letters'
+          );
+        }
       }
       break;
 
     case 'confirmPassword':
       if (!value) {
-        error = 'Confirm password is required';
+        error.push('Confirm password is required');
       } else if (stateObj.password && value !== stateObj.password) {
-        error = 'Password and Confirm Password does not match';
+        error.push('Password and Confirm Password does not match');
       }
       break;
 
     default:
-      if (!value) {
-        error = 'Username field is required';
+      if (!value || !value.trim()) {
+        error.push('Username field is required');
       }
   }
-  return error;
+  return error.join('. ');
 };

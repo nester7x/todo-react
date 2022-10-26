@@ -25,7 +25,7 @@ const Layout = ({ children }) => {
   const links = [
     {
       component: (
-        <S.Link to="/">
+        <S.Link to="">
           <HomeIcon />
         </S.Link>
       ),
@@ -85,7 +85,7 @@ const Layout = ({ children }) => {
         <S.HeaderInner>
           <S.Title>
             {location.pathname.substring(1) === ''
-              ? 'registration'
+              ? 'home'
               : location.pathname.split('/')[1]}
           </S.Title>
           <S.Menu>
