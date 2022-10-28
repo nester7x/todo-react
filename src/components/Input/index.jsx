@@ -6,7 +6,7 @@ import * as S from './styles';
 const Input = ({ onChange, value, type, errorText, ...rest }) => (
   <>
     <S.InputStyled {...rest} type={type} onChange={onChange} value={value} />
-    <S.Error>{errorText}</S.Error>
+    {errorText && <S.Error>{errorText}</S.Error>}
   </>
 );
 

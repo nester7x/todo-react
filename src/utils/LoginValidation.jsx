@@ -45,5 +45,5 @@ export const validate = (fieldName, value, stateObj) => {
         error.push('Username field is required');
       }
   }
-  return error.join('. ');
+  return error.join('.\n');
 };
