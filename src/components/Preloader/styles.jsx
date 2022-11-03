@@ -37,7 +37,6 @@ export const Circle = styled.span`
     left: 0;
     animation: ${Grow} 500ms linear 0ms infinite;
   }
-
   &:last-child {
     position: absolute;
     top: 0;

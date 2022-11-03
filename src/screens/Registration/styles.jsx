@@ -14,7 +14,7 @@ export const DataForm = styled.form`
   background-color: #394252;
   border-radius: 20px;
   padding: 28px 29px;
-  max-width: 250px;
+  max-width: 300px;
   position: fixed;
   left: 50%;
   top: 50%;

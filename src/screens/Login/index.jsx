@@ -61,17 +61,17 @@ const Login = () => {
           name="email"
           value={loginData.email}
           onChange={handleDataChange}
-          placeholder="email"
+          placeholder="Email"
         />
         <S.DataInput
           name="password"
           type="password"
           value={loginData.password}
           onChange={handleDataChange}
-          placeholder="password"
+          placeholder="Password"
         />
         <S.LoginBtn type="submit" disabled={isDisabled()}>
-          Login
+          Submit
         </S.LoginBtn>
       </S.DataForm>
     </S.Wrap>

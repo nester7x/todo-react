@@ -29,7 +29,7 @@ const Layout = ({ children }) => {
           <HomeIcon />
         </S.Link>
       ),
-      isLogin: 'general',
+      isLogin: 'loggedIn',
       key: 'home'
     },
     {
@@ -91,7 +91,14 @@ const Layout = ({ children }) => {
           <S.Menu>
             {links.map((item) => (
               <S.MenuItem key={item.key} data-hover={item.key}>
-                {showComponents(user.isLogin, item.isLogin, item.component)}
+                {location.pathname.split('/')[1] !== item.component.props.to
+                  ? showComponents(
+                      user.isLogin,
+                      item.isLogin,
+                      item.component,
+                      item.key
+                    )
+                  : ''}
               </S.MenuItem>
             ))}
           </S.Menu>

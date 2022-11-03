@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import InputStyled from './styles';
+import * as S from './styles';
 
-const Input = ({ onChange, value, type, ...rest }) => (
-  <InputStyled {...rest} type={type} onChange={onChange} value={value} />
+const Input = ({ onChange, value, type, errorText, ...rest }) => (
+  <>
+    <S.InputStyled {...rest} type={type} onChange={onChange} value={value} />
+    {errorText && <S.Error>{errorText}</S.Error>}
+  </>
 );
 
 Input.defaultProps = {
@@ -15,7 +18,8 @@ Input.defaultProps = {
 Input.propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string,
-  type: PropTypes.string
+  type: PropTypes.string,
+  errorText: PropTypes.string.isRequired
 };
 
 export default Input;
