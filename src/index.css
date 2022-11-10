@@ -11,6 +11,10 @@ body {
   font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: normal;
+  color: #ffffff;
 }
 
 ::-webkit-scrollbar {
@@ -43,3 +47,23 @@ li {
 a {
   text-decoration: none;
 }
+
+/*------CKEditor---*/
+
+.ck.ck-reset.ck-editor.ck-rounded-corners {
+  color: #000000;
+  max-width: 80%;
+}
+
+.ck-editor__editable {
+  max-height: 100px;
+}
+
+@media (max-width: 1200px){
+  .ck.ck-reset.ck-editor.ck-rounded-corners {
+    color: #000000;
+    width: fit-content;
+  }
+}
+
+/*------CKEditor---*/

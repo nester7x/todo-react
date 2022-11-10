@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+
 import { httpGet } from 'api/base.api';
 import { getCookie } from 'utils/CookieUtils';
 import Messages from './components/Messages';
@@ -15,6 +16,20 @@ const Chat = () => {
     receiverName: '',
     conversation: []
   });
+  const [isOpen, setIsOpen] = useState(false);
+  const btnRef = useRef();
+
+  useEffect(() => {
+    const closeDropDown = async (e) => {
+      if (e.path[0] !== btnRef.current) {
+        setIsOpen(false);
+      }
+    };
+
+    document.body.addEventListener('click', closeDropDown);
+
+    return () => document.body.removeEventListener('click', closeDropDown);
+  }, []);
 
   const getConversation = async () => {
     const data = await httpGet(`conversation?with=${id}`, getCookie('token'));
@@ -44,19 +59,30 @@ const Chat = () => {
 
   return (
     <S.Wrapper>
-      <Receivers />
-      {id ? (
-        <S.Chat>
-          <S.Receiver>{receiver.receiverName}</S.Receiver>
-          <Messages conversation={receiver.conversation} />
-          <SendMessage
-            chatId={id.toString()}
-            getConversation={getConversation}
-          />
-        </S.Chat>
-      ) : (
-        <S.EmptyReceiver>Choose a receiver</S.EmptyReceiver>
-      )}
+      <S.ChatHeader>
+        <S.MenuBurger
+          ref={btnRef}
+          onClick={() => {
+            setIsOpen((prev) => !prev);
+          }}
+        />
+        <S.Contacts>Contacts</S.Contacts>
+        <S.Receiver>{receiver.receiverName}</S.Receiver>
+      </S.ChatHeader>
+      <S.ChatBody>
+        <Receivers className={isOpen ? 'open' : 'closed'} />
+        {id ? (
+          <S.Chat className={isOpen ? 'open' : 'closed'}>
+            <Messages conversation={receiver.conversation} />
+            <SendMessage
+              chatId={id.toString()}
+              getConversation={getConversation}
+            />
+          </S.Chat>
+        ) : (
+          <S.EmptyReceiver>Choose a receiver</S.EmptyReceiver>
+        )}
+      </S.ChatBody>
     </S.Wrapper>
   );
 };

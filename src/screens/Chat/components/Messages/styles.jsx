@@ -1,11 +1,14 @@
 import styled from 'styled-components';
 
+import { mediaQueries } from 'utils/MediaQueries';
+
 export const Messages = styled.div`
-  padding: 20px;
-  margin-bottom: auto;
+  padding: 20px 20px 0;
   display: flex;
   flex-direction: column-reverse;
   overflow-y: auto;
+  overflow-x: hidden;
+  margin: 0 0 20px;
   ::-webkit-scrollbar {
     width: 4px;
   }
@@ -14,6 +17,10 @@ export const Messages = styled.div`
   }
   ::-webkit-scrollbar-thumb {
     border-radius: 20px;
+  }
+  ${mediaQueries.tablet} {
+    margin: 0 0 10px;
+    padding: 10px 10px 0;
   }
 `;
 

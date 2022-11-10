@@ -1,11 +1,14 @@
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+
 import Table from 'components/Table';
+import { mediaQueries } from 'utils/MediaQueries';
 
 export const StyledTable = styled(Table)`
   display: block;
   height: 88vh;
   overflow-y: scroll;
+  overflow-x: hidden;
   width: max-content;
   ::-webkit-scrollbar {
     width: 10px;
@@ -20,6 +23,16 @@ export const StyledTable = styled(Table)`
   }
   ::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.4);
+  }
+  ${mediaQueries.tablet} {
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+  }
+  ${mediaQueries.mobileL} {
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
   }
 `;
 

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import LoginIcon from '@mui/icons-material/Login';
@@ -16,6 +16,13 @@ import * as S from './styles';
 const Layout = ({ children }) => {
   const { user } = useContext(GlobalContext);
   const location = useLocation();
+
+  const [headerHeight, setHeaderHeight] = useState();
+  const ref = useRef(null);
+
+  useEffect(() => {
+    setHeaderHeight(ref.current.clientHeight);
+  });
 
   const onLogOut = () => {
     deleteCookie('token', '/', 'localhost');
@@ -81,7 +88,7 @@ const Layout = ({ children }) => {
 
   return (
     <S.Wrapper>
-      <S.Header>
+      <S.Header ref={ref}>
         <S.HeaderInner>
           <S.Title>
             {location.pathname.substring(1) === ''
@@ -105,7 +112,7 @@ const Layout = ({ children }) => {
         </S.HeaderInner>
       </S.Header>
 
-      <S.Main>{children}</S.Main>
+      <S.Main headerHeight={headerHeight}>{children}</S.Main>
     </S.Wrapper>
   );
 };

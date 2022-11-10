@@ -1,14 +1,19 @@
 import styled from 'styled-components';
+
 import Button from 'components/Button';
+import { mediaQueries } from 'utils/MediaQueries';
 
 export const Wrapper = styled.form`
-  margin: 20px;
+  margin: 0 20px 20px;
   display: flex;
-  align-items: flex-end;
+  ${mediaQueries.tablet} {
+    margin: 0 10px 10px;
+  }
 `;
 
 export const SendBtn = styled(Button)`
   && {
+    margin-top: auto;
     background-color: #1976d2;
     width: 100%;
     padding: 10px 15px;
