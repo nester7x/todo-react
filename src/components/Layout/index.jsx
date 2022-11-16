@@ -17,9 +17,9 @@ const Layout = ({ children }) => {
   const { user } = useContext(GlobalContext);
   const location = useLocation();
 
-  const onLogOut = () => {
-    deleteCookie('token', '/', 'localhost');
-    window.location.reload();
+  const onLogOut = async () => {
+    await deleteCookie('token', '/');
+    await window.location.reload();
   };
 
   const links = [
