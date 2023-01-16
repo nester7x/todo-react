@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
-import { mediaQueries } from 'utils/MediaQueries';
+import { device } from 'utils/MediaQueries';
 
 export const Wrapper = styled.div`
   width: 30%;
@@ -20,19 +20,21 @@ export const Wrapper = styled.div`
   ::-webkit-scrollbar-thumb {
     border-radius: 20px;
   }
-  ${mediaQueries.tablet} {
-    position: absolute;
-    top: 0;
-    right: 100%;
-    width: 0;
-    height: 100%;
-    transition: 0.2s;
-    opacity: 0;
-    z-index: 105;
-    &.open {
-      width: 60%;
-      transform: translateX(100%);
-      opacity: 1;
+  @media screen and ${device.tablet} {
+    && {
+      position: absolute;
+      top: 0;
+      right: 100%;
+      width: 0;
+      height: 100%;
+      transition: 0.2s;
+      opacity: 0;
+      z-index: 105;
+      &.open {
+        width: 60%;
+        transform: translateX(100%);
+        opacity: 1;
+      }
     }
   }
 `;

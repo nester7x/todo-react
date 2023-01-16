@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import { mediaQueries } from 'utils/MediaQueries';
+import { device } from 'utils/MediaQueries';
 
 export const Wrapper = styled.div`
   margin: 0 auto;
@@ -32,7 +32,7 @@ export const Chat = styled.div`
   height: 93%;
   width: 70%;
   overflow-x: hidden;
-  ${mediaQueries.tablet} {
+  @media screen and ${device.tablet} {
     width: 100%;
     &.open {
       pointer-events: none;
@@ -49,7 +49,7 @@ export const Receiver = styled.p`
   color: #ffffff;
   background-color: #262a33;
   padding: 10px;
-  ${mediaQueries.tablet} {
+  @media screen and ${device.tablet} {
     width: 100%;
   }
 `;
@@ -61,7 +61,7 @@ export const EmptyReceiver = styled.p`
   justify-content: center;
   align-items: center;
   width: 80%;
-  ${mediaQueries.tablet} {
+  @media screen and ${device.tablet} {
     width: 100%;
   }
 `;
@@ -73,7 +73,7 @@ export const Contacts = styled.p`
   width: 30%;
   color: #ffffff;
   background-color: #262a33;
-  ${mediaQueries.tablet} {
+  @media screen and ${device.tablet} {
     display: none;
   }
 `;
@@ -84,10 +84,10 @@ export const MenuBurger = styled(MenuIcon)`
     margin: 10px;
     z-index: 100;
     display: none;
-    ${mediaQueries.tablet} {
+    @media screen and ${device.tablet} {
       display: block;
     }
-    ${mediaQueries.mobileL} {
+    @media screen and ${device.mobileL} {
       margin: 5px 0 5px 10px;
     }
   }

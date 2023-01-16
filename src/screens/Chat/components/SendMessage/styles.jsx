@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
 import Button from 'components/Button';
-import { mediaQueries } from 'utils/MediaQueries';
+import { device } from 'utils/MediaQueries';
 
 export const Wrapper = styled.form`
   margin: 0 20px 20px;
   display: flex;
-  ${mediaQueries.tablet} {
+  @media screen and ${device.tablet} {
     margin: 0 10px 10px;
   }
 `;

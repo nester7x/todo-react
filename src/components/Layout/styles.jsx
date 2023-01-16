@@ -2,30 +2,34 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import Container from '@mui/material/Container';
 
-import { mediaQueries } from 'utils/MediaQueries';
+import { device } from 'utils/MediaQueries';
 
 export const Wrapper = styled.div`
   background-color: #cccccc;
   position: relative;
-  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
 `;
 
-export const Main = styled(Container)`
-  min-height: 100vh;
-  padding: ${(props) => props.headerHeight + 15}px 0 15px;
+export const Main = styled.main`
+  overflow-y: auto;
+  height: calc(100% - 50px);
+  padding: 15px 0 15px;
+  width: 100%;
 `;
+
+export const MainContainer = styled(Container)``;
 
 export const Header = styled.header`
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
   width: 100%;
+  z-index: 200;
   background-color: #394252;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   padding: 10px 0;
-  z-index: 200;
-  ${mediaQueries.mobileL} {
+  @media screen and ${device.mobileL} {
     padding: 8px 0;
   }
 `;
@@ -43,11 +47,11 @@ export const Title = styled.p`
   line-height: 28px;
   text-transform: uppercase;
   color: #ffffff;
-  ${mediaQueries.tablet} {
+  @media screen and ${device.tablet} {
     font-size: 20px;
     line-height: 24px;
   }
-  ${mediaQueries.mobileL} {
+  @media screen and ${device.mobileL} {
     font-size: 16px;
     line-height: 20px;
   }
@@ -64,7 +68,7 @@ export const LogOut = styled.a`
     svg:hover {
       opacity: 0.7;
     }
-    ${mediaQueries.mobileL} {
+    @media screen and ${device.mobileL} {
       margin: 0 8px;
       svg {
         height: 20px;
@@ -78,7 +82,7 @@ export const Menu = styled.ul`
   display: flex;
   align-items: center;
   margin-right: -10px;
-  ${mediaQueries.mobileL} {
+  @media screen and ${device.mobileL} {
     margin-right: -8px;
   }
 `;
@@ -94,7 +98,7 @@ export const Link = styled(NavLink)`
   svg:hover {
     opacity: 0.7;
   }
-  ${mediaQueries.mobileL} {
+  @media screen and ${device.mobileL} {
     margin: 0 8px;
     svg {
       height: 20px;

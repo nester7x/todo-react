@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
-import { mediaQueries } from 'utils/MediaQueries';
+import { device } from 'utils/MediaQueries';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -24,19 +24,19 @@ export const Error = styled.h3`
   text-align: center;
   margin-bottom: 20px;
   color: #ffffff;
-  ${mediaQueries.laptopL} {
+  @media screen and ${device.laptopL} {
     font-size: 180px;
     line-height: 130px;
   }
-  ${mediaQueries.tablet} {
+  @media screen and ${device.tablet} {
     font-size: 160px;
     line-height: 110px;
   }
-  ${mediaQueries.tabletS} {
+  @media screen and ${device.tabletS} {
     font-size: 130px;
     line-height: 80px;
   }
-  ${mediaQueries.mobileL} {
+  @media screen and ${device.mobileL} {
     font-size: 100px;
     line-height: 70px;
   }
@@ -48,20 +48,20 @@ export const Message = styled.p`
   margin-bottom: 20px;
   text-align: center;
   color: #ffffff;
-  ${mediaQueries.laptopL} {
+  @media screen and ${device.laptopL} {
     font-size: 50px;
     line-height: 46px;
   }
-  ${mediaQueries.tablet} {
+  @media screen and ${device.tablet} {
     font-size: 40px;
     line-height: 36px;
     margin-bottom: 10px;
   }
-  ${mediaQueries.tabletS} {
+  @media screen and ${device.tabletS} {
     font-size: 30px;
     line-height: 26px;
   }
-  ${mediaQueries.tabletS} {
+  @media screen and ${device.tabletS} {
     font-size: 26px;
     line-height: 22px;
   }
@@ -79,10 +79,10 @@ export const Btn = styled(NavLink)`
   :hover {
     opacity: 0.8;
   }
-  ${mediaQueries.tablet} {
+  @media screen and ${device.tablet} {
     font-size: 14px;
   }
-  ${mediaQueries.mobileL} {
+  @media screen and ${device.mobileL} {
     padding: 12px 18px;
     font-size: 12px;
   }

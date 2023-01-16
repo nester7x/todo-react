@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+
 import { setCookie } from 'utils/CookieUtils';
 import { httpPost } from 'api/base.api';
 import Preloader from 'components/Preloader';
+
 import * as S from './styles';
 
 const Login = () => {

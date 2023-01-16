@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { mediaQueries } from 'utils/MediaQueries';
+import { device } from 'utils/MediaQueries';
 
 export const Messages = styled.div`
   padding: 20px 20px 0;
@@ -18,7 +18,7 @@ export const Messages = styled.div`
   ::-webkit-scrollbar-thumb {
     border-radius: 20px;
   }
-  ${mediaQueries.tablet} {
+  @media screen and ${device.tablet} {
     margin: 0 0 10px;
     padding: 10px 10px 0;
   }
