@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { httpGet } from 'api/base.api';
 import { getCookie } from 'utils/CookieUtils';
-
 import Preloader from 'components/Preloader';
+
 import * as S from './styles';
 
-const Receivers = () => {
+const Receivers = ({ className }) => {
   const [info, setInfo] = useState('');
 
   useEffect(() => {
@@ -21,17 +22,18 @@ const Receivers = () => {
   if (!info) return <Preloader />;
 
   return (
-    <S.Wrapper>
-      <S.Contacts>Contacts</S.Contacts>
-      <S.Receivers>
-        {info.map((item) => (
-          <S.Receiver key={item?.id} to={`/chat/${item?.id}`}>
-            {item?.username || ''}
-          </S.Receiver>
-        ))}
-      </S.Receivers>
+    <S.Wrapper className={className}>
+      {info.map((item) => (
+        <S.Receiver key={item?.id} to={`/chat/${item?.id}`}>
+          {item?.username || ''}
+        </S.Receiver>
+      ))}
     </S.Wrapper>
   );
+};
+
+Receivers.propTypes = {
+  className: PropTypes.string.isRequired
 };
 
 export default Receivers;

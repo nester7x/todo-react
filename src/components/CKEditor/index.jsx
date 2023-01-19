@@ -1,6 +1,6 @@
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import React from 'react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
 import PropTypes from 'prop-types';
 
 const Editor = ({ data, onChange, placeholder, ...rest }) => (
@@ -9,7 +9,9 @@ const Editor = ({ data, onChange, placeholder, ...rest }) => (
     editor={ClassicEditor}
     data={data}
     onChange={onChange}
-    config={{ placeholder: `${placeholder || 'Type something...'}` }}
+    config={{
+      placeholder: `${placeholder || 'Type something...'}`
+    }}
   />
 );
 

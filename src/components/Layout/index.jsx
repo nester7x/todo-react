@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import { GlobalContext } from 'context/global';
 import { deleteCookie } from 'utils/CookieUtils';
 import { showComponents } from 'utils/ShowComponents.Utils';
+
 import * as S from './styles';
 
 const Layout = ({ children }) => {
@@ -105,7 +106,9 @@ const Layout = ({ children }) => {
         </S.HeaderInner>
       </S.Header>
 
-      <S.Main>{children}</S.Main>
+      <S.Main>
+        <S.MainContainer>{children}</S.MainContainer>
+      </S.Main>
     </S.Wrapper>
   );
 };
