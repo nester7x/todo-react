@@ -20,6 +20,7 @@ const Layout = ({ children }) => {
 
   const onLogOut = async () => {
     await deleteCookie('token', '/');
+    await deleteCookie('refreshToken', '/');
     await window.location.reload();
   };
 

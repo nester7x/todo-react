@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+
 import { setCookie } from 'utils/CookieUtils';
 import { validate } from 'utils/LoginValidation';
 import { httpPost } from 'api/base.api';
 import Preloader from 'components/Preloader';
+
 import * as S from './styles';
 
 const Registration = () => {
@@ -40,9 +42,10 @@ const Registration = () => {
   };
 
   const login = async () => {
-    const data = await httpPost('user/login', registrationData);
-    setCookie('token', data.user.token, 1);
-    window.location.reload();
+    const data = await httpPost('auth/signin', registrationData);
+    await setCookie('token', data.accessToken, 1);
+    await setCookie('refreshToken', data.refreshToken, 1);
+    await window.location.reload();
   };
 
   useEffect(() => {
@@ -58,14 +61,11 @@ const Registration = () => {
     try {
       event.preventDefault();
       setIsLoading(true);
-      const response = await httpPost('user', registrationData);
-      if (!response.errors) await login();
+      const response = await httpPost('auth/signup', registrationData);
+      if (!response.error) await login();
       else
         setRequestError(() => ({
-          message:
-            'username' in response.errors
-              ? response.errors.username
-              : 'Something went wrong',
+          message: response.error || 'Something went wrong',
           isShow: true
         }));
     } finally {

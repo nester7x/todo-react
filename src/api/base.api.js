@@ -1,5 +1,5 @@
 const config = {
-  api: 'https://nestbe.herokuapp.com/api/',
+  api: 'http://localhost:8080/api/',
   options: {
     headers: { 'content-type': 'application/json' }
   }
@@ -10,11 +10,18 @@ export const httpGet = (endpoint, token) =>
     method: 'get',
     ...config.options,
     headers: {
-      Authorization: `Bearer ${token}`
+      'x-access-token': `${token}`
     }
   })
-    .then((response) => response.json())
-    .then((json) => json)
+    .then((response) =>
+      response
+        .json()
+        .then((data) => ({
+          data,
+          status: response.status
+        }))
+        .then((res) => res.data)
+    )
     .catch((error) => {
       console.error(error);
       throw Error(error);
