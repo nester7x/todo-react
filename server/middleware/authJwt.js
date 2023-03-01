@@ -16,7 +16,6 @@ const catchError = (err, res) => {
   return res.sendStatus(401).send({ message: 'Unauthorized!' });
 };
 
-// eslint-disable-next-line consistent-return
 const verifyToken = (req, res, next) => {
   const token = req.headers['x-access-token'];
 
@@ -24,7 +23,6 @@ const verifyToken = (req, res, next) => {
     return res.status(403).send({ message: 'No token provided!' });
   }
 
-  // eslint-disable-next-line consistent-return
   jwt.verify(token, config.secret, (err, decoded) => {
     if (err) {
       return catchError(err, res);
@@ -37,7 +35,6 @@ const verifyToken = (req, res, next) => {
 const isAdmin = (req, res, next) => {
   User.findByPk(req.userId).then((user) => {
     user.getRoles().then((roles) => {
-      // eslint-disable-next-line no-plusplus
       for (let i = 0; i < roles.length; i++) {
         if (roles[i].name === 'admin') {
           next();
@@ -55,7 +52,6 @@ const isAdmin = (req, res, next) => {
 const isModerator = (req, res, next) => {
   User.findByPk(req.userId).then((user) => {
     user.getRoles().then((roles) => {
-      // eslint-disable-next-line no-plusplus
       for (let i = 0; i < roles.length; i++) {
         if (roles[i].name === 'moderator') {
           next();
@@ -73,14 +69,8 @@ const isModerator = (req, res, next) => {
 const isModeratorOrAdmin = (req, res, next) => {
   User.findByPk(req.userId).then((user) => {
     user.getRoles().then((roles) => {
-      // eslint-disable-next-line no-plusplus
       for (let i = 0; i < roles.length; i++) {
-        if (roles[i].name === 'moderator') {
-          next();
-          return;
-        }
-
-        if (roles[i].name === 'admin') {
+        if (roles[i].name === 'moderator' || roles[i].name === 'admin') {
           next();
           return;
         }

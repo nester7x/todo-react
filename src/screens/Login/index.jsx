@@ -39,10 +39,13 @@ const Login = () => {
       event.preventDefault();
       setIsLoading(true);
       const data = await httpPost('auth/signin', loginData);
-      await setCookie('token', data.accessToken, 1);
-      await setCookie('refreshToken', data.refreshToken, 1);
+      if (data.accessToken !== null) {
+        await setCookie('token', data.accessToken, 1);
+        await setCookie('refreshToken', data.refreshToken, 1);
+      }
       if (getCookie('token')) {
-        window.location.reload();
+        const currentUrl = location.href;
+        location.href = currentUrl;
       } else {
         setError(() => ({
           message: data.message || 'Something went wrong',

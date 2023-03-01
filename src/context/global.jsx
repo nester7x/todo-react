@@ -20,15 +20,12 @@ export const GlobalContextProvider = ({ children }) => {
 
       let data;
       if (token !== null) {
-        data = await httpGet('test/user', token);
+        data = await httpGet('user', token);
       }
 
+      let userInfo;
       if (token && !data.message) {
-        setUser((prevState) => ({
-          ...prevState,
-          userInfo: data,
-          isLogin: true
-        }));
+        userInfo = data;
       } else if (token && data.message) {
         const refreshToken = getCookie('refreshToken');
         const newAccessToken = await httpPost('auth/refreshtoken', {
@@ -36,10 +33,13 @@ export const GlobalContextProvider = ({ children }) => {
         });
         await setCookie('token', newAccessToken.accessToken, 1);
         const newToken = getCookie('token');
-        const newData = await httpGet('test/user', newToken);
+        userInfo = await httpGet('user', newToken);
+      }
+
+      if (userInfo) {
         setUser((prevState) => ({
           ...prevState,
-          userInfo: newData,
+          userInfo,
           isLogin: true
         }));
       }

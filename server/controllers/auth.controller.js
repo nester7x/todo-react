@@ -8,6 +8,30 @@ const { user: User, role: Role, refreshToken: RefreshToken } = db;
 
 const { Op } = db.Sequelize;
 
+const showUserInfo = async (user, res) => {
+  const token = jwt.sign({ id: user.id }, config.secret, {
+    expiresIn: config.jwtExpiration
+  });
+
+  const refreshToken = await RefreshToken.createToken(user);
+
+  const authorities = [];
+  user.getRoles().then((roles) => {
+    for (let i = 0; i < roles.length; i++) {
+      authorities.push(`ROLE_${roles[i].name.toUpperCase()}`);
+    }
+
+    res.status(200).send({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      roles: authorities,
+      accessToken: token,
+      refreshToken
+    });
+  });
+};
+
 exports.signup = (req, res) => {
   // Save User to Database
   User.create({
@@ -25,13 +49,13 @@ exports.signup = (req, res) => {
           }
         }).then((roles) => {
           user.setRoles(roles).then(() => {
-            res.send({ message: 'User was registered successfully!' });
+            res.send({ message: 'User was registered!' });
           });
         });
       } else {
         // user role = 1
-        user.setRoles([1]).then(() => {
-          res.send({ message: 'User was registered successfully!' });
+        user.setRoles([1]).then(async () => {
+          await showUserInfo(user, res);
         });
       }
     })
@@ -46,7 +70,6 @@ exports.signin = (req, res) => {
       username: req.body.username
     }
   })
-    // eslint-disable-next-line consistent-return
     .then(async (user) => {
       if (!user) {
         return res.status(404).send({ message: 'User Not found.' });
@@ -64,28 +87,7 @@ exports.signin = (req, res) => {
         });
       }
 
-      const token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: config.jwtExpiration
-      });
-
-      const refreshToken = await RefreshToken.createToken(user);
-
-      const authorities = [];
-      user.getRoles().then((roles) => {
-        // eslint-disable-next-line no-plusplus
-        for (let i = 0; i < roles.length; i++) {
-          authorities.push(`ROLE_${roles[i].name.toUpperCase()}`);
-        }
-
-        res.status(200).send({
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          roles: authorities,
-          accessToken: token,
-          refreshToken
-        });
-      });
+      await showUserInfo(user, res);
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });
@@ -104,11 +106,9 @@ exports.refreshToken = async (req, res) => {
       where: { token: requestToken }
     });
 
-    console.log(refreshToken);
-
     if (!refreshToken) {
       res.status(403).json({ message: 'Refresh token is not in database!' });
-      // eslint-disable-next-line consistent-return
+
       return;
     }
 
@@ -118,7 +118,7 @@ exports.refreshToken = async (req, res) => {
       res.status(403).json({
         message: 'Refresh token was expired. Please make a new signin request'
       });
-      // eslint-disable-next-line consistent-return
+
       return;
     }
 

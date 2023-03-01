@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { setCookie } from 'utils/CookieUtils';
+import { getCookie, setCookie } from 'utils/CookieUtils';
 import { validate } from 'utils/LoginValidation';
 import { httpPost } from 'api/base.api';
 import Preloader from 'components/Preloader';
@@ -41,13 +41,6 @@ const Registration = () => {
     setRegistrationData((prev) => ({ ...prev, [target.name]: target.value }));
   };
 
-  const login = async () => {
-    const data = await httpPost('auth/signin', registrationData);
-    await setCookie('token', data.accessToken, 1);
-    await setCookie('refreshToken', data.refreshToken, 1);
-    await window.location.reload();
-  };
-
   useEffect(() => {
     Object.keys(inputError).forEach((key) => {
       setInputError((prev) => ({
@@ -62,8 +55,14 @@ const Registration = () => {
       event.preventDefault();
       setIsLoading(true);
       const response = await httpPost('auth/signup', registrationData);
-      if (!response.error) await login();
-      else
+      if (response.accessToken !== null) {
+        await setCookie('token', response.accessToken, 1);
+        await setCookie('refreshToken', response.refreshToken, 1);
+      }
+      if (getCookie('token')) {
+        const currentUrl = location.href;
+        location.href = currentUrl;
+      } else
         setRequestError(() => ({
           message: response.error || 'Something went wrong',
           isShow: true

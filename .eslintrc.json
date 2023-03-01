@@ -18,6 +18,9 @@
     "import/no-extraneous-dependencies": ["error",  {"devDependencies": true}],
     "react/jsx-props-no-spreading": "off",
     "no-alert": "off",
+    "no-plusplus": "off",
+    "consistent-return": "off",
+    "no-restricted-globals": "off",
     "react/no-array-index-key": "off",
     "import/no-unresolved": "off",
     "react/no-unstable-nested-components": [
