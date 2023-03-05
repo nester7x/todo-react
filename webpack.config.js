@@ -4,6 +4,9 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 module.exports = function (_env, argv) {
   const isProduction = argv.mode === 'production';
@@ -66,6 +69,11 @@ module.exports = function (_env, argv) {
       extensions: ['.js', '.jsx', '.json'],
       alias: {
         reducers: path.resolve(__dirname, './src/reducers')
+      },
+      fallback: {
+        fs: false,
+        os: false,
+        path: false
       }
     },
     plugins: [
@@ -75,7 +83,7 @@ module.exports = function (_env, argv) {
           chunkFilename: 'assets/css/[name].[contenthash:8].chunk.css'
         }),
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify('development')
+        'process.env': JSON.stringify(process.env)
       }),
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, 'public/index.html'),

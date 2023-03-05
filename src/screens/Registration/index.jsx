@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { setCookie } from 'utils/CookieUtils';
+import { useNavigate } from 'react-router-dom';
+
+import { getCookie, setCookie } from 'utils/CookieUtils';
 import { validate } from 'utils/LoginValidation';
 import { httpPost } from 'api/base.api';
 import Preloader from 'components/Preloader';
+
 import * as S from './styles';
 
 const Registration = () => {
+  const navigate = useNavigate();
+
   const [registrationData, setRegistrationData] = useState({
     username: '',
     email: '',
@@ -39,12 +44,6 @@ const Registration = () => {
     setRegistrationData((prev) => ({ ...prev, [target.name]: target.value }));
   };
 
-  const login = async () => {
-    const data = await httpPost('user/login', registrationData);
-    setCookie('token', data.user.token, 1);
-    window.location.reload();
-  };
-
   useEffect(() => {
     Object.keys(inputError).forEach((key) => {
       setInputError((prev) => ({
@@ -58,14 +57,16 @@ const Registration = () => {
     try {
       event.preventDefault();
       setIsLoading(true);
-      const response = await httpPost('user', registrationData);
-      if (!response.errors) await login();
-      else
+      const response = await httpPost('auth/signup', registrationData);
+      if (response.accessToken !== null) {
+        await setCookie('token', response.accessToken, 1);
+        await setCookie('refreshToken', response.refreshToken, 1);
+      }
+      if (getCookie('token')) {
+        await navigate('/');
+      } else
         setRequestError(() => ({
-          message:
-            'username' in response.errors
-              ? response.errors.username
-              : 'Something went wrong',
+          message: response.error || 'Something went wrong',
           isShow: true
         }));
     } finally {

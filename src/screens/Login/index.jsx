@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { setCookie } from 'utils/CookieUtils';
+import { getCookie, setCookie } from 'utils/CookieUtils';
 import { httpPost } from 'api/base.api';
 import Preloader from 'components/Preloader';
 
 import * as S from './styles';
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [loginData, setLoginData] = useState({
-    email: '',
+    username: '',
     password: ''
   });
 
@@ -38,16 +41,19 @@ const Login = () => {
     try {
       event.preventDefault();
       setIsLoading(true);
-      const data = await httpPost('user/login', loginData);
-      await setCookie('token', data.user.token, 1);
-      await window.location.reload();
-    } catch (e) {
-      const data = await httpPost('user/login', loginData);
-      setError(() => ({
-        message:
-          'User' in data.errors ? data.errors.User : 'Something went wrong',
-        isShow: true
-      }));
+      const data = await httpPost('auth/signin', loginData);
+      if (data.accessToken !== null) {
+        await setCookie('token', data.accessToken, 1);
+        await setCookie('refreshToken', data.refreshToken, 1);
+      }
+      if (getCookie('token')) {
+        await navigate('/');
+      } else {
+        setError(() => ({
+          message: data.message || 'Something went wrong',
+          isShow: true
+        }));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -60,8 +66,8 @@ const Login = () => {
       <S.DataForm onSubmit={handleLogin}>
         <S.ErrorMessage error={error.isShow}>{error.message}</S.ErrorMessage>
         <S.DataInput
-          name="email"
-          value={loginData.email}
+          name="username"
+          value={loginData.username}
           onChange={handleDataChange}
           placeholder="Email"
         />
