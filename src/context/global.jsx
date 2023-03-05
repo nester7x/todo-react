@@ -15,7 +15,7 @@ export const GlobalContextProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    const getUser = async () => {
+    (async () => {
       const token = getCookie('token');
 
       let data;
@@ -43,9 +43,7 @@ export const GlobalContextProvider = ({ children }) => {
           isLogin: true
         }));
       }
-    };
-
-    getUser();
+    })();
   }, []);
 
   return <Provider value={{ user, setUser }}>{children}</Provider>;

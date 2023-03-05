@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { getCookie, setCookie } from 'utils/CookieUtils';
 import { httpPost } from 'api/base.api';
@@ -7,6 +8,8 @@ import Preloader from 'components/Preloader';
 import * as S from './styles';
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [loginData, setLoginData] = useState({
     username: '',
     password: ''
@@ -44,8 +47,7 @@ const Login = () => {
         await setCookie('refreshToken', data.refreshToken, 1);
       }
       if (getCookie('token')) {
-        const currentUrl = location.href;
-        location.href = currentUrl;
+        await navigate('/');
       } else {
         setError(() => ({
           message: data.message || 'Something went wrong',
