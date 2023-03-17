@@ -1,9 +1,18 @@
 import React from 'react';
-import Todo from 'components/Todo';
 
 const Home = () => (
-  <div>
-    <Todo />
+  <div
+    style={{
+      fontSize: '20px',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      textAlign: 'center'
+    }}
+  >
+    Home page will be able to access soon...
   </div>
 );
 

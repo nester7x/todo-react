@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { GlobalContext } from 'context/global';
-import { httpGet } from 'api/base.api';
-import { getCookie } from 'utils/CookieUtils';
 import PropTypes from 'prop-types';
+
+import { GlobalContext } from 'context/global';
+import { api } from 'utils/apiUtils';
+import { getCookie } from 'utils/CookieUtils';
 import Message from '../Message';
+
 import * as S from './styles';
 
 const Messages = ({ conversation }) => {
@@ -13,7 +15,7 @@ const Messages = ({ conversation }) => {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await httpGet('users', getCookie('token'));
+      const data = await api.get('users', getCookie('token'));
       await setInfo(data);
     };
 

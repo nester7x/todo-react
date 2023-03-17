@@ -19,7 +19,9 @@ export const Main = styled.main`
   width: 100%;
 `;
 
-export const MainContainer = styled(Container)``;
+export const MainContainer = styled(Container)`
+  height: 100%;
+`;
 
 export const Header = styled.header`
   position: sticky;

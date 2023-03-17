@@ -2,21 +2,21 @@ import React, { useContext, useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { GlobalContext } from 'context/global';
+import { AuthContext } from 'context/authContext';
 
 function PrivateRoute({ children }) {
   const location = useLocation();
   const url = new URLSearchParams();
   url.set('redirect', location.pathname + location.search);
-  const { user } = useContext(GlobalContext);
+  const { loginState } = useContext(AuthContext);
 
   useEffect(() => {
-    if (!user.isLogin) {
+    if (!loginState.isLoggedIn) {
       window.location.href = `/login?${url.toString()}`;
     }
-  }, [user.isLogin, url]);
+  }, [loginState.isLoggedIn, url]);
 
-  return user.isLogin ? (
+  return loginState.isLoggedIn ? (
     children
   ) : (
     <Navigate

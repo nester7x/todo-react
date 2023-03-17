@@ -8,21 +8,14 @@ import GroupIcon from '@mui/icons-material/Group';
 import ChatIcon from '@mui/icons-material/Chat';
 import PropTypes from 'prop-types';
 
-import { GlobalContext } from 'context/global';
-import { deleteCookie } from 'utils/CookieUtils';
 import { showComponents } from 'utils/ShowComponents.Utils';
+import { AuthContext } from 'context/authContext';
 
 import * as S from './styles';
 
 const Layout = ({ children }) => {
-  const { user } = useContext(GlobalContext);
   const location = useLocation();
-
-  const onLogOut = async () => {
-    await deleteCookie('token', '/');
-    await deleteCookie('refreshToken', '/');
-    await window.location.reload();
-  };
+  const { loginState, logout } = useContext(AuthContext);
 
   const links = [
     {
@@ -72,7 +65,7 @@ const Layout = ({ children }) => {
     },
     {
       component: (
-        <S.LogOut onClick={onLogOut}>
+        <S.LogOut onClick={() => logout()}>
           <LogoutOutlinedIcon />
         </S.LogOut>
       ),
@@ -95,7 +88,7 @@ const Layout = ({ children }) => {
               <S.MenuItem key={item.key} data-hover={item.key}>
                 {location.pathname.split('/')[1] !== item.component.props.to
                   ? showComponents(
-                      user.isLogin,
+                      loginState.isLoggedIn,
                       item.isLogin,
                       item.component,
                       item.key

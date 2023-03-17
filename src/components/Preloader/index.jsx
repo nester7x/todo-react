@@ -1,13 +1,13 @@
 import React from 'react';
+
 import { Box, Circle, Container } from './styles';
 
 const Preloader = (props) => (
   <Box {...props}>
     <Container>
-      <Circle />
-      <Circle />
-      <Circle />
-      <Circle />
+      {Array.from({ length: 4 }).map((_, index) => (
+        <Circle key={index} />
+      ))}
     </Container>
   </Box>
 );

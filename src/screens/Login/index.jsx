@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
 
-import { getCookie, setCookie } from 'utils/CookieUtils';
-import { httpPost } from 'api/base.api';
 import Preloader from 'components/Preloader';
+import { AuthContext } from 'context/authContext';
 
 import * as S from './styles';
 
 const Login = () => {
-  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const [loginData, setLoginData] = useState({
     username: '',
@@ -41,19 +39,18 @@ const Login = () => {
     try {
       event.preventDefault();
       setIsLoading(true);
-      const data = await httpPost('auth/signin', loginData);
-      if (data.accessToken !== null) {
-        await setCookie('token', data.accessToken, 1);
-        await setCookie('refreshToken', data.refreshToken, 1);
-      }
-      if (getCookie('token')) {
-        await navigate('/');
-      } else {
-        setError(() => ({
-          message: data.message || 'Something went wrong',
+
+      const loginRequest = await login('auth/signin', loginData);
+      if (loginRequest.message || loginRequest.error) {
+        await setError(() => ({
+          message:
+            loginRequest.message ||
+            loginRequest.error ||
+            'Something went wrong',
           isShow: true
         }));
       }
+      await loginRequest();
     } finally {
       setIsLoading(false);
     }
