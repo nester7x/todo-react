@@ -57,16 +57,10 @@ const Registration = () => {
       setIsLoading(true);
 
       const loginRequest = await login('auth/signup', registrationData);
-      if (loginRequest.message || loginRequest.error) {
-        await setRequestError(() => ({
-          message:
-            loginRequest.message ||
-            loginRequest.error ||
-            'Something went wrong',
-          isShow: true
-        }));
-      }
-      await loginRequest();
+      await setRequestError(() => ({
+        message: loginRequest || 'Something went wrong',
+        isShow: true
+      }));
     } finally {
       setIsLoading(false);
     }

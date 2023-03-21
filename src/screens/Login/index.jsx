@@ -41,16 +41,10 @@ const Login = () => {
       setIsLoading(true);
 
       const loginRequest = await login('auth/signin', loginData);
-      if (loginRequest.message || loginRequest.error) {
-        await setError(() => ({
-          message:
-            loginRequest.message ||
-            loginRequest.error ||
-            'Something went wrong',
-          isShow: true
-        }));
-      }
-      await loginRequest();
+      await setError(() => ({
+        message: loginRequest || 'Something went wrong',
+        isShow: true
+      }));
     } finally {
       setIsLoading(false);
     }
@@ -66,7 +60,7 @@ const Login = () => {
           name="username"
           value={loginData.username}
           onChange={handleDataChange}
-          placeholder="Email"
+          placeholder="Username"
         />
         <S.DataInput
           name="password"

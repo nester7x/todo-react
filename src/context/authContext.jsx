@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { deleteCookie, getCookie, setCookie } from 'utils/CookieUtils';
@@ -9,6 +9,13 @@ export const AuthContext = createContext();
 const { Provider } = AuthContext;
 
 export const GlobalAuthProvider = ({ children }) => {
+  const [user, setUser] = useState({
+    id: '',
+    username: '',
+    email: '',
+    roles: []
+  });
+
   const [loginState, setLoginState] = useState({
     isLoggedIn: false,
     accessToken: null,
@@ -21,14 +28,22 @@ export const GlobalAuthProvider = ({ children }) => {
     if (data.accessToken) {
       await setCookie('token', data.accessToken, 1);
       await setCookie('refreshToken', data.refreshToken, 1);
+
       await setLoginState({
         isLoggedIn: true,
         accessToken: data.accessToken,
         refreshToken: data.refreshToken
       });
-    }
 
-    return data;
+      await setUser((prevState) => ({
+        ...prevState,
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        roles: [...prevState.roles, ...data.roles]
+      }));
+    }
+    return data.message || data.error || '';
   };
 
   const logout = async () => {
@@ -60,7 +75,28 @@ export const GlobalAuthProvider = ({ children }) => {
     }
   }, []);
 
-  return <Provider value={{ loginState, login, logout }}>{children}</Provider>;
+  useEffect(() => {
+    (async () => {
+      if (
+        loginState.accessToken &&
+        (!user.username || !user.email || !user.id)
+      ) {
+        const userInfo = await api.get('user', loginState.accessToken);
+
+        await setUser((prevState) => ({
+          ...prevState,
+          id: userInfo.id,
+          username: userInfo.username,
+          email: userInfo.email,
+          roles: [...prevState.roles]
+        }));
+      }
+    })();
+  }, [loginState]);
+
+  return (
+    <Provider value={{ user, loginState, login, logout }}>{children}</Provider>
+  );
 };
 
 GlobalAuthProvider.propTypes = {
