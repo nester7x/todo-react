@@ -19,10 +19,11 @@ export const GlobalAuthProvider = ({ children }) => {
   const [loginState, setLoginState] = useState({
     isLoggedIn: false,
     accessToken: null,
-    refreshToken: null
+    refreshToken: null,
+    errors: ''
   });
 
-  const login = async (endpoint, loginData) => {
+  const auth = async (endpoint, loginData) => {
     const data = await api.post(`${endpoint}`, loginData);
 
     if (data.accessToken) {
@@ -32,7 +33,8 @@ export const GlobalAuthProvider = ({ children }) => {
       await setLoginState({
         isLoggedIn: true,
         accessToken: data.accessToken,
-        refreshToken: data.refreshToken
+        refreshToken: data.refreshToken,
+        errors: ''
       });
 
       await setUser((prevState) => ({
@@ -43,7 +45,15 @@ export const GlobalAuthProvider = ({ children }) => {
         roles: [...prevState.roles, ...data.roles]
       }));
     }
-    return data.message || data.error || '';
+
+    if (data.message || data.error) {
+      await setLoginState({
+        isLoggedIn: false,
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+        errors: data.message || data.error
+      });
+    }
   };
 
   const logout = async () => {
@@ -52,7 +62,8 @@ export const GlobalAuthProvider = ({ children }) => {
     await setLoginState({
       isLoggedIn: false,
       accessToken: null,
-      refreshToken: null
+      refreshToken: null,
+      errors: ''
     });
   };
 
@@ -65,7 +76,8 @@ export const GlobalAuthProvider = ({ children }) => {
         ...prevState,
         isLoggedIn: true,
         accessToken,
-        refreshToken
+        refreshToken,
+        errors: ''
       }));
     }
 
@@ -77,10 +89,11 @@ export const GlobalAuthProvider = ({ children }) => {
 
   useEffect(() => {
     (async () => {
-      if (
-        loginState.accessToken &&
-        (!user.username || !user.email || !user.id)
-      ) {
+      let isUserInfo = true;
+      Object.keys(user).map((value) => {
+        if (user[value].length === 0) isUserInfo = false;
+      });
+      if (loginState.accessToken && !isUserInfo) {
         const userInfo = await api.get('user', loginState.accessToken);
 
         await setUser((prevState) => ({
@@ -95,7 +108,7 @@ export const GlobalAuthProvider = ({ children }) => {
   }, [loginState]);
 
   return (
-    <Provider value={{ user, loginState, login, logout }}>{children}</Provider>
+    <Provider value={{ user, loginState, auth, logout }}>{children}</Provider>
   );
 };
 

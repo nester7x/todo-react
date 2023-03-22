@@ -7,7 +7,7 @@ import { AuthContext } from 'context/authContext';
 import * as S from './styles';
 
 const Registration = () => {
-  const { login } = useContext(AuthContext);
+  const { auth, loginState } = useContext(AuthContext);
 
   const [registrationData, setRegistrationData] = useState({
     username: '',
@@ -55,12 +55,7 @@ const Registration = () => {
     try {
       event.preventDefault();
       setIsLoading(true);
-
-      const loginRequest = await login('auth/signup', registrationData);
-      await setRequestError(() => ({
-        message: loginRequest || 'Something went wrong',
-        isShow: true
-      }));
+      await auth('auth/signup', registrationData);
     } finally {
       setIsLoading(false);
     }
@@ -75,6 +70,15 @@ const Registration = () => {
       }));
     });
   };
+
+  useEffect(() => {
+    if (loginState.errors) {
+      setRequestError(() => ({
+        message: loginState.errors || 'Something went wrong',
+        isShow: true
+      }));
+    }
+  }, [loginState.errors]);
 
   if (isLoading) return <Preloader />;
 

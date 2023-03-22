@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import Preloader from 'components/Preloader';
 import { AuthContext } from 'context/authContext';
@@ -6,7 +6,7 @@ import { AuthContext } from 'context/authContext';
 import * as S from './styles';
 
 const Login = () => {
-  const { login } = useContext(AuthContext);
+  const { auth, loginState } = useContext(AuthContext);
 
   const [loginData, setLoginData] = useState({
     username: '',
@@ -39,16 +39,20 @@ const Login = () => {
     try {
       event.preventDefault();
       setIsLoading(true);
-
-      const loginRequest = await login('auth/signin', loginData);
-      await setError(() => ({
-        message: loginRequest || 'Something went wrong',
-        isShow: true
-      }));
+      await auth('auth/signin', loginData);
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (loginState.errors) {
+      setError(() => ({
+        message: loginState.errors || 'Something went wrong',
+        isShow: true
+      }));
+    }
+  }, [loginState.errors]);
 
   if (isLoading) return <Preloader />;
 
