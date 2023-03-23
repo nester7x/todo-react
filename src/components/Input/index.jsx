@@ -12,14 +12,15 @@ const Input = ({ onChange, value, type, errorText, ...rest }) => (
 
 Input.defaultProps = {
   value: null,
-  type: 'text'
+  type: 'text',
+  errorText: ''
 };
 
 Input.propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string,
   type: PropTypes.string,
-  errorText: PropTypes.string.isRequired
+  errorText: PropTypes.string
 };
 
 export default Input;

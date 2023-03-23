@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
 
-import { getCookie, setCookie } from 'utils/CookieUtils';
 import { validate } from 'utils/LoginValidation';
-import { httpPost } from 'api/base.api';
 import Preloader from 'components/Preloader';
+import { AuthContext } from 'context/authContext';
 
 import * as S from './styles';
 
 const Registration = () => {
-  const navigate = useNavigate();
+  const { auth, loginState } = useContext(AuthContext);
 
   const [registrationData, setRegistrationData] = useState({
     username: '',
@@ -19,11 +17,6 @@ const Registration = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const [requestError, setRequestError] = useState({
-    message: '',
-    isShow: false
-  });
 
   const [inputError, setInputError] = useState({
     username: '',
@@ -51,24 +44,13 @@ const Registration = () => {
         [key]: validate(key, registrationData[key], registrationData)
       }));
     });
-  }, [inputError]);
+  }, [registrationData]);
 
   const handleRegistration = async (event) => {
     try {
       event.preventDefault();
       setIsLoading(true);
-      const response = await httpPost('auth/signup', registrationData);
-      if (response.accessToken !== null) {
-        await setCookie('token', response.accessToken, 1);
-        await setCookie('refreshToken', response.refreshToken, 1);
-      }
-      if (getCookie('token')) {
-        await navigate('/');
-      } else
-        setRequestError(() => ({
-          message: response.error || 'Something went wrong',
-          isShow: true
-        }));
+      await auth('auth/signup', registrationData);
     } finally {
       setIsLoading(false);
     }
@@ -89,8 +71,8 @@ const Registration = () => {
   return (
     <S.Wrap>
       <S.DataForm onSubmit={handleRegistration}>
-        <S.ErrorMessage error={requestError.isShow}>
-          {requestError.message}
+        <S.ErrorMessage error={!!loginState.errors}>
+          {loginState.errors}
         </S.ErrorMessage>
         <S.DataInput
           name="username"
@@ -100,7 +82,9 @@ const Registration = () => {
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
           placeholder="Full Name"
-          errorText={isDirty.username && inputError.username}
+          errorText={
+            isDirty.username && inputError.username ? inputError.username : ''
+          }
         />
         <S.DataInput
           name="email"
@@ -110,7 +94,7 @@ const Registration = () => {
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
           placeholder="Email"
-          errorText={isDirty.email && inputError.email}
+          errorText={isDirty.email && inputError.email ? inputError.email : ''}
         />
         <S.DataInput
           name="password"
@@ -120,7 +104,9 @@ const Registration = () => {
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
           placeholder="Password"
-          errorText={isDirty.password && inputError.password}
+          errorText={
+            isDirty.password && inputError.password ? inputError.password : ''
+          }
         />
         <S.DataInput
           name="confirmPassword"
@@ -130,7 +116,11 @@ const Registration = () => {
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
           placeholder="Confirm Password"
-          errorText={isDirty.confirmPassword && inputError.confirmPassword}
+          errorText={
+            isDirty.confirmPassword && inputError.confirmPassword
+              ? inputError.confirmPassword
+              : ''
+          }
         />
         <S.LoginBtn
           type="submit"

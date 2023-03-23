@@ -43,7 +43,7 @@
     "start": "react-scripts start",
     "serve": "webpack serve",
     "dev": "webpack-dev-server",
-    "build": "react-scripts build",
+    "build": "webpack --mode production",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "nodemon server/index.js"
@@ -99,7 +99,6 @@
     "nodemon": "^2.0.20",
     "optimize-css-assets-webpack-plugin": "^6.0.1",
     "prettier": "2.6.2",
-    "prisma": "^4.9.0",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.3.6",
     "url-loader": "^4.1.1",

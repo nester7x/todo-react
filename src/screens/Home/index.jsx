@@ -1,10 +1,9 @@
 import React from 'react';
-import Todo from 'components/Todo';
+
+import * as S from './styles';
 
 const Home = () => (
-  <div>
-    <Todo />
-  </div>
+  <S.Wrapper>Home page will be able to access soon...</S.Wrapper>
 );
 
 export default Home;

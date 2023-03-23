@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import Preloader from 'components/Preloader';
-import { httpGet } from 'api/base.api';
+import { api } from 'utils/apiUtils';
 import { getCookie } from 'utils/CookieUtils';
 
 import * as S from './styles';
@@ -11,7 +11,7 @@ const Users = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await httpGet('users', getCookie('token'));
+      const data = await api.get('users', getCookie('token'));
       await setInfo(data);
     };
 

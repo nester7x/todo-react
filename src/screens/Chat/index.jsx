@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { httpGet } from 'api/base.api';
+import { api } from 'utils/apiUtils';
 import { getCookie } from 'utils/CookieUtils';
 import Messages from './components/Messages';
 import SendMessage from './components/SendMessage';
@@ -32,7 +32,7 @@ const Chat = () => {
   }, []);
 
   const getConversation = async () => {
-    const data = await httpGet(`conversation?with=${id}`, getCookie('token'));
+    const data = await api.get(`conversation?with=${id}`, getCookie('token'));
     await setReceiver((prevState) => ({
       ...prevState,
       conversation: data.items
@@ -42,8 +42,8 @@ const Chat = () => {
   useEffect(() => {
     if (id) {
       (async () => {
-        const user = await httpGet(`user/${id}`, getCookie('token'));
-        const conversation = await httpGet(
+        const user = await api.get(`user/${id}`, getCookie('token'));
+        const conversation = await api.get(
           `conversation?with=${id}`,
           getCookie('token')
         );

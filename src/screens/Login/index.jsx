@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
 
-import { getCookie, setCookie } from 'utils/CookieUtils';
-import { httpPost } from 'api/base.api';
 import Preloader from 'components/Preloader';
+import { AuthContext } from 'context/authContext';
 
 import * as S from './styles';
 
 const Login = () => {
-  const navigate = useNavigate();
+  const { auth, loginState } = useContext(AuthContext);
 
   const [loginData, setLoginData] = useState({
     username: '',
@@ -16,11 +14,6 @@ const Login = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const [error, setError] = useState({
-    message: '',
-    isShow: false
-  });
 
   const isDisabled = () => {
     let res = false;
@@ -41,19 +34,7 @@ const Login = () => {
     try {
       event.preventDefault();
       setIsLoading(true);
-      const data = await httpPost('auth/signin', loginData);
-      if (data.accessToken !== null) {
-        await setCookie('token', data.accessToken, 1);
-        await setCookie('refreshToken', data.refreshToken, 1);
-      }
-      if (getCookie('token')) {
-        await navigate('/');
-      } else {
-        setError(() => ({
-          message: data.message || 'Something went wrong',
-          isShow: true
-        }));
-      }
+      await auth('auth/signin', loginData);
     } finally {
       setIsLoading(false);
     }
@@ -64,12 +45,14 @@ const Login = () => {
   return (
     <S.Wrap>
       <S.DataForm onSubmit={handleLogin}>
-        <S.ErrorMessage error={error.isShow}>{error.message}</S.ErrorMessage>
+        <S.ErrorMessage error={!!loginState.errors}>
+          {loginState.errors}
+        </S.ErrorMessage>
         <S.DataInput
           name="username"
           value={loginData.username}
           onChange={handleDataChange}
-          placeholder="Email"
+          placeholder="Username"
         />
         <S.DataInput
           name="password"
