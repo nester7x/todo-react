@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import Preloader from 'components/Preloader';
 import { AuthContext } from 'context/authContext';
@@ -14,11 +14,6 @@ const Login = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const [error, setError] = useState({
-    message: '',
-    isShow: false
-  });
 
   const isDisabled = () => {
     let res = false;
@@ -45,21 +40,14 @@ const Login = () => {
     }
   };
 
-  useEffect(() => {
-    if (loginState.errors) {
-      setError(() => ({
-        message: loginState.errors || 'Something went wrong',
-        isShow: true
-      }));
-    }
-  }, [loginState.errors]);
-
   if (isLoading) return <Preloader />;
 
   return (
     <S.Wrap>
       <S.DataForm onSubmit={handleLogin}>
-        <S.ErrorMessage error={error.isShow}>{error.message}</S.ErrorMessage>
+        <S.ErrorMessage error={!!loginState.errors}>
+          {loginState.errors}
+        </S.ErrorMessage>
         <S.DataInput
           name="username"
           value={loginData.username}

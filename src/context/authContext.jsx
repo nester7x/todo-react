@@ -94,7 +94,19 @@ export const GlobalAuthProvider = ({ children }) => {
         if (user[value].length === 0) isUserInfo = false;
       });
       if (loginState.accessToken && !isUserInfo) {
-        const userInfo = await api.get('user', loginState.accessToken);
+        const data = await api.get('user', loginState.accessToken);
+
+        let userInfo;
+        if (loginState.accessToken && !data.message) {
+          userInfo = data;
+        } else if (loginState.accessToken && data.message) {
+          const refreshToken = getCookie('refreshToken');
+          const newAccessToken = await api.post('auth/refreshtoken', {
+            refreshToken: `${refreshToken}`
+          });
+          await setCookie('token', newAccessToken.accessToken, 1);
+          userInfo = await api.get('user', newAccessToken.accessToken);
+        }
 
         await setUser((prevState) => ({
           ...prevState,

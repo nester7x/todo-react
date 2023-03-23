@@ -18,11 +18,6 @@ const Registration = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [requestError, setRequestError] = useState({
-    message: '',
-    isShow: false
-  });
-
   const [inputError, setInputError] = useState({
     username: '',
     email: '',
@@ -71,22 +66,13 @@ const Registration = () => {
     });
   };
 
-  useEffect(() => {
-    if (loginState.errors) {
-      setRequestError(() => ({
-        message: loginState.errors || 'Something went wrong',
-        isShow: true
-      }));
-    }
-  }, [loginState.errors]);
-
   if (isLoading) return <Preloader />;
 
   return (
     <S.Wrap>
       <S.DataForm onSubmit={handleRegistration}>
-        <S.ErrorMessage error={requestError.isShow}>
-          {requestError.message}
+        <S.ErrorMessage error={!!loginState.errors}>
+          {loginState.errors}
         </S.ErrorMessage>
         <S.DataInput
           name="username"
