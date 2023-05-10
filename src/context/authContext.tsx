@@ -1,13 +1,12 @@
 import React, { createContext, FC, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 
 import { deleteCookie, getCookie, setCookie } from 'utils/cookieUtils';
 import { api } from 'utils/apiUtils';
 
 type User = {
-  id?: string | undefined;
-  username?: string | undefined;
-  email?: string | undefined;
+  id: string;
+  username: string;
+  email: string;
   roles: string[];
   [key: string]: any;
 };
@@ -22,7 +21,7 @@ type LoginState = {
 type AuthContextType = {
   user: User;
   loginState: LoginState;
-  auth: (endpoint: string, loginData: object) => Promise<void>;
+  auth: (endpoint: string, loginData: { username: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -49,7 +48,7 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
     errors: '',
   });
 
-  const auth = async (endpoint: string, loginData: object) => {
+  const auth = async (endpoint: string, loginData: { username: string; password: string }) => {
     const data = await api.post(`${endpoint}`, loginData);
 
     if (data.accessToken) {
@@ -122,7 +121,7 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
       if (loginState.accessToken && !isUserInfo) {
         const data = await api.get('user', loginState.accessToken);
 
-        let userInfo: object | any;
+        let userInfo: User;
         if (loginState.accessToken && !data.message) {
           userInfo = data;
         } else if (loginState.accessToken && data.message) {
@@ -146,8 +145,4 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
   }, [loginState]);
 
   return <Provider value={{ user, loginState, auth, logout }}>{children}</Provider>;
-};
-
-GlobalAuthProvider.propTypes = {
-  children: PropTypes.element.isRequired,
 };

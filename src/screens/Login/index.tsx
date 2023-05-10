@@ -67,9 +67,7 @@ const Login: FC = () => {
           onChange={handleDataChange}
           placeholder='Password'
         />
-        <S.LoginBtn type='submit' disabled={isDisabled()}>
-          Submit
-        </S.LoginBtn>
+        <S.LoginBtn type='submit' text='Submit' disabled={isDisabled()} />
       </S.DataForm>
     </S.Wrap>
   );

@@ -138,9 +138,11 @@ const Registration: FC = () => {
             isDirty.confirmPassword && inputError.confirmPassword ? inputError.confirmPassword : ''
           }
         />
-        <S.LoginBtn type='submit' disabled={Object.values(inputError).join('') !== ''}>
-          Submit
-        </S.LoginBtn>
+        <S.LoginBtn
+          type='submit'
+          text='Submit'
+          disabled={Object.values(inputError).join('') !== ''}
+        />
       </S.DataForm>
     </S.Wrap>
   );

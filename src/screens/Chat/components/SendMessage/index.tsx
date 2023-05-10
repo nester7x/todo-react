@@ -36,9 +36,7 @@ const SendMessage: FC<SendMessageProps> = ({ chatId, getConversation }) => {
   return (
     <S.Wrapper>
       <CKEditor data={messageValue} onChange={handleInputChange} placeholder='Write a message...' />
-      <S.SendBtn onClick={sendMessage} disabled={!messageValue}>
-        Send
-      </S.SendBtn>
+      <S.SendBtn onClick={sendMessage} disabled={!messageValue} text='Send' type='button' />
     </S.Wrapper>
   );
 };
