@@ -7,24 +7,24 @@ import { AuthContext } from 'context/authContext';
 import * as S from './styles';
 
 type RegistrationData = {
-  username: string;
   email: string;
   password: string;
+  fullName: string;
   confirmPassword: string;
   [key: string]: string;
 };
 
 type InputError = {
-  username: string;
   email: string;
   password: string;
+  fullName: string;
   confirmPassword: string;
 };
 
 type IsDirty = {
-  username: boolean;
   email: boolean;
   password: boolean;
+  fullName: boolean;
   confirmPassword: boolean;
 };
 
@@ -32,25 +32,25 @@ const Registration: FC = () => {
   const { auth, loginState } = useContext(AuthContext);
 
   const [registrationData, setRegistrationData] = useState<RegistrationData>({
-    username: '',
     email: '',
     password: '',
+    fullName: '',
     confirmPassword: '',
   });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [inputError, setInputError] = useState<InputError>({
-    username: '',
     email: '',
     password: '',
+    fullName: '',
     confirmPassword: '',
   });
 
   const [isDirty, setIsDirty] = useState<IsDirty>({
-    username: false,
     email: false,
     password: false,
+    fullName: false,
     confirmPassword: false,
   });
 
@@ -72,7 +72,7 @@ const Registration: FC = () => {
     try {
       event.preventDefault();
       setIsLoading(true);
-      await auth('auth/signup', registrationData);
+      await auth('auth/register', registrationData);
     } finally {
       setIsLoading(false);
     }
@@ -96,20 +96,21 @@ const Registration: FC = () => {
         <S.ErrorMessage onError={loginState.errors ? () => true : undefined}>
           {loginState.errors}
         </S.ErrorMessage>
+        <S.Title>REGISTRATION</S.Title>
         <S.DataInput
-          name='username'
+          name='fullName'
           type='text'
-          inputProps={{ maxLength: 20 }}
-          value={registrationData.username}
+          inputProps={{ maxLength: 30 }}
+          value={registrationData.fullName}
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
           placeholder='Full Name'
-          errorText={isDirty.username && inputError.username ? inputError.username : ''}
+          errorText={isDirty.fullName && inputError.fullName ? inputError.fullName : ''}
         />
         <S.DataInput
           name='email'
           type='email'
-          inputProps={{ maxLength: 40 }}
+          inputProps={{ maxLength: 50 }}
           value={registrationData.email}
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
@@ -133,7 +134,7 @@ const Registration: FC = () => {
           value={registrationData.confirmPassword}
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
-          placeholder='Confirm Password'
+          placeholder='Confirm password'
           errorText={
             isDirty.confirmPassword && inputError.confirmPassword ? inputError.confirmPassword : ''
           }
@@ -143,6 +144,9 @@ const Registration: FC = () => {
           text='Submit'
           disabled={Object.values(inputError).join('') !== ''}
         />
+        <S.Question>
+          Already a user? <S.SubBtn to='/login'>LOGIN</S.SubBtn>
+        </S.Question>
       </S.DataForm>
     </S.Wrap>
   );

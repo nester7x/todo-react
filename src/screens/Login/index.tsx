@@ -6,7 +6,7 @@ import { AuthContext } from 'context/authContext';
 import * as S from './styles';
 
 type LoginData = {
-  username: string;
+  email: string;
   password: string;
 };
 
@@ -14,7 +14,7 @@ const Login: FC = () => {
   const { auth, loginState } = useContext(AuthContext);
 
   const [loginData, setLoginData] = useState<LoginData>({
-    username: '',
+    email: '',
     password: '',
   });
 
@@ -39,7 +39,7 @@ const Login: FC = () => {
     try {
       event.preventDefault();
       setIsLoading(true);
-      await auth('auth/signin', loginData);
+      await auth('auth/login', loginData);
     } finally {
       setIsLoading(false);
     }
@@ -53,12 +53,13 @@ const Login: FC = () => {
         <S.ErrorMessage onError={loginState.errors ? () => true : undefined}>
           {loginState.errors}
         </S.ErrorMessage>
+        <S.Title>LOGIN</S.Title>
         <S.DataInput
-          name='username'
+          name='email'
           type='text'
-          value={loginData.username}
+          value={loginData.email}
           onChange={handleDataChange}
-          placeholder='Username'
+          placeholder='Email'
         />
         <S.DataInput
           name='password'
@@ -68,6 +69,9 @@ const Login: FC = () => {
           placeholder='Password'
         />
         <S.LoginBtn type='submit' text='Submit' disabled={isDisabled()} />
+        <S.Question>
+          Need an account? <S.SubBtn to='/registration'>REGISTRATION</S.SubBtn>
+        </S.Question>
       </S.DataForm>
     </S.Wrap>
   );

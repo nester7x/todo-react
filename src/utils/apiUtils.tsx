@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8080/api/';
+const BASE_URL = 'http://localhost:4444/';
 
 const handleResponse = async (response: Response) => {
   try {
@@ -12,12 +12,12 @@ export const api = {
   get: (endpoint: string, token: string | undefined) =>
     fetch(BASE_URL + endpoint, {
       headers: {
-        'x-access-token': `${token}`,
+        Authorization: `Bearer ${token}`,
       },
     }).then(handleResponse),
   post: (endpoint: string, data: object) =>
     fetch(BASE_URL + endpoint, {
-      method: 'POST',
+      method: 'post',
       headers: {
         'Content-Type': 'application/json',
       },

@@ -44,18 +44,18 @@ module.exports = function (_env, argv) {
           use: [isProduction ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'],
         },
         {
-          test: /\.(png|jpg|gif)$/i,
-          use: {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-              name: 'static/media/[name].[hash:8].[ext]',
-            },
+          test: /\.(png|jpe?g|gif)$/i,
+          loader: 'file-loader',
+          options: {
+            name: 'assets/images/[name].[contenthash:8].[ext]',
           },
         },
         {
-          test: /\.svg$/,
-          use: ['@svgr/webpack'],
+          test: /\.(svg|ico)$/i,
+          loader: 'file-loader',
+          options: {
+            name: 'assets/images/[name].[contenthash:8].[ext]',
+          },
         },
         {
           test: /\.(eot|otf|ttf|woff|woff2)$/,

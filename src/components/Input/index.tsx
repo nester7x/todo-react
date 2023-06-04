@@ -22,9 +22,11 @@ const Input: FC<InputProps> = ({
   errorText,
   placeholder,
   inputStyles,
+  ...rest
 }) => (
   <>
     <S.InputStyled
+      {...rest}
       style={inputStyles}
       name={name}
       type={type}

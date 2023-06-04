@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { NavLink } from 'react-router-dom';
 
 import Btn from 'components/Button';
 import Input from 'components/Input';
@@ -12,17 +13,16 @@ export const Wrap = styled.div`
 `;
 
 export const DataForm = styled.form`
-  background-color: #394252;
   border-radius: 20px;
   padding: 28px 29px;
-  max-width: 250px;
+  width: 475px;
   position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 `;
 
 export const ErrorMessage = styled.p`
@@ -33,35 +33,37 @@ export const ErrorMessage = styled.p`
   font-size: 18px;
 `;
 
+export const Title = styled.h5`
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 30px;
+  color: #202124;
+  margin: 0 0 25px;
+`;
+
 export const DataInput = styled(Input)`
   && {
-    padding: 4px 6px;
-    border-bottom: 1px solid #ffffff;
-    background: transparent;
-    width: 100%;
-    color: #ffffff;
-    margin: 0 0 10px;
-    :before {
-      border-bottom: 1px solid transparent;
-    }
-    :after {
-      border-bottom: 1px solid #394252;
-    }
-    :hover:before {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
-    }
+    margin: 0 0 25px !important;
   }
 `;
 
 export const LoginBtn = styled(Btn)`
   && {
-    margin: 19px 0 0;
-    background: rgba(255, 255, 255, 0.36) !important;
-    border-radius: 0;
-    width: 100%;
-    transition: 0.3s;
-    font-size: 16px;
-    line-height: 19px;
-    color: #ffffff;
+    margin: 0 0 10px;
+  }
+`;
+
+export const Question = styled.span`
+  font-size: 16px;
+  line-height: 20px;
+  color: #202124;
+`;
+
+export const SubBtn = styled(NavLink)`
+  text-decoration-line: underline;
+  color: #202124;
+  transition: 0.3s;
+  :hover {
+    opacity: 0.8;
   }
 `;
