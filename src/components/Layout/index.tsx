@@ -1,12 +1,8 @@
 import React, { FC, ReactNode, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
-import HomeIcon from '@mui/icons-material/Home';
-import LoginIcon from '@mui/icons-material/Login';
+import { useLocation, NavLink } from 'react-router-dom';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import GroupIcon from '@mui/icons-material/Group';
-import ChatIcon from '@mui/icons-material/Chat';
 
+import Logo from 'assets/Images/logo.svg';
 import { showComponents } from 'utils/showComponents.Utils';
 import { AuthContext } from 'context/authContext';
 
@@ -22,49 +18,19 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
   const links = [
     {
-      component: (
-        <S.Link to=''>
-          <HomeIcon />
-        </S.Link>
-      ),
+      component: <S.Link to=''>Feed</S.Link>,
       isLogin: 'loggedIn',
-      key: 'home',
+      key: 'feed',
     },
     {
-      component: (
-        <S.Link to='registration'>
-          <PersonAddIcon />
-        </S.Link>
-      ),
-      isLogin: 'loggedOut',
-      key: 'registration',
-    },
-    {
-      component: (
-        <S.Link to='login'>
-          <LoginIcon />
-        </S.Link>
-      ),
-      isLogin: 'loggedOut',
-      key: 'login',
-    },
-    {
-      component: (
-        <S.Link to='chat'>
-          <ChatIcon />
-        </S.Link>
-      ),
+      component: <S.Link to='chat'>Chat</S.Link>,
       isLogin: 'loggedIn',
       key: 'chat',
     },
     {
-      component: (
-        <S.Link to='users'>
-          <GroupIcon />
-        </S.Link>
-      ),
+      component: <S.Link to='my-profile'>My profile</S.Link>,
       isLogin: 'loggedIn',
-      key: 'users',
+      key: 'myProfile',
     },
     {
       component: (
@@ -81,17 +47,19 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     <S.Wrapper>
       <S.Header>
         <S.HeaderInner>
-          <S.Title>
-            {location.pathname.substring(1) === '' ? 'home' : location.pathname.split('/')[1]}
-          </S.Title>
+          <NavLink to='/'>
+            <img src={Logo} alt='logo icon' />
+          </NavLink>
           <S.Menu>
-            {links.map((item) => (
-              <S.MenuItem key={item.key} data-hover={item.key}>
-                {location.pathname.split('/')[1] !== item.component.props.to
-                  ? showComponents(loginState.isLoggedIn, item.isLogin, item.component)
-                  : ''}
-              </S.MenuItem>
-            ))}
+            {loginState.isLoggedIn
+              ? links.map((item) => (
+                  <S.MenuItem key={item.key} data-hover={item.key}>
+                    {location.pathname.split('/')[1] !== item.component.props.to
+                      ? showComponents(loginState.isLoggedIn, item.isLogin, item.component)
+                      : ''}
+                  </S.MenuItem>
+                ))
+              : ''}
           </S.Menu>
         </S.HeaderInner>
       </S.Header>
