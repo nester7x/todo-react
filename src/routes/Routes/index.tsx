@@ -16,9 +16,9 @@ export default function AppRoutes() {
       <Route
         path='/'
         element={
-          <PrivateRoute>
+          <GuestRoute>
             <Home />
-          </PrivateRoute>
+          </GuestRoute>
         }
       />
       <Route

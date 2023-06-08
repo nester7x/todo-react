@@ -22,13 +22,9 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
   const links = [
     {
-      component: (
-        <S.Link to=''>
-          <HomeIcon />
-        </S.Link>
-      ),
+      component: <S.Link to=''>Feed</S.Link>,
       isLogin: 'loggedIn',
-      key: 'home',
+      key: 'feed',
     },
     {
       component: (
