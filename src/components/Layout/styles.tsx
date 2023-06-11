@@ -5,7 +5,7 @@ import Container from '@mui/material/Container';
 import { device } from 'utils/mediaQueries';
 
 export const Wrapper = styled.div`
-  background-color: #cccccc;
+  background-color: #f5f5f5;
   position: relative;
   display: flex;
   flex-wrap: wrap;
@@ -28,9 +28,9 @@ export const Header = styled.header`
   top: 0;
   width: 100%;
   z-index: 200;
-  background-color: #394252;
+  background-color: #2758d6;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  padding: 10px 0;
+  padding: 22px 0 21px;
   @media screen and ${device.mobileL} {
     padding: 8px 0;
   }
@@ -44,26 +44,10 @@ export const HeaderInner = styled(Container)`
   }
 `;
 
-export const Title = styled.p`
-  font-size: 24px;
-  line-height: 28px;
-  text-transform: uppercase;
-  color: #ffffff;
-  @media screen and ${device.tablet} {
-    font-size: 20px;
-    line-height: 24px;
-  }
-  @media screen and ${device.mobileL} {
-    font-size: 16px;
-    line-height: 20px;
-  }
-`;
-
 export const LogOut = styled.a`
   && {
     display: flex;
     cursor: pointer;
-    margin: 0 10px;
     svg {
       fill: #ffffff;
     }
@@ -92,19 +76,20 @@ export const Menu = styled.ul`
 export const MenuItem = styled.li``;
 
 export const Link = styled(NavLink)`
-  margin: 0 10px;
-  display: flex;
-  svg {
-    fill: #ffffff;
-  }
-  svg:hover {
-    opacity: 0.7;
+  margin: 0 25px 0 0;
+  padding: 18px 63px;
+  background-color: transparent;
+  border-radius: 50px;
+  font-size: 20px;
+  line-height: 71%;
+  color: #f5f5f5;
+  border: 1px solid #f5f5f5;
+  transition: 0.3s;
+  :hover {
+    background-color: #f5f5f5;
+    color: #000000;
   }
   @media screen and ${device.mobileL} {
-    margin: 0 8px;
-    svg {
-      height: 20px;
-      width: 20px;
-    }
+    margin: 0 15px 0 0;
   }
 `;

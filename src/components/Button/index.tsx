@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import BtnStyled from './styles';
+import * as S from './styles';
 
 type BtnProps = {
   onClick?: () => void;
@@ -10,9 +10,9 @@ type BtnProps = {
 };
 
 const Btn: FC<BtnProps> = ({ onClick, type = 'button', text, disabled = false, ...rest }) => (
-  <BtnStyled {...rest} onClick={onClick} type={type} disabled={disabled}>
+  <S.BtnStyled {...rest} onClick={onClick} type={type} disabled={disabled}>
     {text}
-  </BtnStyled>
+  </S.BtnStyled>
 );
 
 export default Btn;

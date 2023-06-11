@@ -7,21 +7,19 @@ type User = {
   id: string;
   username: string;
   email: string;
-  roles: string[];
   [key: string]: any;
 };
 
 type LoginState = {
   isLoggedIn: boolean;
-  accessToken: string | null;
-  refreshToken: string | null;
+  token: string | null;
   errors: string | boolean;
 };
 
 type AuthContextType = {
   user: User;
   loginState: LoginState;
-  auth: (endpoint: string, loginData: { username: string; password: string }) => Promise<void>;
+  auth: (endpoint: string, loginData: { email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -38,27 +36,23 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
     id: '',
     username: '',
     email: '',
-    roles: [],
   });
 
   const [loginState, setLoginState] = useState<LoginState>({
     isLoggedIn: false,
-    accessToken: null,
-    refreshToken: null,
+    token: null,
     errors: '',
   });
 
-  const auth = async (endpoint: string, loginData: { username: string; password: string }) => {
+  const auth = async (endpoint: string, loginData: { email: string; password: string }) => {
     const data = await api.post(`${endpoint}`, loginData);
 
-    if (data.accessToken) {
-      await setCookie('token', data.accessToken, 1);
-      await setCookie('refreshToken', data.refreshToken, 1);
+    if (data.token) {
+      await setCookie('token', data.token, 1);
 
       await setLoginState({
         isLoggedIn: true,
-        accessToken: data.accessToken,
-        refreshToken: data.refreshToken,
+        token: data.token,
         errors: '',
       });
 
@@ -67,48 +61,41 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
         id: data.id,
         username: data.username,
         email: data.email,
-        roles: [...prevState.roles, ...data.roles],
       }));
     }
 
-    if (data.message || data.error) {
+    if (data[0]?.msg || data.message) {
       await setLoginState({
         isLoggedIn: false,
-        accessToken: data.accessToken,
-        refreshToken: data.refreshToken,
-        errors: data.message || data.error,
+        token: data.token,
+        errors: data[0]?.msg || data.message,
       });
     }
   };
 
   const logout = async () => {
     await deleteCookie('token', '/');
-    await deleteCookie('refreshToken', '/');
     await setLoginState({
       isLoggedIn: false,
-      accessToken: null,
-      refreshToken: null,
+      token: null,
       errors: '',
     });
   };
 
   useEffect(() => {
-    const accessToken = getCookie('token');
-    const refreshToken = getCookie('refreshToken');
+    const token = getCookie('token');
 
-    if (accessToken && refreshToken) {
+    if (token) {
       setLoginState((prevState) => ({
         ...prevState,
         isLoggedIn: true,
-        accessToken,
-        refreshToken,
+        token,
         errors: '',
       }));
     }
 
     if (loginState.isLoggedIn) {
-      setCookie('token', loginState.accessToken, 1);
-      setCookie('refreshToken', loginState.refreshToken, 1);
+      setCookie('token', loginState.token, 1);
     }
   }, []);
 
@@ -118,27 +105,14 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
       Object.keys(user).map((value) => {
         if (user[value].length === 0) isUserInfo = false;
       });
-      if (loginState.accessToken && !isUserInfo) {
-        const data = await api.get('user', loginState.accessToken);
-
-        let userInfo: User;
-        if (loginState.accessToken && !data.message) {
-          userInfo = data;
-        } else if (loginState.accessToken && data.message) {
-          const refreshToken = getCookie('refreshToken');
-          const newAccessToken = await api.post('auth/refreshtoken', {
-            refreshToken: `${refreshToken}`,
-          });
-          await setCookie('token', newAccessToken.accessToken, 1);
-          userInfo = await api.get('user', newAccessToken.accessToken);
-        }
+      if (loginState.token && !isUserInfo) {
+        const data = await api.get('auth/me', loginState.token);
 
         await setUser((prevState) => ({
           ...prevState,
-          id: userInfo.id,
-          username: userInfo.username,
-          email: userInfo.email,
-          roles: [...prevState.roles],
+          id: data.id,
+          username: data.username,
+          email: data.email,
         }));
       }
     })();
