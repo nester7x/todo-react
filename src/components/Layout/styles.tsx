@@ -14,8 +14,7 @@ export const Wrapper = styled.div`
 
 export const Main = styled.main`
   overflow-y: auto;
-  height: calc(100% - 50px);
-  padding: 15px 0 15px;
+  height: calc(100% - 112px);
   width: 100%;
 `;
 

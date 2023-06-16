@@ -1,74 +1,193 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 
+import Posts from './Tabs/Posts';
+import Users from './Tabs/Users';
+import { getCookie } from 'utils/cookieUtils';
 import { api } from 'utils/apiUtils';
 
 import * as S from './styles';
 
+type User = {
+  avatarUrl: string;
+  fullName: string;
+};
+
 type Post = {
   id: string;
-  username: string;
+  user: User;
   createdAt: string;
   title: string;
   text: string;
   tags: string[];
+  viewsCount: number;
+};
+
+type Filters = {
+  date: boolean;
+  popular: boolean;
+  [key: string]: boolean;
 };
 
 const Home: FC = () => {
+  const menuRef = useRef(null);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
+  const [inputValue, setInputValue] = useState('');
+  const [filters, setFilters] = useState<Filters>({
+    date: false,
+    popular: false,
+  });
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [visible, setVisible] = useState(true);
 
-  const convertDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleString('en-US', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
+  const tabs = [
+    {
+      title: 'Posts',
+      content: <Posts posts={posts} />,
+      to: '',
+    },
+    {
+      title: 'Users',
+      content: <Users />,
+      to: '',
+    },
+  ];
+
+  const handleTabClick = (index: number): void => {
+    setActiveTab(index);
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const { target } = event;
+    setInputValue(target.value);
+  };
+
+  const handleFiltersChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, checked } = event.target;
+
+    setFilters((prev) => {
+      const updatedFilters = { ...prev };
+      Object.keys(updatedFilters).forEach((filterName) => {
+        updatedFilters[filterName] = filterName === name ? checked : false;
+      });
+
+      return updatedFilters;
     });
+  };
+
+  const sortedByDate = (data: Post[]): Post[] => {
+    return [...data].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
+  };
+
+  const sortedByPopular = (data: Post[]) => {
+    return [...data].sort((a, b) => b.viewsCount - a.viewsCount);
   };
 
   useEffect(() => {
     (async () => {
-      const data = await api.get(
-        'posts',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDc3OWJmNDAzM2U1MmZkMThiNGJkNzAiLCJpYXQiOjE2ODYwNjI3NTEsImV4cCI6MTY4NjkyNjc1MX0.isabrhZow8eqr83A33loVspETDnAYw1U5WQ2F9wddEI',
-      );
-      setPosts(data);
+      const sessionPosts = sessionStorage.getItem('posts');
+      if (sessionPosts) {
+        setPosts(JSON.parse(sessionPosts));
+      } else {
+        const token = getCookie('token');
+        const data = await api.get('posts', token);
+
+        setPosts(data);
+        sessionStorage.setItem('posts', JSON.stringify(data));
+      }
     })();
   }, []);
 
+  useEffect(() => {
+    if (filters.date) {
+      setPosts((prevState) => sortedByDate(prevState));
+    } else if (filters.popular) {
+      setPosts((prevState) => sortedByPopular(prevState));
+    } else if (!filters.date && !filters.popular) {
+      const sessionPosts = sessionStorage.getItem('posts');
+      sessionPosts ? setPosts(JSON.parse(sessionPosts)) : '';
+    }
+  }, [filters.date, filters.popular]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const mainBlock: HTMLElement | null = document.querySelector('main')!;
+      const currentScrollPos = mainBlock.scrollTop;
+      const isVisible = prevScrollPos > currentScrollPos;
+
+      setPrevScrollPos(currentScrollPos);
+      setVisible(isVisible);
+    };
+
+    document.querySelector('main')!.addEventListener('scroll', handleScroll);
+    return () => {
+      document.querySelector('main')!.removeEventListener('scroll', handleScroll);
+    };
+  }, [prevScrollPos]);
+
   return (
     <S.Wrapper>
-      <S.Header>
+      <S.Header className={visible ? '' : 'hidden'}>
+        <S.Filters>
+          <S.IconWrapper
+            ref={menuRef}
+            onClick={() => {
+              setIsOpen((prev) => !prev);
+            }}
+          >
+            <S.FilterIcon className={isOpen ? 'opened' : ''} />
+          </S.IconWrapper>
+          <S.FiltersMenu className={isOpen ? 'opened' : ''}>
+            <S.MenuItem>
+              <S.CheckboxLabel>
+                <S.InputCheck
+                  type='checkbox'
+                  name='date'
+                  checked={filters.date}
+                  onChange={handleFiltersChange}
+                />
+                <S.Span>Date</S.Span>
+              </S.CheckboxLabel>
+            </S.MenuItem>
+            <S.MenuItem>
+              <S.CheckboxLabel>
+                <S.InputCheck
+                  type='checkbox'
+                  name='popular'
+                  checked={filters.popular}
+                  onChange={handleFiltersChange}
+                />
+                <S.Span>Popular</S.Span>
+              </S.CheckboxLabel>
+            </S.MenuItem>
+          </S.FiltersMenu>
+        </S.Filters>
         <S.SearchInput
           name='search'
-          onChange={() => {
-            console.log('input changed');
-          }}
-          placeholder='Search'
+          value={inputValue}
+          onChange={handleInputChange}
+          placeholder='Search...'
           type='text'
         />
-        <S.Tabs>
-          <S.Tab>Posts</S.Tab>
-          <S.Tab>Users</S.Tab>
+        <S.Tabs className={activeTab === 0 ? 'left' : 'right'}>
+          {tabs.map((tab, index) =>
+            activeTab === index ? (
+              <S.ActiveTab key={index} onClick={() => handleTabClick(index)} to={tab.to}>
+                {tab.title}
+              </S.ActiveTab>
+            ) : (
+              <S.Tab key={index} onClick={() => handleTabClick(index)} to={tab.to}>
+                {tab.title}
+              </S.Tab>
+            ),
+          )}
         </S.Tabs>
         <S.MakePostBtn to='create-post'>Make Post</S.MakePostBtn>
       </S.Header>
-      <S.Posts>
-        {posts.map((item) => (
-          <S.Post key={item.createdAt}>
-            <S.User>
-              <img src='' alt='' />
-              <S.PostInfo>
-                <S.Username>{item.username}</S.Username>
-                <S.Date>{convertDate(item.createdAt)}</S.Date>
-              </S.PostInfo>
-            </S.User>
-            <S.Title>{item.title}</S.Title>
-            <S.Text>{item.text}</S.Text>
-          </S.Post>
-        ))}
-      </S.Posts>
+      <div className='tab-content'>{tabs[activeTab].content}</div>
     </S.Wrapper>
   );
 };
