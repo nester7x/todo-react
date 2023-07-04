@@ -19,22 +19,26 @@ type Post = {
 };
 
 type PostsProps = {
-  posts: Post[];
+  posts: Post[] | undefined;
 };
 
 const Posts: FC<PostsProps> = ({ posts }) => {
   return (
     <S.Wrapper>
-      {posts?.map((item) => (
-        <Post
-          key={item.createdAt}
-          createdAt={item.createdAt}
-          avatarUrl={item?.user?.avatarUrl}
-          fullName={item?.user?.fullName}
-          title={item.title}
-          text={item.text}
-        />
-      ))}
+      {posts?.length ? (
+        posts?.map((item) => (
+          <Post
+            key={item.createdAt}
+            createdAt={item.createdAt}
+            avatarUrl={item?.user?.avatarUrl}
+            fullName={item?.user?.fullName}
+            title={item.title}
+            text={item.text}
+          />
+        ))
+      ) : (
+        <S.EmptyState>There are no posts...</S.EmptyState>
+      )}
     </S.Wrapper>
   );
 };

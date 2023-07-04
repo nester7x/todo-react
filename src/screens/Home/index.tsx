@@ -1,9 +1,12 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
 
-import Posts from './Tabs/Posts';
-import Users from './Tabs/Users';
+import Posts from './Posts';
+import Users from '../Users';
+import PostsLayout from 'components/PostsLayout';
 import { getCookie } from 'utils/cookieUtils';
 import { api } from 'utils/apiUtils';
+import { sortedByDate, sortedByPopular } from 'utils/sortingPosts';
 
 import * as S from './styles';
 
@@ -22,172 +25,97 @@ type Post = {
   viewsCount: number;
 };
 
-type Filters = {
-  date: boolean;
-  popular: boolean;
-  [key: string]: boolean;
-};
-
 const Home: FC = () => {
-  const menuRef = useRef(null);
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState(0);
-  const [inputValue, setInputValue] = useState('');
-  const [filters, setFilters] = useState<Filters>({
-    date: false,
-    popular: false,
+  const queryClient = useQueryClient();
+  const { data: posts } = useQuery<Post[]>({
+    queryKey: ['posts'],
+    enabled: getCookie('token') !== null,
+    queryFn: () => {
+      const token = getCookie('token');
+      return api.get('posts', token);
+    },
   });
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
-  const [visible, setVisible] = useState(true);
 
-  const tabs = [
+  const [filters, setFilters] = useState([
     {
-      title: 'Posts',
-      content: <Posts posts={posts} />,
-      to: '',
+      name: 'date',
+      state: false,
     },
     {
-      title: 'Users',
+      name: 'popular',
+      state: false,
+    },
+  ]);
+
+  const [activeTab, setActiveTab] = useState({
+    index: 0,
+    pathname: '',
+  });
+  const tabs = [
+    {
+      title: 'posts',
+      content: <Posts posts={posts} />,
+      to: '/',
+    },
+    {
+      title: 'users',
       content: <Users />,
-      to: '',
+      to: '/users',
     },
   ];
 
-  const handleTabClick = (index: number): void => {
-    setActiveTab(index);
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const { target } = event;
-    setInputValue(target.value);
+  const handleTabClick = (index: number, to: string): void => {
+    setActiveTab((prevState) => ({ ...prevState, index: index, pathname: to }));
+    window.history.pushState(null, '', to);
   };
 
   const handleFiltersChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, checked } = event.target;
-
-    setFilters((prev) => {
-      const updatedFilters = { ...prev };
-      Object.keys(updatedFilters).forEach((filterName) => {
-        updatedFilters[filterName] = filterName === name ? checked : false;
-      });
-
-      return updatedFilters;
-    });
-  };
-
-  const sortedByDate = (data: Post[]): Post[] => {
-    return [...data].sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    setFilters((prev) =>
+      prev.map((filter) => ({ ...filter, state: filter.name === name ? checked : false })),
     );
   };
 
-  const sortedByPopular = (data: Post[]) => {
-    return [...data].sort((a, b) => b.viewsCount - a.viewsCount);
-  };
-
   useEffect(() => {
-    (async () => {
-      const sessionPosts = sessionStorage.getItem('posts');
-      if (sessionPosts) {
-        setPosts(JSON.parse(sessionPosts));
-      } else {
-        const token = getCookie('token');
-        const data = await api.get('posts', token);
+    let sortedPosts: Post[] = [];
 
-        setPosts(data);
-        sessionStorage.setItem('posts', JSON.stringify(data));
-      }
-    })();
-  }, []);
+    if (Array.isArray(posts)) {
+      sortedPosts = [...posts];
 
-  useEffect(() => {
-    if (filters.date) {
-      setPosts((prevState) => sortedByDate(prevState));
-    } else if (filters.popular) {
-      setPosts((prevState) => sortedByPopular(prevState));
-    } else if (!filters.date && !filters.popular) {
-      const sessionPosts = sessionStorage.getItem('posts');
-      sessionPosts ? setPosts(JSON.parse(sessionPosts)) : '';
+      filters.forEach(async (filter) => {
+        if (filter.name === 'date' && filter.state) {
+          sortedPosts = sortedByDate(sortedPosts);
+        } else if (filter.name === 'popular' && filter.state) {
+          sortedPosts = sortedByPopular(sortedPosts);
+        } else if (filters.every((filter) => !filter.state)) {
+          sortedPosts = await api.get('posts', '');
+          queryClient.setQueryData('posts', sortedPosts);
+        }
+      });
     }
-  }, [filters.date, filters.popular]);
+
+    queryClient.setQueryData('posts', sortedPosts);
+  }, [filters]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const mainBlock: HTMLElement | null = document.querySelector('main')!;
-      const currentScrollPos = mainBlock.scrollTop;
-      const isVisible = prevScrollPos > currentScrollPos;
+    const pathname = window.location.pathname;
 
-      setPrevScrollPos(currentScrollPos);
-      setVisible(isVisible);
-    };
-
-    document.querySelector('main')!.addEventListener('scroll', handleScroll);
-    return () => {
-      document.querySelector('main')!.removeEventListener('scroll', handleScroll);
-    };
-  }, [prevScrollPos]);
+    tabs.map((tab, index) => {
+      if (tab.to === pathname) {
+        setActiveTab((prevState) => ({ ...prevState, index: index, pathname: pathname }));
+      }
+    });
+  }, []);
 
   return (
     <S.Wrapper>
-      <S.Header className={visible ? '' : 'hidden'}>
-        <S.Filters>
-          <S.IconWrapper
-            ref={menuRef}
-            onClick={() => {
-              setIsOpen((prev) => !prev);
-            }}
-          >
-            <S.FilterIcon className={isOpen ? 'opened' : ''} />
-          </S.IconWrapper>
-          <S.FiltersMenu className={isOpen ? 'opened' : ''}>
-            <S.MenuItem>
-              <S.CheckboxLabel>
-                <S.InputCheck
-                  type='checkbox'
-                  name='date'
-                  checked={filters.date}
-                  onChange={handleFiltersChange}
-                />
-                <S.Span>Date</S.Span>
-              </S.CheckboxLabel>
-            </S.MenuItem>
-            <S.MenuItem>
-              <S.CheckboxLabel>
-                <S.InputCheck
-                  type='checkbox'
-                  name='popular'
-                  checked={filters.popular}
-                  onChange={handleFiltersChange}
-                />
-                <S.Span>Popular</S.Span>
-              </S.CheckboxLabel>
-            </S.MenuItem>
-          </S.FiltersMenu>
-        </S.Filters>
-        <S.SearchInput
-          name='search'
-          value={inputValue}
-          onChange={handleInputChange}
-          placeholder='Search...'
-          type='text'
-        />
-        <S.Tabs className={activeTab === 0 ? 'left' : 'right'}>
-          {tabs.map((tab, index) =>
-            activeTab === index ? (
-              <S.ActiveTab key={index} onClick={() => handleTabClick(index)} to={tab.to}>
-                {tab.title}
-              </S.ActiveTab>
-            ) : (
-              <S.Tab key={index} onClick={() => handleTabClick(index)} to={tab.to}>
-                {tab.title}
-              </S.Tab>
-            ),
-          )}
-        </S.Tabs>
-        <S.MakePostBtn to='create-post'>Make Post</S.MakePostBtn>
-      </S.Header>
-      <div className='tab-content'>{tabs[activeTab].content}</div>
+      <PostsLayout
+        activeTab={activeTab}
+        tabs={tabs}
+        handleTabClick={handleTabClick}
+        handleFiltersChange={handleFiltersChange}
+        filters={filters}
+      />
     </S.Wrapper>
   );
 };

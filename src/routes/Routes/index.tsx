@@ -3,7 +3,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Home from 'screens/Home';
 import Login from 'screens/Login';
-import Users from 'screens/Home/Tabs/Users';
 import NotFound from 'screens/NotFound';
 import Registration from 'screens/Registration';
 import Chat from 'screens/Chat';
@@ -57,7 +56,7 @@ export default function AppRoutes() {
         path='/users'
         element={
           <PrivateRoute>
-            <Users />
+            <Home />
           </PrivateRoute>
         }
       />

@@ -4,6 +4,8 @@ import Container from '@mui/material/Container';
 
 import { device } from 'utils/mediaQueries';
 
+const HEADER_HEIGHT = 112;
+
 export const Wrapper = styled.div`
   background-color: #f5f5f5;
   position: relative;
@@ -14,7 +16,7 @@ export const Wrapper = styled.div`
 
 export const Main = styled.main`
   overflow-y: auto;
-  height: calc(100% - 112px);
+  height: calc(100% - ${HEADER_HEIGHT}px);
   width: 100%;
 `;
 
