@@ -110,8 +110,8 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
 
         await setUser((prevState) => ({
           ...prevState,
-          id: data.id,
-          username: data.username,
+          id: data._id,
+          username: data.fullName,
           email: data.email,
         }));
       }

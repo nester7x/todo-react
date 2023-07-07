@@ -7,6 +7,8 @@ import Users from 'screens/Users';
 import NotFound from 'screens/NotFound';
 import Registration from 'screens/Registration';
 import Chat from 'screens/Chat';
+import MyProfile from 'screens/MyProfile';
+import User from 'screens/User';
 import GuestRoute from '../GuestRoute';
 import PrivateRoute from '../PrivateRoute';
 
@@ -58,6 +60,22 @@ export default function AppRoutes() {
         element={
           <PrivateRoute>
             <Users />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path='/users/:id'
+        element={
+          <PrivateRoute>
+            <User />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path='/my-profile'
+        element={
+          <PrivateRoute>
+            <MyProfile />
           </PrivateRoute>
         }
       />
