@@ -4,16 +4,22 @@ import * as S from './styles';
 
 type Filters = {
   name: string;
-  state: boolean;
+  value: string;
 };
 
 type SideBarProps = {
   className: string;
   filters: Filters[];
-  handleFiltersChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSelectFilter: (name: string, value: string) => void;
+  getDefaultParamValue: (name: string, defaultValue: string) => string;
 };
 
-const SideBar: FC<SideBarProps> = ({ className, filters, handleFiltersChange }) => {
+const SideBar: FC<SideBarProps> = ({
+  className,
+  filters,
+  handleSelectFilter,
+  getDefaultParamValue,
+}) => {
   const menuRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,17 +33,19 @@ const SideBar: FC<SideBarProps> = ({ className, filters, handleFiltersChange }) 
       >
         <S.FilterIcon className={isOpen ? 'opened' : ''} />
       </S.IconWrapper>
+
       <S.FiltersMenu className={isOpen ? 'opened' : ''}>
-        {filters?.map((item, index) => (
+        {filters?.map((filter, index) => (
           <S.MenuItem key={index}>
             <S.CheckboxLabel>
               <S.InputCheck
-                type='checkbox'
-                name={item.name}
-                checked={item.state}
-                onChange={handleFiltersChange}
+                name='filter'
+                onChange={(e) => handleSelectFilter(e.target.name, e.target.value)}
+                defaultValue={getDefaultParamValue('filter', '')}
+                type='radio'
+                value={filter.value}
               />
-              <S.LabelName>{item.name}</S.LabelName>
+              <S.LabelName>{filter.name}</S.LabelName>
             </S.CheckboxLabel>
           </S.MenuItem>
         ))}

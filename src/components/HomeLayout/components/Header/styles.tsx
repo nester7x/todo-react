@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import Input from 'components/Input';
 import { NavLink } from 'react-router-dom';
+
+import Input from 'components/Input';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -41,7 +42,7 @@ export const Tabs = styled.div`
     width: 50%;
     top: 50%;
     transform: translateY(-50%);
-    transition: left cubic-bezier(1, 0.5, 0.5, 1) 0.4s;
+    transition: left cubic-bezier(1, 0.5, 0.5, 1) 0.3s;
     border-radius: 27.5px;
     box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.1);
     background-color: #43d440;
@@ -56,7 +57,7 @@ export const Tabs = styled.div`
   }
 `;
 
-export const Tab = styled.p`
+export const Tab = styled(NavLink)`
   font-size: 20px;
   line-height: 71%;
   color: #202124;
@@ -67,7 +68,7 @@ export const Tab = styled.p`
   transition: color 200ms;
   user-select: none;
   text-transform: uppercase;
-  &.active_tab {
+  &.active {
     color: #f5f5f5;
     border-radius: 100px;
     padding: 15px 25px;
@@ -86,7 +87,7 @@ export const CreateBtn = styled(NavLink)`
   :hover {
     opacity: 0.8;
   }
-  &.disabled {
+  &.hidden {
     opacity: 0;
     visibility: hidden;
     z-index: -1;

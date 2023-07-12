@@ -5,11 +5,6 @@ import Header from './components/Header';
 
 import * as S from './styles';
 
-type ActiveTab = {
-  index: number;
-  pathname: string;
-};
-
 type Tabs = {
   title: string;
   content: JSX.Element;
@@ -18,23 +13,21 @@ type Tabs = {
 
 type Filters = {
   name: string;
-  state: boolean;
+  value: string;
 };
 
-type PostsLayoutProps = {
-  activeTab: ActiveTab;
+type HomeLayoutProps = {
   tabs: Tabs[];
-  handleTabClick: (index: number, to: string) => void;
-  handleFiltersChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   filters: Filters[];
+  handleSelectFilter: (name: string, value: string) => void;
+  getDefaultParamValue: (name: string, defaultValue: string) => string;
 };
 
-const PostsLayout: FC<PostsLayoutProps> = ({
-  activeTab,
+const HomeLayout: FC<HomeLayoutProps> = ({
   tabs,
-  handleTabClick,
-  handleFiltersChange,
   filters,
+  handleSelectFilter,
+  getDefaultParamValue,
 }) => {
   const [visible, setVisible] = useState(true);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
@@ -57,22 +50,18 @@ const PostsLayout: FC<PostsLayoutProps> = ({
 
   return (
     <S.Wrapper className={visible ? '' : 'hidden'}>
-      <Header
-        className={visible ? '' : 'hidden'}
-        activeTab={activeTab}
-        tabs={tabs}
-        handleTabClick={handleTabClick}
-      />
+      <Header className={visible ? '' : 'hidden'} tabs={tabs} />
       <SideBar
-        className={`${activeTab.pathname === '/users' ? 'disabled' : ''} ${
-          visible ? '' : 'hidden'
-        }`}
-        handleFiltersChange={handleFiltersChange}
+        className={visible ? '' : 'hidden'}
         filters={filters}
+        handleSelectFilter={handleSelectFilter}
+        getDefaultParamValue={getDefaultParamValue}
       />
-      <S.Main>{tabs[activeTab.index].content}</S.Main>
+      {tabs.map((tab, index) =>
+        tab.to === window.location.pathname ? <S.Main key={index}>{tab.content}</S.Main> : '',
+      )}
     </S.Wrapper>
   );
 };
 
-export default PostsLayout;
+export default HomeLayout;

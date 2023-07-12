@@ -1,60 +1,53 @@
-import React, { FC, useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import React, { FC } from 'react';
+import { useUrlFilter } from 'react-filter-by-url';
 
 import Posts from './Posts';
 import Users from '../Users';
-import PostsLayout from 'components/PostsLayout';
-import { getCookie } from 'utils/cookieUtils';
-import { api } from 'utils/apiUtils';
-import { sortedByDate, sortedByPopular } from 'utils/sortingPosts';
+import HomeLayout from 'components/HomeLayout';
 
 import * as S from './styles';
 
-type User = {
-  avatarUrl: string;
-  fullName: string;
-};
-
-type Post = {
-  id: string;
-  user: User;
-  createdAt: string;
-  title: string;
-  text: string;
-  tags: string[];
-  viewsCount: number;
-};
-
 const Home: FC = () => {
-  const queryClient = useQueryClient();
-  const { data: posts } = useQuery<Post[]>({
-    queryKey: ['posts'],
-    enabled: getCookie('token') !== null,
-    queryFn: () => {
-      const token = getCookie('token');
-      return api.get('posts', token);
-    },
-  });
+  const params = ['page', 'filter'];
+  const { apiQuery, getDefaultParamValue, handleSelectFilter } = useUrlFilter(
+    params,
+    `${window.location.pathname === '/users' ? 'users' : 'posts'}`,
+  );
 
-  const [filters, setFilters] = useState([
+  const postsFilters = [
+    {
+      name: 'all',
+      value: '',
+    },
     {
       name: 'date',
-      state: false,
+      value: 'date',
     },
     {
       name: 'popular',
-      state: false,
+      value: 'popular',
     },
-  ]);
+  ];
 
-  const [activeTab, setActiveTab] = useState({
-    index: 0,
-    pathname: '',
-  });
+  const usersFilters = [
+    {
+      name: 'all',
+      value: '',
+    },
+    {
+      name: 'name',
+      value: 'name',
+    },
+    {
+      name: 'country',
+      value: 'country',
+    },
+  ];
+
   const tabs = [
     {
       title: 'posts',
-      content: <Posts posts={posts} />,
+      content: <Posts apiQuery={apiQuery} />,
       to: '/',
     },
     {
@@ -64,57 +57,13 @@ const Home: FC = () => {
     },
   ];
 
-  const handleTabClick = (index: number, to: string): void => {
-    setActiveTab((prevState) => ({ ...prevState, index: index, pathname: to }));
-    window.history.pushState(null, '', to);
-  };
-
-  const handleFiltersChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, checked } = event.target;
-    setFilters((prev) =>
-      prev.map((filter) => ({ ...filter, state: filter.name === name ? checked : false })),
-    );
-  };
-
-  useEffect(() => {
-    let sortedPosts: Post[] = [];
-
-    if (Array.isArray(posts)) {
-      sortedPosts = [...posts];
-
-      filters.forEach(async (filter) => {
-        if (filter.name === 'date' && filter.state) {
-          sortedPosts = sortedByDate(sortedPosts);
-        } else if (filter.name === 'popular' && filter.state) {
-          sortedPosts = sortedByPopular(sortedPosts);
-        } else if (filters.every((filter) => !filter.state)) {
-          sortedPosts = await api.get('posts', '');
-          queryClient.setQueryData('posts', sortedPosts);
-        }
-      });
-    }
-
-    queryClient.setQueryData('posts', sortedPosts);
-  }, [filters]);
-
-  useEffect(() => {
-    const pathname = window.location.pathname;
-
-    tabs.map((tab, index) => {
-      if (tab.to === pathname) {
-        setActiveTab((prevState) => ({ ...prevState, index: index, pathname: pathname }));
-      }
-    });
-  }, []);
-
   return (
     <S.Wrapper>
-      <PostsLayout
-        activeTab={activeTab}
+      <HomeLayout
         tabs={tabs}
-        handleTabClick={handleTabClick}
-        handleFiltersChange={handleFiltersChange}
-        filters={filters}
+        filters={window.location.pathname === '/users' ? usersFilters : postsFilters}
+        handleSelectFilter={handleSelectFilter}
+        getDefaultParamValue={getDefaultParamValue}
       />
     </S.Wrapper>
   );

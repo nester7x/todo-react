@@ -1,28 +1,26 @@
 import React, { FC } from 'react';
 
+import Preloader from 'components/Preloader';
 import Post from './components/Post';
+import { usePosts } from 'hooks/usePosts';
 
 import * as S from './styles';
 
-type User = {
-  avatarUrl: string;
-  fullName: string;
-};
-
-type Post = {
-  id: string;
-  user: User;
-  createdAt: string;
-  title: string;
-  text: string;
-  tags: string[];
-};
-
 type PostsProps = {
-  posts: Post[] | undefined;
+  apiQuery: string;
 };
 
-const Posts: FC<PostsProps> = ({ posts }) => {
+const Posts: FC<PostsProps> = ({ apiQuery }) => {
+  const { data: posts, isLoading } = usePosts(apiQuery);
+
+  if (isLoading) {
+    return (
+      <div>
+        <Preloader />
+      </div>
+    );
+  }
+
   return (
     <S.Wrapper>
       {posts?.length ? (

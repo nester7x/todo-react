@@ -7,14 +7,10 @@ export const Wrapper = styled.aside`
   position: sticky;
   top: 24px;
   margin: -62px 0 0 -9%;
-  &.disabled {
+  &.hidden {
     opacity: 0;
     visibility: hidden;
     z-index: -1;
-  }
-  &.hidden {
-    z-index: -1;
-    opacity: 0;
   }
 `;
 

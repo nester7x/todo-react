@@ -8,19 +8,12 @@ type Tabs = {
   to: string;
 };
 
-type ActiveTab = {
-  index: number;
-  pathname: string;
-};
-
 type HeaderProps = {
-  activeTab: ActiveTab;
   tabs: Tabs[];
-  handleTabClick: (index: number, to: string) => void;
   className: string;
 };
 
-const Header: FC<HeaderProps> = ({ activeTab, tabs, handleTabClick, className }) => {
+const Header: FC<HeaderProps> = ({ tabs, className }) => {
   const [inputValue, setInputValue] = useState('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -38,19 +31,20 @@ const Header: FC<HeaderProps> = ({ activeTab, tabs, handleTabClick, className })
         type='text'
       />
       <S.Tabs
-        className={tabs.map((tab) => (tab.to === activeTab.pathname ? tab.title : '')).join(' ')}
+        className={tabs
+          .map((tab) => (tab.to === window.location.pathname ? tab.title : ''))
+          .join(' ')}
       >
         {tabs.map((tab, index) => (
-          <S.Tab
-            className={index === activeTab.index ? 'active_tab' : ''}
-            key={index}
-            onClick={() => handleTabClick(index, tab.to)}
-          >
+          <S.Tab key={index} to={tab.to}>
             {tab.title}
           </S.Tab>
         ))}
       </S.Tabs>
-      <S.CreateBtn className={activeTab.pathname === '/users' ? 'disabled' : ''} to='create-post'>
+      <S.CreateBtn
+        className={window.location.pathname === '/users' ? 'hidden' : ''}
+        to='create-post'
+      >
         Make Post
       </S.CreateBtn>
     </S.Wrapper>
