@@ -6,6 +6,11 @@ import Login from 'screens/Login';
 import NotFound from 'screens/NotFound';
 import Registration from 'screens/Registration';
 import Chat from 'screens/Chat';
+import Users from 'screens/Users';
+
+// TODO: update routes for other pages
+import { routes } from 'constants/routes'
+
 import GuestRoute from '../GuestRoute';
 import PrivateRoute from '../PrivateRoute';
 
@@ -13,7 +18,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route
-        path='/'
+        path={routes.posts}
         element={
           <PrivateRoute>
             <Home />
@@ -53,10 +58,10 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path='/users'
+        path={routes.users}
         element={
           <PrivateRoute>
-            <Home />
+            <Users />
           </PrivateRoute>
         }
       />

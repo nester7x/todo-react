@@ -1,16 +1,19 @@
 import React, { FC } from 'react';
+import { useUrlFilter } from 'react-filter-by-url';
 
 import Preloader from 'components/Preloader';
-import Post from './components/Post';
 import { usePosts } from 'hooks/usePosts';
+
+import { params } from 'constants/filters'
+
+import Post from './components/Post';
 
 import * as S from './styles';
 
-type PostsProps = {
-  apiQuery: string;
-};
+const Posts: FC = () => {
+  const { apiQuery } = useUrlFilter(params, 'posts');
 
-const Posts: FC<PostsProps> = ({ apiQuery }) => {
+  // TODO: not works
   const { data: posts, isLoading } = usePosts(apiQuery);
 
   if (isLoading) {

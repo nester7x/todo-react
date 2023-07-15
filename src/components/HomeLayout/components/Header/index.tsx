@@ -1,52 +1,54 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
+import { useLocation } from 'react-router-dom';
+
+import { routes } from 'constants/routes'
+
+import Search from '../Search';
 
 import * as S from './styles';
 
 type Tabs = {
   title: string;
-  content: JSX.Element;
   to: string;
 };
 
-type HeaderProps = {
-  tabs: Tabs[];
-  className: string;
-};
+const tabs: Tabs[] = [
+  {
+    title: 'posts',
+    to: routes.posts,
+  },
+  {
+    title: 'users',
+    to: routes.users,
+  },
+];
 
-const Header: FC<HeaderProps> = ({ tabs, className }) => {
-  const [inputValue, setInputValue] = useState('');
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const { target } = event;
-    setInputValue(target.value);
-  };
+const Header: FC = () => {
+  const location = useLocation();
+  const isPostsPage = location.pathname === routes.posts
+  const isActiveTab = tabs.find((tab) => tab.to === location.pathname)
 
   return (
-    <S.Wrapper className={className}>
-      <S.SearchInput
-        name='search'
-        value={inputValue}
-        onChange={handleInputChange}
-        placeholder='Search...'
-        type='text'
-      />
+    <S.Wrapper>
+      <S.SearchWrap>
+        <Search />
+      </S.SearchWrap>
+
       <S.Tabs
-        className={tabs
-          .map((tab) => (tab.to === window.location.pathname ? tab.title : ''))
-          .join(' ')}
+        className={`${isActiveTab?.title}`}
       >
-        {tabs.map((tab, index) => (
-          <S.Tab key={index} to={tab.to}>
+        {tabs.map((tab) => (
+          <S.Tab key={tab.to} to={tab.to}>
             {tab.title}
           </S.Tab>
         ))}
       </S.Tabs>
-      <S.CreateBtn
-        className={window.location.pathname === '/users' ? 'hidden' : ''}
-        to='create-post'
-      >
-        Make Post
-      </S.CreateBtn>
+
+      {isPostsPage && (
+        <S.CreateBtn to='create-post'>
+          Make Post
+        </S.CreateBtn>
+      )}
     </S.Wrapper>
   );
 };
