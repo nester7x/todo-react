@@ -8,8 +8,7 @@ import Registration from 'screens/Registration';
 import Chat from 'screens/Chat';
 import Users from 'screens/Users';
 
-// TODO: update routes for other pages
-import { routes } from 'constants/routes'
+import { routes } from 'constants/routes';
 
 import GuestRoute from '../GuestRoute';
 import PrivateRoute from '../PrivateRoute';
@@ -26,7 +25,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path='/login'
+        path={routes.login}
         element={
           <GuestRoute>
             <Login />
@@ -34,7 +33,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path='/registration'
+        path={routes.registration}
         element={
           <GuestRoute>
             <Registration />
@@ -42,7 +41,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path='/chat'
+        path={routes.chat}
         element={
           <PrivateRoute>
             <Chat />
@@ -50,7 +49,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path='/chat/:id'
+        path={routes.chatId}
         element={
           <PrivateRoute>
             <Chat />

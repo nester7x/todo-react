@@ -1,27 +1,19 @@
 import React, { FC } from 'react';
-import { useUrlFilter } from 'react-filter-by-url';
+import { useLocation } from 'react-router-dom';
 
 import Preloader from 'components/Preloader';
 import { usePosts } from 'hooks/usePosts';
-
-import { params } from 'constants/filters'
 
 import Post from './components/Post';
 
 import * as S from './styles';
 
 const Posts: FC = () => {
-  const { apiQuery } = useUrlFilter(params, 'posts');
-
-  // TODO: not works
-  const { data: posts, isLoading } = usePosts(apiQuery);
+  const location = useLocation();
+  const { data: posts, isLoading } = usePosts(`posts${location.search}`);
 
   if (isLoading) {
-    return (
-      <div>
-        <Preloader />
-      </div>
-    );
+    return <Preloader />;
   }
 
   return (

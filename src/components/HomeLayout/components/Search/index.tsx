@@ -1,19 +1,24 @@
-import React, { FC } from 'react'
-import { useUrlFilter } from 'react-filter-by-url';
+import React, { FC, useEffect, useState } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
-import { params } from 'constants/filters';
+import useDebounce from 'hooks/useDebounce';
 import { getURLParams } from 'utils/getURLParams';
 
 import * as S from './styles';
 
 const Search: FC = () => {
-  const { queryString, handleSelectFilter } = useUrlFilter(params, 'posts');
-  const searchValue = getURLParams(queryString, 'search')
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchValue, setSearchValue] = useState(getURLParams(location.search, 'search'));
+  const debouncedSearchTerm = useDebounce(searchValue, 500);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const { target } = event;
-    handleSelectFilter(target.name, target.value)
-  };
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setSearchValue(event.target.value);
+
+  useEffect(() => {
+    const sort = searchParams.get('sort') || '';
+    setSearchParams({ search: debouncedSearchTerm, sort: `${sort}` });
+  }, [debouncedSearchTerm]);
 
   return (
     <S.SearchContainer>
@@ -25,7 +30,7 @@ const Search: FC = () => {
         type='text'
       />
     </S.SearchContainer>
-  )
-}
+  );
+};
 
-export default Search
+export default Search;
