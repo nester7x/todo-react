@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react';
-
+import HomeLayout from 'components/HomeLayout';
 import Preloader from 'components/Preloader';
 import { api } from 'utils/apiUtils';
 import { getCookie } from 'utils/cookieUtils';
@@ -41,15 +41,17 @@ const Users: FC = () => {
   ];
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <S.StyledTable data={info} colName={colName} />
-    </div>
+    <HomeLayout>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <S.StyledTable data={info} colName={colName} />
+      </div>
+    </HomeLayout>
   );
 };
 
