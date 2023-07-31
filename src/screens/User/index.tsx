@@ -3,28 +3,16 @@ import { useParams } from 'react-router-dom';
 
 import Preloader from 'components/Preloader';
 import ProfileLayout from 'components/ProfileLayout';
+
 import { api } from 'utils/apiUtils';
 import { getCookie } from 'utils/cookieUtils';
+import { UserProps } from 'types/userTypes';
 
 import * as S from './styles';
 
-type AdditionalInfo = {
-  name: string;
-  value: string;
-};
-
-type User = {
-  _id: string;
-  fullName: string;
-  email: string;
-  additionalInfo: AdditionalInfo[];
-  aboutMe: string;
-  userPhoto: string;
-};
-
 const User: FC = () => {
   const { id } = useParams();
-  const [userInfo, setUserInfo] = useState<User | null>(null);
+  const [user, setUser] = useState<UserProps | null>(null);
 
   const buttons = [
     <S.Btn key='0' to={`/chat/${id}`}>
@@ -37,26 +25,17 @@ const User: FC = () => {
       (async () => {
         const token = getCookie('token');
         const data = await api.get(`users/${id}`, token);
-        setUserInfo(data);
+        setUser(data);
       })();
     }
   }, [id]);
 
-  if (!userInfo)
-    return (
-      <div>
-        <Preloader />
-      </div>
-    );
+  if (!user) return <Preloader />;
 
   return (
-    <ProfileLayout
-      buttons={buttons}
-      username={userInfo?.fullName || ''}
-      additionalInfo={userInfo?.additionalInfo || []}
-      aboutMe={userInfo?.aboutMe || ''}
-      userPhoto={userInfo?.userPhoto || ''}
-    />
+    <ProfileLayout buttons={buttons} user={user}>
+      <div>Here will be posts...</div>
+    </ProfileLayout>
   );
 };
 

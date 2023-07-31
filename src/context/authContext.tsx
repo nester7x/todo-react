@@ -2,13 +2,7 @@ import React, { createContext, FC, useEffect, useState } from 'react';
 
 import { deleteCookie, getCookie, setCookie } from 'utils/cookieUtils';
 import { api } from 'utils/apiUtils';
-
-type User = {
-  id: string;
-  username: string;
-  email: string;
-  [key: string]: any;
-};
+import { UserProps } from 'types/userTypes';
 
 type LoginState = {
   isLoggedIn: boolean;
@@ -17,10 +11,11 @@ type LoginState = {
 };
 
 type AuthContextType = {
-  user: User;
+  user: UserProps | undefined;
   loginState: LoginState;
   auth: (endpoint: string, loginData: { email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
+  update: (updatedUserInfo: UserProps) => Promise<void>;
 };
 
 type GlobalAuthProviderProps = {
@@ -32,10 +27,17 @@ export const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 const { Provider } = AuthContext;
 
 export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User>({
+  const [user, setUser] = useState<UserProps>({
     id: '',
-    username: '',
+    fullName: '',
     email: '',
+    activity: '',
+    city: '',
+    country: '',
+    age: 0,
+    description: '',
+    userPhoto: '',
+    errors: '',
   });
 
   const [loginState, setLoginState] = useState<LoginState>({
@@ -47,7 +49,7 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
   const auth = async (endpoint: string, loginData: { email: string; password: string }) => {
     const data = await api.post(`${endpoint}`, loginData);
 
-    if (data.token) {
+    if (data?.token) {
       await setCookie('token', data.token, 1);
 
       await setLoginState({
@@ -59,15 +61,21 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
       await setUser((prevState) => ({
         ...prevState,
         id: data.id,
-        username: data.username,
+        fullName: data.fullName,
         email: data.email,
+        activity: data.activity,
+        city: data.city,
+        country: data.country,
+        age: data.age,
+        description: data.description,
+        userPhoto: data.userPhoto,
       }));
     }
 
     if (data[0]?.msg || data.message) {
       await setLoginState({
         isLoggedIn: false,
-        token: data.token,
+        token: data?.token,
         errors: data[0]?.msg || data.message,
       });
     }
@@ -80,6 +88,34 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
       token: null,
       errors: '',
     });
+  };
+
+  // TODO: remove updatedUserInfo, info should be from response
+  const update = async (updatedUserInfo: UserProps) => {
+    const response = await api.patch('auth/me', updatedUserInfo, getCookie('token'));
+
+    if (response.success) {
+      await setUser((prevState) => ({
+        ...prevState,
+        id: updatedUserInfo.id,
+        fullName: updatedUserInfo.fullName,
+        email: updatedUserInfo.email,
+        activity: updatedUserInfo.activity,
+        city: updatedUserInfo.city,
+        country: updatedUserInfo.country,
+        age: updatedUserInfo.age,
+        description: updatedUserInfo.description,
+        userPhoto: updatedUserInfo.userPhoto || '',
+      }));
+    }
+
+    // TODO: handle errors
+    if (response.message) {
+      await setUser((prevState) => ({
+        ...prevState,
+        errors: response.message,
+      }));
+    }
   };
 
   useEffect(() => {
@@ -111,12 +147,18 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
         await setUser((prevState) => ({
           ...prevState,
           id: data._id,
-          username: data.fullName,
+          fullName: data.fullName,
           email: data.email,
+          activity: data.activity,
+          city: data.city,
+          country: data.country,
+          age: data.age,
+          description: data.description,
+          userPhoto: data.userPhoto,
         }));
       }
     })();
   }, [loginState]);
 
-  return <Provider value={{ user, loginState, auth, logout }}>{children}</Provider>;
+  return <Provider value={{ user, loginState, auth, logout, update }}>{children}</Provider>;
 };

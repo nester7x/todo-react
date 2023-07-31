@@ -1,4 +1,8 @@
 import styled from 'styled-components';
+import Textarea from '@mui/joy/Textarea';
+
+import Input from '../Input';
+import Button from '../Button';
 
 export const Wrapper = styled.div`
   max-width: 750px;
@@ -64,6 +68,17 @@ export const InfoName = styled.span`
 
 export const InfoValue = styled.span``;
 
+export const EditInput = styled(Input)`
+  && {
+    padding: 5px 10px;
+    width: 75%;
+    font-size: 16px;
+    line-height: 71%;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+  }
+`;
+
 export const SubTitle = styled.h6`
   font-weight: 400;
   font-size: 14px;
@@ -73,7 +88,7 @@ export const SubTitle = styled.h6`
   text-align: center;
 `;
 
-export const About = styled.p`
+export const Description = styled.p`
   font-size: 14px;
   line-height: 100%;
   text-align: center;
@@ -81,4 +96,39 @@ export const About = styled.p`
   border-radius: 25px;
   padding: 25px 10px;
   background-color: #f5f5f5;
+`;
+
+export const DescriptionArea = styled(Textarea)`
+  && {
+    margin: 0 0 15px;
+    --Textarea-focusedInset: var(--any);
+    --Textarea-focusedThickness: '0.25rem';
+    --Textarea-focusedHighlight: rgba(13, 110, 253, 0.25);
+    &::before {
+      transition: box-shadow 0.15s ease-in-out;
+    }
+    &:focus-within {
+      border-color: transparent;
+    }
+  }
+`;
+
+export const Btn = styled(Button)`
+  && {
+    font-size: 16px;
+    line-height: 71%;
+    text-transform: capitalize;
+    padding: 10px;
+    border: 1px solid #2758d6;
+    background-color: #ffffff;
+    color: #202124;
+    border-radius: 25px;
+    transition: 0.2s;
+    margin: 0 auto;
+    &:hover {
+      background-color: #2758d6;
+      color: #ffffff;
+      border: 1px solid transparent;
+    }
+  }
 `;
