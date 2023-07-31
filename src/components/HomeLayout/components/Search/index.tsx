@@ -16,8 +16,7 @@ const Search: FC = () => {
     setSearchValue(event.target.value);
 
   useEffect(() => {
-    const sort = searchParams.get('sort') || '';
-    setSearchParams({ search: debouncedSearchTerm, sort: `${sort}` });
+    setSearchParams((prev) => ({ ...prev, search: debouncedSearchTerm }));
   }, [debouncedSearchTerm]);
 
   return (
