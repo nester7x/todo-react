@@ -1,7 +1,11 @@
 import React, { FC } from 'react';
+import HomeLayout from 'components/HomeLayout';
+import Posts from './Posts';
 
-import * as S from './styles';
-
-const Home: FC = () => <S.Wrapper>Home page will be able to access soon...</S.Wrapper>;
+const Home: FC = () => (
+  <HomeLayout>
+    <Posts />
+  </HomeLayout>
+);
 
 export default Home;

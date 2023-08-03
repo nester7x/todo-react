@@ -3,10 +3,13 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Home from 'screens/Home';
 import Login from 'screens/Login';
-import Users from 'screens/Users';
 import NotFound from 'screens/NotFound';
 import Registration from 'screens/Registration';
 import Chat from 'screens/Chat';
+import Users from 'screens/Users';
+
+import { routes } from 'constants/routes';
+
 import MyProfile from 'screens/MyProfile';
 import User from 'screens/User';
 import GuestRoute from '../GuestRoute';
@@ -16,7 +19,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route
-        path='/'
+        path={routes.posts}
         element={
           <PrivateRoute>
             <Home />
@@ -24,7 +27,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path='/login'
+        path={routes.login}
         element={
           <GuestRoute>
             <Login />
@@ -32,7 +35,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path='/registration'
+        path={routes.registration}
         element={
           <GuestRoute>
             <Registration />
@@ -40,7 +43,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path='/chat'
+        path={routes.chat}
         element={
           <PrivateRoute>
             <Chat />
@@ -48,7 +51,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path='/chat/:id'
+        path={routes.chatId}
         element={
           <PrivateRoute>
             <Chat />
@@ -56,7 +59,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path='/users'
+        path={routes.users}
         element={
           <PrivateRoute>
             <Users />
@@ -64,7 +67,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path='/users/:id'
+        path={routes.usersId}
         element={
           <PrivateRoute>
             <User />
@@ -72,7 +75,7 @@ export default function AppRoutes() {
         }
       />
       <Route
-        path='/my-profile'
+        path={routes.myProfile}
         element={
           <PrivateRoute>
             <MyProfile />
