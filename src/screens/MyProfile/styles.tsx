@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 import Button from 'components/Button';
 
-// TODO: buttons in header and buttons of components are not the same
 export const Btn = styled(Button)`
   && {
     font-size: 16px;

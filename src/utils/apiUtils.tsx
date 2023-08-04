@@ -7,7 +7,7 @@ const handleResponse = async (response: Response) => {
     return Promise.reject(error);
   }
 };
-// TODO: fix null and undefined inside User.tsx
+
 export const api = {
   get: (endpoint: string, token: string | null | undefined) =>
     fetch(BASE_URL + endpoint, {

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
+// TODO: component for NavLink buttons?
 export const Btn = styled(NavLink)`
   font-size: 16px;
   line-height: 71%;

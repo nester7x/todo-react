@@ -7,6 +7,7 @@ import Button from '../Button';
 export const Wrapper = styled.div`
   max-width: 750px;
   margin: 0 auto;
+  padding: 20px 0 0;
 `;
 
 export const Profile = styled.div`

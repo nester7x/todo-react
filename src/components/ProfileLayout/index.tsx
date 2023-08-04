@@ -22,7 +22,6 @@ const ProfileLayout: FC<ProfileLayoutProps> = ({
 }) => {
   const { update } = useContext(AuthContext);
   const user: UserProps | null = initialUser || null;
-
   const additionalInfo = [
     {
       name: 'activity',
@@ -42,29 +41,30 @@ const ProfileLayout: FC<ProfileLayoutProps> = ({
     },
   ];
 
-  const [updatedUInfo, setUpdatedUInfo] = useState<UserProps | null>(null);
+  const [updatedUserInfo, setUpdatedUserInfo] = useState<UserProps | null>(null);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = event.target;
-    setUpdatedUInfo((prevState) => ({ ...prevState, [name]: value } as UserProps));
+    setUpdatedUserInfo((prevState) => ({ ...prevState, [name]: value } as UserProps));
   };
 
   const handleTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const { name, value } = event.target;
-    setUpdatedUInfo((prevState) => ({ ...prevState, [name]: value } as UserProps));
+    setUpdatedUserInfo((prevState) => ({ ...prevState, [name]: value } as UserProps));
   };
 
-  const handleUpdate = async (updatedUInfo: UserProps | null): Promise<void> => {
-    if (updatedUInfo) {
-      await update(updatedUInfo);
+  const handleUpdate = async (updatedUserInfo: UserProps | null): Promise<void> => {
+    if (updatedUserInfo) {
+      await update(updatedUserInfo);
       setIsEditMode && setIsEditMode(false);
     }
   };
 
   useEffect(() => {
-    setUpdatedUInfo(user);
+    setUpdatedUserInfo(user);
   }, [user]);
 
+  // TODO: dropdown from API for countries and cities
   return (
     <S.Wrapper>
       <S.Profile>
@@ -82,7 +82,7 @@ const ProfileLayout: FC<ProfileLayoutProps> = ({
             {isEditMode ? (
               <S.Btn
                 type='button'
-                onClick={() => handleUpdate(updatedUInfo)}
+                onClick={() => handleUpdate(updatedUserInfo)}
                 disabled={false}
                 text='Save'
               />
@@ -100,9 +100,10 @@ const ProfileLayout: FC<ProfileLayoutProps> = ({
                 <S.EditInput
                   onChange={handleInputChange}
                   name={item.name}
-                  value={!updatedUInfo || updatedUInfo[item.name]}
+                  value={!updatedUserInfo || updatedUserInfo[item.name]}
                   placeholder=''
-                  type='text'
+                  type={item.name === 'age' ? 'number' : 'text'}
+                  inputProps={item.name === 'age' ? { min: 5, max: 130 } : { maxLength: 30 }}
                 />
               ) : (
                 <S.InfoValue>{item.value}</S.InfoValue>
@@ -115,7 +116,7 @@ const ProfileLayout: FC<ProfileLayoutProps> = ({
               onChange={handleTextareaChange}
               name='description'
               variant='plain'
-              value={updatedUInfo?.description}
+              value={updatedUserInfo?.description}
               placeholder=''
             />
           ) : (

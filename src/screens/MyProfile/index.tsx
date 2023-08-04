@@ -2,6 +2,8 @@ import React, { FC, useContext, useState } from 'react';
 
 import { AuthContext } from 'context/authContext';
 import ProfileLayout from 'components/ProfileLayout';
+import Preloader from 'components/Preloader';
+import { UserProps } from 'types/userTypes';
 
 import * as S from './styles';
 
@@ -13,12 +15,16 @@ const MyProfile: FC = () => {
     <S.Btn
       key='edit'
       type='button'
-      text={isEditMode ? 'Save' : 'Edit'}
+      text='Edit'
       disabled={false}
       onClick={() => setIsEditMode((prevState) => !prevState)}
     />,
   ];
 
+  const hasData = Object.values(user as UserProps).some((value) => value !== '' && value !== 0);
+  if (!hasData) return <Preloader />;
+
+  // TODO: posts
   return (
     <ProfileLayout
       isEditMode={isEditMode}
@@ -26,7 +32,7 @@ const MyProfile: FC = () => {
       buttons={buttons}
       user={user}
     >
-      <div>Here will be posts...</div>
+      <div>Here will be user&apos;s posts...</div>
     </ProfileLayout>
   );
 };

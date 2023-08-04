@@ -90,22 +90,17 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
     });
   };
 
-  // TODO: remove updatedUserInfo, info should be from response
   const update = async (updatedUserInfo: UserProps) => {
     const response = await api.patch('auth/me', updatedUserInfo, getCookie('token'));
 
-    if (response.success) {
+    if (!response.message) {
       await setUser((prevState) => ({
         ...prevState,
-        id: updatedUserInfo.id,
-        fullName: updatedUserInfo.fullName,
-        email: updatedUserInfo.email,
-        activity: updatedUserInfo.activity,
-        city: updatedUserInfo.city,
-        country: updatedUserInfo.country,
-        age: updatedUserInfo.age,
-        description: updatedUserInfo.description,
-        userPhoto: updatedUserInfo.userPhoto || '',
+        activity: response.activity,
+        city: response.city,
+        country: response.country,
+        age: response.age,
+        description: response.description,
       }));
     }
 

@@ -32,6 +32,7 @@ const User: FC = () => {
 
   if (!user) return <Preloader />;
 
+  // TODO: posts
   return (
     <ProfileLayout buttons={buttons} user={user}>
       <div>Here will be posts...</div>
