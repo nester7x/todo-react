@@ -1,30 +1,29 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import ViewProfile from 'components/ViewProfile';
 import Preloader from 'components/Preloader';
-import ProfileLayout from 'components/ProfileLayout';
-
 import { api } from 'utils/apiUtils';
 import { getCookie } from 'utils/cookieUtils';
 import { UserProps } from 'types/userTypes';
+import { PostProps } from 'types/postTypes';
 
 import * as S from './styles';
 
+type User = {
+  user: UserProps;
+  posts: PostProps[];
+};
+
 const User: FC = () => {
   const { id } = useParams();
-  const [user, setUser] = useState<UserProps | null>(null);
-
-  const buttons = [
-    <S.Btn key='0' to={`/chat/${id}`}>
-      Message
-    </S.Btn>,
-  ];
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     if (id) {
       (async () => {
         const token = getCookie('token');
-        const data = await api.get(`users/${id}`, token);
+        const data = await api.get(`auth/user/${id}`, token);
         setUser(data);
       })();
     }
@@ -32,11 +31,13 @@ const User: FC = () => {
 
   if (!user) return <Preloader />;
 
-  // TODO: posts
   return (
-    <ProfileLayout buttons={buttons} user={user}>
-      <div>Here will be posts...</div>
-    </ProfileLayout>
+    <S.Wrapper>
+      <ViewProfile userInfo={user?.user} />
+      {user?.posts?.map((item, index) => (
+        <S.PostCustom key={index} postData={item} />
+      ))}
+    </S.Wrapper>
   );
 };
 

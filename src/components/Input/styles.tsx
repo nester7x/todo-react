@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Input from '@mui/material/Input';
+import Input from '@mui/joy/Input';
 
 export const InputStyled = styled(Input)`
   && {
@@ -11,18 +11,6 @@ export const InputStyled = styled(Input)`
     font-size: 30px;
     line-height: 37px;
     color: #8d8d8d;
-    input {
-      padding: 0;
-    }
-    :before {
-      border-bottom: 1px solid transparent;
-    }
-    :after {
-      border-bottom: 1px solid transparent;
-    }
-    :hover:before {
-      border-bottom: 1px solid transparent !important;
-    }
   }
 `;
 

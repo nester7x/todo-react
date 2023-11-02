@@ -1,23 +1,15 @@
 import styled from 'styled-components';
 
-import Button from 'components/Button';
+import Post from 'components/Post';
 
-export const Btn = styled(Button)`
+export const Wrapper = styled.div`
+  max-width: 750px;
+  margin: 0 auto;
+  padding: 20px 0 10px;
+`;
+
+export const PostCustom = styled(Post)`
   && {
-    font-size: 16px;
-    line-height: 71%;
-    text-transform: capitalize;
-    padding: 10px;
-    border: 1px solid #2758d6;
-    background-color: #ffffff;
-    color: #202124;
-    border-radius: 25px;
-    transition: 0.2s;
-    margin: 0 auto;
-    &:hover {
-      background-color: #2758d6;
-      color: #ffffff;
-      border: 1px solid transparent;
-    }
+    margin: 0 0 15px;
   }
 `;

@@ -3,6 +3,7 @@ import React, { createContext, FC, useEffect, useState } from 'react';
 import { deleteCookie, getCookie, setCookie } from 'utils/cookieUtils';
 import { api } from 'utils/apiUtils';
 import { UserProps } from 'types/userTypes';
+import { PostProps } from 'types/postTypes';
 
 type LoginState = {
   isLoggedIn: boolean;
@@ -10,8 +11,13 @@ type LoginState = {
   errors: string | boolean;
 };
 
+type User = {
+  userInfo: UserProps;
+  userPosts: PostProps[];
+};
+
 type AuthContextType = {
-  user: UserProps | undefined;
+  user: User;
   loginState: LoginState;
   auth: (endpoint: string, loginData: { email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
@@ -27,17 +33,20 @@ export const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 const { Provider } = AuthContext;
 
 export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<UserProps>({
-    id: '',
-    fullName: '',
-    email: '',
-    activity: '',
-    city: '',
-    country: '',
-    age: 0,
-    description: '',
-    userPhoto: '',
-    errors: '',
+  const [user, setUser] = useState<User>({
+    userInfo: {
+      id: '',
+      fullName: '',
+      email: '',
+      activity: '',
+      city: '',
+      country: '',
+      age: 0,
+      description: '',
+      userPhoto: '',
+      errors: '',
+    },
+    userPosts: [],
   });
 
   const [loginState, setLoginState] = useState<LoginState>({
@@ -60,15 +69,17 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
 
       await setUser((prevState) => ({
         ...prevState,
-        id: data.id,
-        fullName: data.fullName,
-        email: data.email,
-        activity: data.activity,
-        city: data.city,
-        country: data.country,
-        age: data.age,
-        description: data.description,
-        userPhoto: data.userPhoto,
+        userInfo: {
+          id: data.id,
+          fullName: data.fullName,
+          email: data.email,
+          activity: data.activity,
+          city: data.city,
+          country: data.country,
+          age: data.age,
+          description: data.description,
+          userPhoto: data.userPhoto,
+        },
       }));
     }
 
@@ -96,11 +107,17 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
     if (!response.message) {
       await setUser((prevState) => ({
         ...prevState,
-        activity: response.activity,
-        city: response.city,
-        country: response.country,
-        age: response.age,
-        description: response.description,
+        userInfo: {
+          id: response.id,
+          fullName: response.fullName,
+          email: response.email,
+          activity: response.activity,
+          city: response.city,
+          country: response.country,
+          age: response.age,
+          description: response.description,
+          userPhoto: response.userPhoto,
+        },
       }));
     }
 
@@ -133,23 +150,27 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
   useEffect(() => {
     (async () => {
       let isUserInfo = true;
-      Object.keys(user).map((value) => {
-        if (user[value].length === 0) isUserInfo = false;
+      Object.keys(user?.userInfo).map((value) => {
+        if (!user?.userInfo[value].length) isUserInfo = false;
       });
+
       if (loginState.token && !isUserInfo) {
         const data = await api.get('auth/me', loginState.token);
 
         await setUser((prevState) => ({
           ...prevState,
-          id: data._id,
-          fullName: data.fullName,
-          email: data.email,
-          activity: data.activity,
-          city: data.city,
-          country: data.country,
-          age: data.age,
-          description: data.description,
-          userPhoto: data.userPhoto,
+          userInfo: {
+            id: data.user._id,
+            fullName: data.user.fullName,
+            email: data.user.email,
+            activity: data.user.activity,
+            city: data.user.city,
+            country: data.user.country,
+            age: data.user.age,
+            description: data.user.description,
+            userPhoto: data.user.userPhoto,
+          },
+          userPosts: data.posts,
         }));
       }
     })();
