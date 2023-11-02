@@ -5,4 +5,6 @@ export const routes = {
   registration: '/registration',
   chat: '/chat',
   chatId: '/chat/:id',
+  usersId: '/users/:id',
+  myProfile: '/my-profile',
 };

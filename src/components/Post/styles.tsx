@@ -35,7 +35,7 @@ export const Title = styled.h6`
   font-weight: 700;
   font-size: 25px;
   line-height: 100%;
-  color: #000000;
+  color: #2758d6;
   margin: 0 0 15px;
 `;
 
@@ -43,13 +43,10 @@ export const Text = styled.p`
   font-size: 16px;
   line-height: 100%;
   color: #000000;
-  background: #f5f5f5;
-  border-radius: 25px;
-  padding: 7px 10px;
   width: fit-content;
 `;
 
-export const MoreBtn = styled.span`
+export const ShowMoreBtn = styled.span`
   color: #2758d6;
   text-decoration: underline;
   cursor: pointer;

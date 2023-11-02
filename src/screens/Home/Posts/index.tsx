@@ -2,9 +2,8 @@ import React, { FC } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import Preloader from 'components/Preloader';
+import Post from 'components/Post';
 import { usePosts } from 'hooks/usePosts';
-
-import Post from './components/Post';
 
 import * as S from './styles';
 
@@ -19,16 +18,7 @@ const Posts: FC = () => {
   return (
     <S.Wrapper>
       {posts?.length ? (
-        posts?.map((item) => (
-          <Post
-            key={item.createdAt}
-            createdAt={item.createdAt}
-            avatarUrl={item?.user?.avatarUrl}
-            fullName={item?.user?.fullName}
-            title={item.title}
-            text={item.text}
-          />
-        ))
+        posts?.map((item, index) => <Post key={index} postData={item} />)
       ) : (
         <S.EmptyState>There are no posts...</S.EmptyState>
       )}

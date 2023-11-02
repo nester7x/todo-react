@@ -10,6 +10,8 @@ import Users from 'screens/Users';
 
 import { routes } from 'constants/routes';
 
+import MyProfile from 'screens/MyProfile';
+import User from 'screens/User';
 import GuestRoute from '../GuestRoute';
 import PrivateRoute from '../PrivateRoute';
 
@@ -61,6 +63,22 @@ export default function AppRoutes() {
         element={
           <PrivateRoute>
             <Users />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={routes.usersId}
+        element={
+          <PrivateRoute>
+            <User />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={routes.myProfile}
+        element={
+          <PrivateRoute>
+            <MyProfile />
           </PrivateRoute>
         }
       />
