@@ -9,7 +9,7 @@ const handleResponse = async (response: Response) => {
 };
 
 export const api = {
-  get: (endpoint: string, token: string | undefined) =>
+  get: (endpoint: string, token: string | null | undefined) =>
     fetch(BASE_URL + endpoint, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -23,10 +23,11 @@ export const api = {
       },
       body: JSON.stringify(data),
     }).then(handleResponse),
-  put: (endpoint: string, data: object) =>
+  patch: (endpoint: string, data: object, token: string | undefined) =>
     fetch(BASE_URL + endpoint, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
