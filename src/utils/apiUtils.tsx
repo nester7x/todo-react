@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:4444/';
+const BASE_URL = 'http://localhost:3000/api/';
 
 const handleResponse = async (response: Response) => {
   try {

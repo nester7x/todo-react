@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -110,7 +110,7 @@ module.exports = function (_env, argv) {
             warnings: false,
           },
         }),
-        new OptimizeCssAssetsPlugin(),
+        new CssMinimizerPlugin(),
       ],
       splitChunks: {
         chunks: 'all',

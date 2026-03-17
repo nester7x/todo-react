@@ -5,7 +5,7 @@ import * as S from './styles';
 type InputProps = {
   name: string;
   type: string;
-  inputProps?: object;
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   value?: string | number;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -22,6 +22,7 @@ const Input: FC<InputProps> = ({
   errorText,
   placeholder,
   inputStyles,
+  inputProps,
   ...rest
 }) => (
   <>
@@ -33,6 +34,7 @@ const Input: FC<InputProps> = ({
       onChange={onChange}
       value={value}
       placeholder={placeholder}
+      slotProps={inputProps ? { input: inputProps as Record<string, unknown> } : undefined}
     />
     {errorText && <S.Error>{errorText}</S.Error>}
   </>

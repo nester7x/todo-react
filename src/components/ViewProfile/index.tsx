@@ -41,7 +41,7 @@ const ViewProfile: FC<ViewProfileProps> = ({ userInfo, handleAction }) => {
         <S.ImgWrapper>
           <S.Img
             src={
-              userInfo?.userPhoto ||
+              'data:image/*;base64,'+userInfo?.image ||
               'https://static.vecteezy.com/system/resources/previews/008/442/086/original/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg'
             }
             alt='user photo'
@@ -54,7 +54,7 @@ const ViewProfile: FC<ViewProfileProps> = ({ userInfo, handleAction }) => {
         )}
       </S.Preview>
       <S.Content>
-        <S.Username>{userInfo?.fullName}</S.Username>
+        <S.Username>{userInfo?.username}</S.Username>
         <S.AdditionalInfo>
           {additionalInfo?.map(
             (item, index) =>

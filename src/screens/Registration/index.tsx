@@ -9,7 +9,7 @@ import * as S from './styles';
 type RegistrationData = {
   email: string;
   password: string;
-  fullName: string;
+  username: string;
   confirmPassword: string;
   [key: string]: string;
 };
@@ -17,14 +17,14 @@ type RegistrationData = {
 type InputError = {
   email: string;
   password: string;
-  fullName: string;
+  username: string;
   confirmPassword: string;
 };
 
 type IsDirty = {
   email: boolean;
   password: boolean;
-  fullName: boolean;
+  username: boolean;
   confirmPassword: boolean;
 };
 
@@ -34,7 +34,7 @@ const Registration: FC = () => {
   const [registrationData, setRegistrationData] = useState<RegistrationData>({
     email: '',
     password: '',
-    fullName: '',
+    username: '',
     confirmPassword: '',
   });
 
@@ -43,14 +43,14 @@ const Registration: FC = () => {
   const [inputError, setInputError] = useState<InputError>({
     email: '',
     password: '',
-    fullName: '',
+    username: '',
     confirmPassword: '',
   });
 
   const [isDirty, setIsDirty] = useState<IsDirty>({
     email: false,
     password: false,
-    fullName: false,
+    username: false,
     confirmPassword: false,
   });
 
@@ -98,14 +98,14 @@ const Registration: FC = () => {
         </S.ErrorMessage>
         <S.Title>REGISTRATION</S.Title>
         <S.DataInput
-          name='fullName'
+          name='username'
           type='text'
           inputProps={{ maxLength: 30 }}
-          value={registrationData.fullName}
+          value={registrationData.username}
           onChange={handleDataChange}
           onBlur={(e) => blurHandler(e)}
           placeholder='Full Name'
-          errorText={isDirty.fullName && inputError.fullName ? inputError.fullName : ''}
+          errorText={isDirty.username && inputError.username ? inputError.username : ''}
         />
         <S.DataInput
           name='email'

@@ -51,9 +51,21 @@ const EditProfile: FC<EditProfileProps> = ({ userInfo, handleAction }) => {
     event.preventDefault();
 
     if (updatedUserInfo) {
-      await update(updatedUserInfo);
-      if (handleAction) {
-        handleAction();
+      const changedFields = (Object.keys(updatedUserInfo) as (keyof UserProps)[]).reduce(
+        (acc, key) => {
+          if (updatedUserInfo[key] !== userInfo[key]) {
+            (acc as UserProps)[key] = updatedUserInfo[key] as never;
+          }
+          return acc;
+        },
+        {} as Partial<UserProps>,
+      );
+
+      if (Object.keys(changedFields).length > 0) {
+        await update(changedFields as UserProps);
+        if (handleAction) {
+          handleAction();
+        }
       }
     }
   };
@@ -72,7 +84,7 @@ const EditProfile: FC<EditProfileProps> = ({ userInfo, handleAction }) => {
           <S.EditInput
             onChange={handleInputChange}
             name={item.name}
-            value={updatedUserInfo && updatedUserInfo[item.name]}
+            value={updatedUserInfo?.[item.name] ?? ''}
             placeholder=''
             type={item.name === 'age' ? 'number' : 'text'}
             inputProps={item.name === 'age' ? { min: 5, max: 130 } : { maxLength: 30 }}

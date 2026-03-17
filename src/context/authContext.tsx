@@ -36,14 +36,14 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
   const [user, setUser] = useState<User>({
     userInfo: {
       id: '',
-      fullName: '',
+      username: '',
       email: '',
       activity: '',
       city: '',
       country: '',
       age: 0,
       description: '',
-      userPhoto: '',
+      image: '',
       errors: '',
     },
     userPosts: [],
@@ -59,32 +59,32 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
     const data = await api.post(`${endpoint}`, loginData);
 
     if (data?.token) {
-      await setCookie('token', data.token, 1);
+      setCookie('token', data.token, 1);
 
-      await setLoginState({
+      setLoginState({
         isLoggedIn: true,
         token: data.token,
         errors: '',
       });
 
-      await setUser((prevState) => ({
+       setUser((prevState) => ({
         ...prevState,
         userInfo: {
           id: data.id,
-          fullName: data.fullName,
+          username: data.username,
           email: data.email,
           activity: data.activity,
           city: data.city,
           country: data.country,
           age: data.age,
           description: data.description,
-          userPhoto: data.userPhoto,
+          image: data.image,
         },
       }));
     }
 
     if (data[0]?.msg || data.message) {
-      await setLoginState({
+       setLoginState({
         isLoggedIn: false,
         token: data?.token,
         errors: data[0]?.msg || data.message,
@@ -93,8 +93,8 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
   };
 
   const logout = async () => {
-    await deleteCookie('token', '/');
-    await setLoginState({
+     deleteCookie('token', '/');
+     setLoginState({
       isLoggedIn: false,
       token: null,
       errors: '',
@@ -102,28 +102,28 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
   };
 
   const update = async (updatedUserInfo: UserProps) => {
-    const response = await api.patch('auth/me', updatedUserInfo, getCookie('token'));
+    const response = await api.patch('users/me', updatedUserInfo, getCookie('token'));
 
     if (!response.message) {
-      await setUser((prevState) => ({
+       setUser((prevState) => ({
         ...prevState,
         userInfo: {
           id: response.id,
-          fullName: response.fullName,
+          username: response.username,
           email: response.email,
           activity: response.activity,
           city: response.city,
           country: response.country,
           age: response.age,
           description: response.description,
-          userPhoto: response.userPhoto,
+          image: response.image,
         },
       }));
     }
 
     // TODO: handle errors
     if (response.message) {
-      await setUser((prevState) => ({
+       setUser((prevState) => ({
         ...prevState,
         errors: response.message,
       }));
@@ -155,20 +155,20 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
       });
 
       if (loginState.token && !isUserInfo) {
-        const data = await api.get('auth/me', loginState.token);
+        const data = await api.get('users/me', loginState.token);
 
-        await setUser((prevState) => ({
+         setUser((prevState) => ({
           ...prevState,
           userInfo: {
             id: data.user._id,
-            fullName: data.user.fullName,
+            username: data.user.username,
             email: data.user.email,
             activity: data.user.activity,
             city: data.user.city,
             country: data.user.country,
             age: data.user.age,
             description: data.user.description,
-            userPhoto: data.user.userPhoto,
+            image: data.user.image,
           },
           userPosts: data.posts,
         }));
