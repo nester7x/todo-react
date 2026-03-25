@@ -1,51 +1,27 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext } from 'react';
 
-import { GlobalContext } from 'context/global';
-import { api } from 'utils/apiUtils';
-import { getCookie } from 'utils/cookieUtils';
+import { AuthContext } from 'context/authContext';
 import Message from '../Message';
 
 import * as S from './styles';
 
-type MessageInfo = {
-  id: number;
-  username: string;
-};
-
-type MessageItem = {
-  id: number;
-  from: string;
-  message: string;
-  createdDate: string;
-};
-
 type MessagesProps = {
-  conversation: MessageItem[];
+  messages: Message[];
 };
 
-const Messages: FC<MessagesProps> = ({ conversation }) => {
-  const { user } = useContext(GlobalContext);
-
-  const [info, setInfo] = useState<MessageInfo[]>([]);
-
-  useEffect(() => {
-    const getData = async () => {
-      const data = await api.get('users', getCookie('token'));
-      await setInfo(data);
-    };
-
-    getData();
-  }, []);
+const Messages: FC<MessagesProps> = ({ messages }) => {
+  const { user } = useContext(AuthContext);
 
   return (
     <S.Messages>
-      {conversation.length === 0 ? (
+      {messages?.length === 0 ? (
         <S.EmptyMessage>Nothing here...</S.EmptyMessage>
       ) : (
-        conversation.map((item) => (
+        messages?.map((item, index) => (
           <Message
+            key={item?.id || index}
             style={
-              item.from === user.userInfo.id.toString()
+              item?.sender?.id === user?.id?.toString()
                 ? {
                     border: '1px solid #1976d2',
                     backgroundColor: '#1976d2',
@@ -53,13 +29,7 @@ const Messages: FC<MessagesProps> = ({ conversation }) => {
                   }
                 : {}
             }
-            key={item.id}
-            createdDate={item.createdDate}
-            from={info.map((infoItem) =>
-              infoItem.id.toString() === item.from ? infoItem.username : '',
-            )}
-            id={item.id}
-            message={item.message}
+            message={item}
           />
         ))
       )}

@@ -1,42 +1,38 @@
 import React, { FC, useContext, useState } from 'react';
 
-import CKEditor from 'components/CKEditor';
-import { GlobalContext } from 'context/global';
-import { api } from 'utils/apiUtils';
+import TextArea from 'components/TextArea';
+import { AuthContext } from '../../../../context/authContext';
+import socket from '../../../../utils/socket';
 
 import * as S from './styles';
 
 type SendMessageProps = {
-  chatId: string | number;
-  getConversation: () => void;
+  roomId: string;
 };
 
-const SendMessage: FC<SendMessageProps> = ({ chatId, getConversation }) => {
-  const { user } = useContext(GlobalContext);
+const SendMessage: FC<SendMessageProps> = ({ roomId }) => {
+  const { user } = useContext(AuthContext);
 
   const [messageValue, setMessageValue] = useState<string>('');
 
-  const handleInputChange = (event: React.FormEvent<HTMLInputElement>, editor: any): void => {
-    const data = editor.getData();
-    setMessageValue(data);
+  const handleInputChange = (value: string): void => {
+    setMessageValue(value);
   };
 
-  const sendMessage = async () => {
-    const data = await api.post('message', {
-      from: user?.userInfo?.id.toString(),
-      to: chatId,
-      message: messageValue,
+  const handleSendMessage = async () => {
+    socket.emit('send-message', {
+      roomId,
+      senderId: user.id,
+      body: messageValue,
     });
 
-    await getConversation();
-    await setMessageValue('');
-    return data;
+    setMessageValue('');
   };
 
   return (
     <S.Wrapper>
-      <CKEditor data={messageValue} onChange={handleInputChange} placeholder='Write a message...' />
-      <S.SendBtn onClick={sendMessage} disabled={!messageValue} text='Send' type='button' />
+      <TextArea data={messageValue} onChange={handleInputChange} placeholder='Write a message...' />
+      <S.SendBtn onClick={handleSendMessage} disabled={!messageValue} text='Send' type='submit' />
     </S.Wrapper>
   );
 };

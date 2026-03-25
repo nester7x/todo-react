@@ -5,19 +5,19 @@ import ViewProfile from 'components/ViewProfile';
 import Preloader from 'components/Preloader';
 import { api } from 'utils/apiUtils';
 import { getCookie } from 'utils/cookieUtils';
-import { UserProps } from 'types/userTypes';
+import { User } from 'types/userTypes';
 import { PostProps } from 'types/postTypes';
 
 import * as S from './styles';
 
-type User = {
-  user: UserProps;
+type UserType = {
+  user: User;
   posts: PostProps[];
 };
 
 const User: FC = () => {
   const { id } = useParams();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserType | null>(null);
 
   useEffect(() => {
     if (id) {

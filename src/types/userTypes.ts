@@ -1,15 +1,14 @@
-type UserProps = {
+type User = {
   id: string;
   username: string;
   email: string;
-  activity: string;
-  city: string;
-  country: string;
-  age: number;
-  description: string;
-  image: string;
-  [key: string]: any;
-  errors?: string;
+  image?: string;
+  age?: number;
+  city?: string;
+  country?: string;
+  description?: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
-export type { UserProps };
+export type { User };

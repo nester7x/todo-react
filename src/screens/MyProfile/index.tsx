@@ -18,12 +18,10 @@ const MyProfile: FC = () => {
   return (
     <S.Wrapper>
       {isEditMode ? (
-        <EditProfile userInfo={user?.userInfo} handleAction={handleAction} />
+        <EditProfile userInfo={user} handleAction={handleAction} />
       ) : (
-        <ViewProfile userInfo={user?.userInfo} handleAction={handleAction} />
+        <ViewProfile userInfo={user} handleAction={handleAction} />
       )}
-      {!isEditMode &&
-        user?.userPosts?.map((item, index) => <S.PostCustom key={index} postData={item} />)}
     </S.Wrapper>
   );
 };

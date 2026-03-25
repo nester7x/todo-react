@@ -1,27 +1,17 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { api } from 'utils/apiUtils';
-import { getCookie } from 'utils/cookieUtils';
+import { ChatContext, ChatProvider } from './context/chatContext';
+
 import Messages from './components/Messages';
 import SendMessage from './components/SendMessage';
 import Receivers from './components/Receivers';
 
 import * as S from './styles';
+const ChatInner: FC = () => {
+  const { messages, getMessages } = useContext(ChatContext);
 
-type Receiver = {
-  receiverId: number | string;
-  receiverName: string;
-  conversation: [];
-};
-
-const Chat: FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [receiver, setReceiver] = useState<Receiver>({
-    receiverId: '',
-    receiverName: '',
-    conversation: [],
-  });
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const btnRef = useRef<SVGSVGElement | null>(null);
 
@@ -37,26 +27,9 @@ const Chat: FC = () => {
     return () => document.body.removeEventListener('click', closeDropDown);
   }, []);
 
-  const getConversation = async () => {
-    const data = await api.get(`conversation?with=${id}`, getCookie('token'));
-    await setReceiver((prevState) => ({
-      ...prevState,
-      conversation: data.items,
-    }));
-  };
-
   useEffect(() => {
     if (id) {
-      (async () => {
-        const user = await api.get(`user/${id}`, getCookie('token'));
-        const conversation = await api.get(`conversation?with=${id}`, getCookie('token'));
-        await setReceiver((prevState) => ({
-          ...prevState,
-          receiverId: id,
-          receiverName: user.user.username,
-          conversation: conversation.items,
-        }));
-      })();
+      getMessages(id);
     }
   }, [id]);
 
@@ -70,14 +43,14 @@ const Chat: FC = () => {
           }}
         />
         <S.Contacts>Contacts</S.Contacts>
-        <S.Receiver>{receiver.receiverName}</S.Receiver>
+        {/* <S.Receiver>{receiver.receiverName}</S.Receiver>*/}
       </S.ChatHeader>
       <S.ChatBody>
         <Receivers className={isOpen ? 'open' : 'closed'} />
         {id ? (
           <S.Chat className={isOpen ? 'open' : 'closed'}>
-            <Messages conversation={receiver.conversation} />
-            <SendMessage chatId={id} getConversation={getConversation} />
+            <Messages messages={messages} />
+            <SendMessage roomId={id} />
           </S.Chat>
         ) : (
           <S.EmptyReceiver>Choose a receiver</S.EmptyReceiver>
@@ -86,5 +59,11 @@ const Chat: FC = () => {
     </S.Wrapper>
   );
 };
+
+const Chat: FC = () => (
+  <ChatProvider>
+    <ChatInner />
+  </ChatProvider>
+);
 
 export default Chat;

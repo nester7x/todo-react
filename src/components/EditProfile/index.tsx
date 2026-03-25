@@ -2,27 +2,23 @@ import React, { FC, useContext, useEffect, useState } from 'react';
 
 import Preloader from '../Preloader';
 import { AuthContext } from 'context/authContext';
-import { UserProps } from 'types/userTypes';
+import { User } from 'types/userTypes';
 
 import * as S from './styles';
 
 type EditProfileProps = {
-  userInfo: UserProps;
+  userInfo: User;
   handleAction?: () => void;
 };
 
 const EditProfile: FC<EditProfileProps> = ({ userInfo, handleAction }) => {
   const { update } = useContext(AuthContext);
 
-  const [updatedUserInfo, setUpdatedUserInfo] = useState<UserProps | null>(null);
+  const [updatedUserInfo, setUpdatedUserInfo] = useState<User | null>(null);
 
-  const hasData = Object.values(userInfo as UserProps).some((value) => value !== '' && value !== 0);
+  const hasData = Object.values(userInfo as User).some((value) => value !== '' && value !== 0);
 
   const editInfo = [
-    {
-      name: 'activity',
-      value: userInfo?.activity,
-    },
     {
       name: 'country',
       value: userInfo?.country,
@@ -39,30 +35,27 @@ const EditProfile: FC<EditProfileProps> = ({ userInfo, handleAction }) => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = event.target;
-    setUpdatedUserInfo((prevState) => ({ ...prevState, [name]: value } as UserProps));
+    setUpdatedUserInfo((prevState) => ({ ...prevState, [name]: value } as User));
   };
 
   const handleTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const { name, value } = event.target;
-    setUpdatedUserInfo((prevState) => ({ ...prevState, [name]: value } as UserProps));
+    setUpdatedUserInfo((prevState) => ({ ...prevState, [name]: value } as User));
   };
 
   const handleUpdate = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
 
     if (updatedUserInfo) {
-      const changedFields = (Object.keys(updatedUserInfo) as (keyof UserProps)[]).reduce(
-        (acc, key) => {
-          if (updatedUserInfo[key] !== userInfo[key]) {
-            (acc as UserProps)[key] = updatedUserInfo[key] as never;
-          }
-          return acc;
-        },
-        {} as Partial<UserProps>,
-      );
+      const changedFields = (Object.keys(updatedUserInfo) as (keyof User)[]).reduce((acc, key) => {
+        if (updatedUserInfo[key] !== userInfo[key]) {
+          (acc as User)[key] = updatedUserInfo[key] as never;
+        }
+        return acc;
+      }, {} as Partial<User>);
 
       if (Object.keys(changedFields).length > 0) {
-        await update(changedFields as UserProps);
+        await update(changedFields as User);
         if (handleAction) {
           handleAction();
         }
@@ -84,6 +77,7 @@ const EditProfile: FC<EditProfileProps> = ({ userInfo, handleAction }) => {
           <S.EditInput
             onChange={handleInputChange}
             name={item.name}
+            // @ts-ignore
             value={updatedUserInfo?.[item.name] ?? ''}
             placeholder=''
             type={item.name === 'age' ? 'number' : 'text'}

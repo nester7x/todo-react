@@ -15,10 +15,11 @@ export const api = {
         Authorization: `Bearer ${token}`,
       },
     }).then(handleResponse),
-  post: (endpoint: string, data: object) =>
+  post: (endpoint: string, data: object, token?: string) =>
     fetch(BASE_URL + endpoint, {
       method: 'post',
       headers: {
+        ...(token && { Authorization: `Bearer ${token}` }),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),

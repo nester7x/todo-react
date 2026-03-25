@@ -15,7 +15,7 @@ export const SendBtn = styled(Button)`
   && {
     margin-top: auto;
     background-color: #1976d2;
-    width: 100%;
+    width: 20%;
     padding: 10px 15px;
     border-radius: 0 5px 5px 0;
     :hover {

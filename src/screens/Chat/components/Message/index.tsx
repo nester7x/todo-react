@@ -1,24 +1,22 @@
 import React, { FC } from 'react';
-import parse from 'html-react-parser';
 
-import { convertingDate } from 'utils/convertingDate';
+import { Message } from '../../../../types/messageTypes';
+import moment from 'moment';
+
 import * as S from './styles';
 
 type MessageProps = {
-  id: number;
-  from: string[];
-  createdDate: string;
-  message: string;
+  message: Message;
   style?: React.CSSProperties;
 };
 
-const Message: FC<MessageProps> = ({ id, from, createdDate, message, ...rest }) => (
-  <S.Message key={id} style={rest.style}>
+const Message: FC<MessageProps> = ({ message, ...rest }) => (
+  <S.Message style={rest.style}>
     <S.InfoWrap>
-      <S.Name>{from}</S.Name>
-      <S.Date>{convertingDate(createdDate)}</S.Date>
+      <S.Name>{message?.sender?.username}</S.Name>
+      <S.Date>{moment(message?.createdAt).calendar()}</S.Date>
     </S.InfoWrap>
-    <S.Content>{parse(message)}</S.Content>
+    <S.Content>{message?.body}</S.Content>
   </S.Message>
 );
 

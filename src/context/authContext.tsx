@@ -2,8 +2,7 @@ import React, { createContext, FC, useEffect, useState } from 'react';
 
 import { deleteCookie, getCookie, setCookie } from 'utils/cookieUtils';
 import { api } from 'utils/apiUtils';
-import { UserProps } from 'types/userTypes';
-import { PostProps } from 'types/postTypes';
+import { User } from 'types/userTypes';
 
 type LoginState = {
   isLoggedIn: boolean;
@@ -11,17 +10,12 @@ type LoginState = {
   errors: string | boolean;
 };
 
-type User = {
-  userInfo: UserProps;
-  userPosts: PostProps[];
-};
-
 type AuthContextType = {
   user: User;
   loginState: LoginState;
   auth: (endpoint: string, loginData: { email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
-  update: (updatedUserInfo: UserProps) => Promise<void>;
+  update: (updatedUserInfo: User) => Promise<void>;
 };
 
 type GlobalAuthProviderProps = {
@@ -34,19 +28,14 @@ const { Provider } = AuthContext;
 
 export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>({
-    userInfo: {
-      id: '',
-      username: '',
-      email: '',
-      activity: '',
-      city: '',
-      country: '',
-      age: 0,
-      description: '',
-      image: '',
-      errors: '',
-    },
-    userPosts: [],
+    id: '',
+    username: '',
+    email: '',
+    city: '',
+    country: '',
+    age: 0,
+    description: '',
+    image: '',
   });
 
   const [loginState, setLoginState] = useState<LoginState>({
@@ -67,7 +56,7 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
         errors: '',
       });
 
-       setUser((prevState) => ({
+      setUser((prevState) => ({
         ...prevState,
         userInfo: {
           id: data.id,
@@ -84,7 +73,7 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
     }
 
     if (data[0]?.msg || data.message) {
-       setLoginState({
+      setLoginState({
         isLoggedIn: false,
         token: data?.token,
         errors: data[0]?.msg || data.message,
@@ -93,19 +82,19 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
   };
 
   const logout = async () => {
-     deleteCookie('token', '/');
-     setLoginState({
+    deleteCookie('token', '/');
+    setLoginState({
       isLoggedIn: false,
       token: null,
       errors: '',
     });
   };
 
-  const update = async (updatedUserInfo: UserProps) => {
+  const update = async (updatedUserInfo: User) => {
     const response = await api.patch('users/me', updatedUserInfo, getCookie('token'));
 
     if (!response.message) {
-       setUser((prevState) => ({
+      setUser((prevState) => ({
         ...prevState,
         userInfo: {
           id: response.id,
@@ -123,7 +112,7 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
 
     // TODO: handle errors
     if (response.message) {
-       setUser((prevState) => ({
+      setUser((prevState) => ({
         ...prevState,
         errors: response.message,
       }));
@@ -149,28 +138,20 @@ export const GlobalAuthProvider: FC<GlobalAuthProviderProps> = ({ children }) =>
 
   useEffect(() => {
     (async () => {
-      let isUserInfo = true;
-      Object.keys(user?.userInfo).map((value) => {
-        if (!user?.userInfo[value].length) isUserInfo = false;
-      });
-
-      if (loginState.token && !isUserInfo) {
+      if (loginState.token) {
         const data = await api.get('users/me', loginState.token);
 
-         setUser((prevState) => ({
+        setUser((prevState) => ({
           ...prevState,
-          userInfo: {
-            id: data.user._id,
-            username: data.user.username,
-            email: data.user.email,
-            activity: data.user.activity,
-            city: data.user.city,
-            country: data.user.country,
-            age: data.user.age,
-            description: data.user.description,
-            image: data.user.image,
-          },
-          userPosts: data.posts,
+          id: data?.id,
+          username: data?.username,
+          email: data?.email,
+          activity: data?.activity,
+          city: data?.city,
+          country: data?.country,
+          age: data?.age,
+          description: data?.description,
+          image: data?.image,
         }));
       }
     })();
