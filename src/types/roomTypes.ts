@@ -3,7 +3,12 @@ export type Room = {
   name: string;
   isDirectMessage: boolean;
   owner: string;
-  members: string[];
+  members: Member[];
   createdAt: string;
   updatedAt: string;
+};
+
+export type Member = {
+  username: string;
+  id: string;
 };

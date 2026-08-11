@@ -3,8 +3,6 @@ import React, { FC, useContext } from 'react';
 import { AuthContext } from 'context/authContext';
 import Message from '../Message';
 
-import * as S from './styles';
-
 type MessagesProps = {
   messages: Message[];
 };
@@ -13,9 +11,15 @@ const Messages: FC<MessagesProps> = ({ messages }) => {
   const { user } = useContext(AuthContext);
 
   return (
-    <S.Messages>
+    <div
+      className='
+        pt-5 px-5 flex flex-col-reverse overflow-y-auto overflow-x-hidden mb-5 border-t border-black
+        [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:rounded-[20px] [&::-webkit-scrollbar-thumb]:rounded-[20px]
+        max-tablet:mb-[10px] max-tablet:p-[10px_10px_0]
+      '
+    >
       {messages?.length === 0 ? (
-        <S.EmptyMessage>Nothing here...</S.EmptyMessage>
+        <p className='text-[30px] mx-auto text-white'>Nothing here...</p>
       ) : (
         messages?.map((item, index) => (
           <Message
@@ -33,7 +37,7 @@ const Messages: FC<MessagesProps> = ({ messages }) => {
           />
         ))
       )}
-    </S.Messages>
+    </div>
   );
 };
 

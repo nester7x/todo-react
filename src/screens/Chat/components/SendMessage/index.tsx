@@ -3,8 +3,7 @@ import React, { FC, useContext, useState } from 'react';
 import TextArea from 'components/TextArea';
 import { AuthContext } from '../../../../context/authContext';
 import socket from '../../../../utils/socket';
-
-import * as S from './styles';
+import Button from 'components/Button';
 
 type SendMessageProps = {
   roomId: string;
@@ -30,10 +29,16 @@ const SendMessage: FC<SendMessageProps> = ({ roomId }) => {
   };
 
   return (
-    <S.Wrapper>
+    <form className='mx-5 mb-5 flex max-tablet:mx-[10px] max-tablet:mb-[10px]'>
       <TextArea data={messageValue} onChange={handleInputChange} placeholder='Write a message...' />
-      <S.SendBtn onClick={handleSendMessage} disabled={!messageValue} text='Send' type='submit' />
-    </S.Wrapper>
+      <Button
+        onClick={handleSendMessage}
+        disabled={!messageValue}
+        text='Send'
+        type='submit'
+        className='mt-auto bg-[#1976d2] w-[20%] px-[15px] py-[10px] rounded-[0_5px_5px_0] hover:bg-[#1976d2] hover:opacity-80'
+      />
+    </form>
   );
 };
 

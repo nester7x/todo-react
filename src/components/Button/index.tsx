@@ -7,6 +7,7 @@ type BtnProps = {
   type: 'button' | 'submit' | 'reset';
   text: string;
   disabled: boolean;
+  className?: string;
 };
 
 const Btn: FC<BtnProps> = ({ onClick, type = 'button', text, disabled = false, ...rest }) => (

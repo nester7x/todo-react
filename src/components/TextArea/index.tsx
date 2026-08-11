@@ -8,6 +8,7 @@ const Textarea = styled.input`
   border-radius: 5px 0 0 5px;
   resize: none;
   font-size: 14px;
+  color: #333333;
   max-height: 100px;
   outline: none;
   width: 300px;

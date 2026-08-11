@@ -41,7 +41,11 @@ module.exports = function (_env, argv) {
         },
         {
           test: /\.css$/,
-          use: [isProduction ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader'],
+          use: [
+            isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+            'css-loader',
+            'postcss-loader',
+          ],
         },
         {
           test: /\.(png|jpe?g|gif)$/i,

@@ -6,7 +6,7 @@ import { device } from 'utils/mediaQueries';
 export const Wrapper = styled.div`
   margin: 0 auto;
   border-radius: 5px;
-  background-color: #394252;
+  //background-color: #394252;
   height: 85vh;
   overflow: hidden;
 `;
